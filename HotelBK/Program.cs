@@ -8,23 +8,11 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cấu hình kết nối SQL Server
+// Cấu hình kết nối cơ sở dữ liệu
 builder.Services.AddDbContext<HotelContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelManagementDB")));
 
-// Cấu hình dịch vụ MVC
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Cấu hình HTTP Request Pipeline
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-// Thêm dịch vụ xác thực cookie
+// Thêm dịch vụ xác thực TRƯỚC KHI xây dựng ứng dụng
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -33,23 +21,33 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     });
 
-// Thêm service Password Hasher
+// Thêm dịch vụ PasswordHasher
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-// Thêm các service vào Program.cs
+// Thêm các dịch vụ nghiệp vụ
 builder.Services.AddScoped<IBookingService, BookingServices>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 
-// Đảm bảo middleware xác thực được kích hoạt
-app.UseAuthentication();
+// Thêm dịch vụ MVC
+builder.Services.AddControllersWithViews();
 
+var app = builder.Build();
+
+// Cấu hình HTTP pipeline
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+// Quan trọng: Gọi UseAuthentication TRƯỚC UseAuthorization
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
+app.UseAuthentication(); // Phải đặt trước Authorization
 app.UseAuthorization();
 
-// ⚡ Thêm route cho Areas
+// Cấu hình routes
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
@@ -62,6 +60,5 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Home}/{action=Index}/{id?}"
     );
 });
-
 
 app.Run();

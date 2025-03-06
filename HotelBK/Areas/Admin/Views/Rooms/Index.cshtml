@@ -39,6 +39,7 @@
                                         <th>Giường</th>
                                         <th>Phòng Tắm</th>
                                         <th>Trạng thái</th>
+                                        <th>Loại Phòng</th>
                                         <th>Ảnh</th>
                                         <th>Thao tác</th>
                                     </tr>
@@ -53,6 +54,16 @@
                                             <td>@item.Beds</td>
                                             <td>@item.Bathrooms</td>
                                             <td>@item.Status</td>
+                                            <td>
+                                                @try
+                                                {
+                                                    @(item.RoomType?.TypeName ?? "Không xác định")
+                                                }
+                                                catch
+                                                {
+                                                    <span>Không xác định</span>
+                                                }
+                                            </td>
                                             <td>
                                                 @if (!string.IsNullOrEmpty(item.Image))
                                                 {

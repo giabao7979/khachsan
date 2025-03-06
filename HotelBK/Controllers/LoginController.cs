@@ -25,14 +25,21 @@ namespace HotelBK.Controllers
             return View();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Index(string email, string password)
         {
+            // Thêm log để kiểm tra thông tin đăng nhập
+            System.Diagnostics.Debug.WriteLine($"Đang đăng nhập với: Email={email}, Password={password}");
+
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 ModelState.AddModelError("", "Vui lòng nhập email và mật khẩu");
                 return View();
             }
+
+            // In ra thông tin để debug
+            Console.WriteLine($"Đang đăng nhập với Email: {email}");
 
             var user = await _context.Users
                 .Include(u => u.Role)
@@ -44,8 +51,11 @@ namespace HotelBK.Controllers
                 return View();
             }
 
-            // Kiểm tra mật khẩu (bạn cần cập nhật cách lưu mật khẩu)
-            if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password) != PasswordVerificationResult.Success)
+            // Kiểm tra mật khẩu
+            var passwordResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            System.Diagnostics.Debug.WriteLine($"Kết quả kiểm tra mật khẩu: {passwordResult}");
+
+            if (passwordResult != PasswordVerificationResult.Success)
             {
                 ModelState.AddModelError("", "Email hoặc mật khẩu không chính xác");
                 return View();

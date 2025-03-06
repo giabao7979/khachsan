@@ -31,65 +31,107 @@ namespace HotelBK.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.RoomTypes = new SelectList(await _context.RoomTypes.ToListAsync(), "RoomTypeID", "TypeName");
-            return PartialView("_Create", new Room());
+            try
+            {
+                // Sửa "RoomTypes" thành "RoomType" nếu tên bảng trong DB là RoomType
+                ViewBag.RoomTypes = new SelectList(await _context.RoomTypes.ToListAsync(), "RoomTypeID", "TypeName");
+                return PartialView("_Create", new Room());
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi để debug
+                Console.WriteLine($"Error loading room types: {ex.Message}");
+                ViewBag.RoomTypes = new SelectList(new List<RoomType>(), "RoomTypeID", "TypeName");
+                return PartialView("_Create", new Room());
+            }
         }
-
         public async Task<IActionResult> Edit(int id)
         {
-            var room = await _roomService.GetRoomById(id);
+            var room = await _context.Rooms.FindAsync(id);
             if (room == null)
             {
                 return NotFound();
             }
 
-            ViewBag.RoomTypes = new SelectList(await _context.RoomTypes.ToListAsync(), "RoomTypeID", "TypeName");
-            return PartialView("_Create", room);
+            try
+            {
+                // Sửa "RoomTypes" thành "RoomType" nếu tên bảng trong DB là RoomType
+                ViewBag.RoomTypes = new SelectList(await _context.RoomTypes.ToListAsync(), "RoomTypeID", "TypeName");
+                return PartialView("_Create", room);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading room types: {ex.Message}");
+                ViewBag.RoomTypes = new SelectList(new List<RoomType>(), "RoomTypeID", "TypeName");
+                return PartialView("_Create", room);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdate(Room room, IFormFile imageFile)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest("Dữ liệu không hợp lệ!");
-            }
-
-            // Xử lý upload hình ảnh
-            if (imageFile != null && imageFile.Length > 0)
-            {
-                // Tạo tên file duy nhất
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-
-                // Đảm bảo thư mục tồn tại
-                string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images", "rooms");
-                if (!Directory.Exists(uploadsFolder))
+                if (!ModelState.IsValid)
                 {
-                    Directory.CreateDirectory(uploadsFolder);
+                    var errors = string.Join("; ", ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage));
+                    return BadRequest($"Dữ liệu không hợp lệ: {errors}");
                 }
 
-                // Lưu file
-                string filePath = Path.Combine(uploadsFolder, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // Ghi log thông tin phòng
+                System.Diagnostics.Debug.WriteLine($"Đang xử lý phòng: ID={room.RoomID}, Tên={room.RoomName}, LoạiID={room.RoomTypeID}");
+
+                // Xử lý upload hình ảnh
+                if (imageFile != null && imageFile.Length > 0)
                 {
-                    await imageFile.CopyToAsync(stream);
+                    // Tạo tên file duy nhất
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+
+                    // Đảm bảo thư mục tồn tại
+                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images", "rooms");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Lưu file
+                    string filePath = Path.Combine(uploadsFolder, fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    // Cập nhật đường dẫn ảnh
+                    room.Image = "/images/rooms/" + fileName;
                 }
 
-                // Cập nhật đường dẫn ảnh
-                room.Image = "/images/rooms/" + fileName;
-            }
+                if (room.RoomID == 0)
+                {
+                    // Tạo mới
+                    System.Diagnostics.Debug.WriteLine("Đang thêm phòng mới");
+                    _context.Rooms.Add(room);
+                }
+                else
+                {
+                    // Cập nhật
+                    System.Diagnostics.Debug.WriteLine($"Đang cập nhật phòng ID={room.RoomID}");
+                    _context.Rooms.Update(room);
+                }
 
-            if (room.RoomID == 0)
-            {
-                // Tạo mới
-                await _roomService.CreateRoom(room);
+                await _context.SaveChangesAsync();
+                System.Diagnostics.Debug.WriteLine("Lưu thành công");
+                return Ok();
             }
-            else
+            catch (Exception ex)
             {
-                // Cập nhật
-                await _roomService.UpdateRoom(room);
+                // Log thông tin lỗi chi tiết
+                System.Diagnostics.Debug.WriteLine($"Lỗi trong CreateOrUpdate: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                return BadRequest($"Lỗi khi lưu phòng: {ex.Message}");
             }
-            return Ok();
         }
 
         [HttpPost]
@@ -103,5 +145,6 @@ namespace HotelBK.Areas.Admin.Controllers
 
             return Ok();
         }
+
     }
 }

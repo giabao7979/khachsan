@@ -80,7 +80,8 @@
                     location.reload();
                 },
                 error: function (xhr) {
-                    alert(xhr.responseText || "Có lỗi xảy ra!");
+                    console.error("Lỗi:", xhr);
+                    alert(xhr.responseText || "Có lỗi xảy ra khi lưu phòng!");
                 }
             });
         });

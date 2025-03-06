@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Debug Database";
+}
+
+<div class="container mt-4">
+    <h1>Debug Database</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">Danh sách bảng</div>
+        <div class="card-body">
+            <ul>
+                @foreach (var table in ViewBag.Tables)
+                {
+                    <li>@table</li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Dữ liệu bảng RoomTypes</div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên loại phòng</th>
+                        <th>Mô tả</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.RoomTypesData)
+                    {
+                        <tr>
+                            <td>@item.RoomTypeID</td>
+                            <td>@item.TypeName</td>
+                            <td>@item.Description</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
