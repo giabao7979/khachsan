@@ -171,3 +171,4 @@ D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\HotelBK.pd
 D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\HotelBK.genruntimeconfig.cache
 D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\ref\HotelBK.dll
 D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\scopedcss\Areas\Admin\Views\Shared\_LayoutAdmin.cshtml.rz.scp.css
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\HotelBK.sourcelink.json

@@ -1,283 +1,190 @@
-﻿@{
+﻿@model IEnumerable<HotelBK.Models.Booking>
+@{
+    ViewData["Title"] = "Quản lý đặt phòng";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
 <div>
     <main id="main" class="main">
-
         <div class="pagetitle">
-            <h1>Category</h1>
+            <h1>Quản lý đặt phòng</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Category</li>
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AdminHome">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Quản lý đặt phòng</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
 
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-
                     <div class="card">
                         <div class="card-body">
-                            <div class="top-row">
-                                <!-- Thanh tìm kiếm ở góc trái -->
+                            <div class="top-row d-flex justify-content-between my-3">
                                 <div class="search-container">
                                     <label for="searchInput">Tìm kiếm:</label>
                                     <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm">
                                 </div>
 
-                                <!-- Nút Thêm Category ở góc phải -->
-                                <div class="add-category-button">
-                                    <button type="button" class="btn btn-success">
-                                        <i class="bi bi-plus-circle"></i> Thêm Category
-                                    </button>
-                                </div>
+                                <button class="btn btn-primary" id="openAddBooking">Thêm đặt phòng</button>
                             </div>
-                            <!-- Table with stripped rows -->
+
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            Product_ID
-                                        </th>
-                                        <th>Img</th>
-                                        <th>Name</th>
-                                        <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                        <th>Status</th>
-                                        <th>Operate</th>
+                                        <th>ID</th>
+                                        <th>Khách hàng</th>
+                                        <th>Phòng</th>
+                                        <th>Check-in</th>
+                                        <th>Check-out</th>
+                                        <th>Số phòng</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Unity Pugh</td>
-                                        <td>9958</td>
-                                        <td>Curicó</td>
-                                        <td>2005/02/11</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Theodore Duran</td>
-                                        <td>8971</td>
-                                        <td>Dhanbad</td>
-                                        <td>1999/04/07</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Kylie Bishop</td>
-                                        <td>3147</td>
-                                        <td>Norman</td>
-                                        <td>2005/09/08</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Willow Gilliam</td>
-                                        <td>3497</td>
-                                        <td>Amqui</td>
-                                        <td>2009/29/11</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Blossom Dickerson</td>
-                                        <td>5018</td>
-                                        <td>Kempten</td>
-                                        <td>2006/11/09</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Elliott Snyder</td>
-                                        <td>3925</td>
-                                        <td>Enines</td>
-                                        <td>2006/03/08</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Castor Pugh</td>
-                                        <td>9488</td>
-                                        <td>Neath</td>
-                                        <td>2014/23/12</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pearl Carlson</td>
-                                        <td>6231</td>
-                                        <td>Cobourg</td>
-                                        <td>2014/31/08</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Deirdre Bridges</td>
-                                        <td>1579</td>
-                                        <td>Eberswalde-Finow</td>
-                                        <td>2014/26/08</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Deirdre Bridges</td>
-                                        <td>1579</td>
-                                        <td>Eberswalde-Finow</td>
-                                        <td>2014/26/08</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Deirdre Bridges</td>
-                                        <td>1579</td>
-                                        <td>Eberswalde-Finow</td>
-                                        <td>2014/26/08</td>
-                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" id="viewButton">
-                                                <i class="bi bi-eye"></i> Xem
-                                            </button>
-                                            <!-- Nút Sửa -->
-                                            <button type="button" class="btn btn-warning text-white" id="editButton">
-                                                <i class="bi bi-pencil"></i> Sửa
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger" id="deleteButton">
-                                                <i class="bi bi-trash"></i> Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
+                                <tbody id="bookingTableBody">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="bookingRow_@item.BookingID">
+                                            <td>@item.BookingID</td>
+                                            <td>@item.FullName</td>
+                                            <td>@item.Room.RoomName</td>
+                                            <td>@item.CheckInDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@item.CheckOutDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@item.RoomCount</td>
+                                            <td>
+                                                @switch (item.Status)
+                                                {
+                                                    case "Pending":
+                                                        <span class="badge bg-warning">Chờ xác nhận</span>
+                                                        break;
+                                                    case "Confirmed":
+                                                        <span class="badge bg-info">Đã xác nhận</span>
+                                                        break;
+                                                    case "Checked-in":
+                                                        <span class="badge bg-primary">Đã nhận phòng</span>
+                                                        break;
+                                                    case "Checked-out":
+                                                        <span class="badge bg-success">Đã trả phòng</span>
+                                                        break;
+                                                    case "Cancelled":
+                                                        <span class="badge bg-danger">Đã hủy</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-secondary">@item.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="statusDropdown_@item.BookingID" data-bs-toggle="dropdown">
+                                                        Đổi trạng thái
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Pending">Chờ xác nhận</a></li>
+                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Confirmed">Đã xác nhận</a></li>
+                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Checked-in">Đã nhận phòng</a></li>
+                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Checked-out">Đã trả phòng</a></li>
+                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Cancelled">Đã hủy</a></li>
+                                                    </ul>
+                                                </div>
+                                                <button class="btn btn-warning text-white mt-2 editBooking" data-id="@item.BookingID">Sửa</button>
+                                                <button class="btn btn-danger mt-2 deleteBooking" data-id="@item.BookingID">Xóa</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
                             </table>
-                            <!-- End Table with stripped rows -->
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
-
-    </main><!-- End #main -->
+    </main>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm/Sửa Đặt Phòng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="bookingModalBody"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Mở modal Thêm đặt phòng
+            $("#openAddBooking").click(function () {
+                $.get("/Admin/Bookings/Create", function (data) {
+                    $("#bookingModalBody").html(data);
+                    $("#bookingModal").modal("show");
+                });
+            });
+
+            // Mở modal Sửa đặt phòng
+            $(".editBooking").click(function () {
+                var id = $(this).data("id");
+                $.get("/Admin/Bookings/Edit/" + id, function (data) {
+                    $("#bookingModalBody").html(data);
+                    $("#bookingModal").modal("show");
+                });
+            });
+
+            // Xử lý đổi trạng thái
+            $(".change-status").click(function (e) {
+                e.preventDefault();
+                var id = $(this).data("id");
+                var status = $(this).data("status");
+
+                if (confirm("Bạn có chắc muốn đổi trạng thái đặt phòng này thành '" + status + "'?")) {
+                    $.ajax({
+                        url: "/Admin/Bookings/ChangeStatus",
+                        type: "POST",
+                        data: { id: id, status: status },
+                        success: function () {
+                            location.reload();
+                        },
+                        error: function (xhr) {
+                            alert(xhr.responseText || "Có lỗi xảy ra khi đổi trạng thái!");
+                        }
+                    });
+                }
+            });
+
+            // Xử lý xóa đặt phòng
+            $(".deleteBooking").click(function () {
+                var id = $(this).data("id");
+
+                if (confirm("Bạn có chắc muốn xóa đặt phòng này?")) {
+                    $.ajax({
+                        url: "/Admin/Bookings/Delete/" + id,
+                        type: "POST",
+                        success: function () {
+                            $("#bookingRow_" + id).remove();
+                        },
+                        error: function (xhr) {
+                            alert(xhr.responseText || "Có lỗi xảy ra khi xóa đặt phòng!");
+                        }
+                    });
+                }
+            });
+
+            // Tìm kiếm
+            $("#searchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#bookingTableBody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

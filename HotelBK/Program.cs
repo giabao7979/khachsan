@@ -1,6 +1,10 @@
 ﻿using HotelBK.Data; // Import namespace của DbContext
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using HotelBK.Models;
+using HotelBK.Services;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,25 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+// Thêm dịch vụ xác thực cookie
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login";
+        options.AccessDeniedPath = "/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    });
+
+// Thêm service Password Hasher
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+// Thêm các service vào Program.cs
+builder.Services.AddScoped<IBookingService, BookingServices>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+
+// Đảm bảo middleware xác thực được kích hoạt
+app.UseAuthentication();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
