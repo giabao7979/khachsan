@@ -1,0 +1,117 @@
+﻿@model IEnumerable<HotelBK.Models.Room>
+@{
+    ViewData["Title"] = "Quản lý phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div>
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Quản lý phòng</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Quản lý phòng</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="top-row d-flex justify-content-between">
+                                <div class="search-container">
+                                    <label for="searchInput">Tìm kiếm:</label>
+                                    <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm">
+                                </div>
+
+                                <button class="btn btn-primary" id="openAddRoom">Thêm phòng</button>
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên Phòng</th>
+                                        <th>Giá</th>
+                                        <th>Giường</th>
+                                        <th>Phòng Tắm</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ảnh</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="roomTableBody">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="roomRow_@item.RoomID">
+                                            <td>@item.RoomID</td>
+                                            <td>@item.RoomName</td>
+                                            <td>@item.Price.ToString("C")</td>
+                                            <td>@item.Beds</td>
+                                            <td>@item.Bathrooms</td>
+                                            <td>@item.Status</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Image))
+                                                {
+                                                    <img src="@item.Image" width="100" />
+                                                }
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-warning text-white editRoom" data-id="@item.RoomID">Sửa</button>
+                                                <button class="btn btn-danger deleteRoom" data-id="@item.RoomID">Xóa</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="roomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm/Sửa Phòng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="roomModalBody"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function () {
+        jQuery("#openAddRoom").click(function () {
+            jQuery.get("/Admin/Rooms/Create", function (data) {
+                jQuery("#roomModalBody").html(data);
+                jQuery("#roomModal").modal("show");
+            });
+        });
+
+        jQuery(".editRoom").click(function () {
+            var id = jQuery(this).data("id");
+            jQuery.get("/Admin/Rooms/Edit/" + id, function (data) {
+                jQuery("#roomModalBody").html(data);
+                jQuery("#roomModal").modal("show");
+            });
+        });
+
+        jQuery(".deleteRoom").click(function () {
+            var id = jQuery(this).data("id");
+            if (confirm("Bạn có chắc muốn xóa phòng này?")) {
+                jQuery.post("/Admin/Rooms/Delete/" + id, function () {
+                    jQuery("#roomRow_" + id).remove();
+                });
+            }
+        });
+    });
+</script>

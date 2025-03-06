@@ -1,0 +1,284 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div>
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+            <h1>Category</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Category</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="top-row">
+                                <!-- Thanh tìm kiếm ở góc trái -->
+                                <div class="search-container">
+                                    <label for="searchInput">Tìm kiếm:</label>
+                                    <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm">
+                                </div>
+
+                                <!-- Nút Thêm Category ở góc phải -->
+                                <div class="add-category-button">
+                                    <button type="button" class="btn btn-success">
+                                        <i class="bi bi-plus-circle"></i> Thêm Category
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Table with stripped rows -->
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Product_ID
+                                        </th>
+                                        <th>Img</th>
+                                        <th>Name</th>
+                                        <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
+                                        <th>Status</th>
+                                        <th>Operate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Unity Pugh</td>
+                                        <td>9958</td>
+                                        <td>Curicó</td>
+                                        <td>2005/02/11</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Theodore Duran</td>
+                                        <td>8971</td>
+                                        <td>Dhanbad</td>
+                                        <td>1999/04/07</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kylie Bishop</td>
+                                        <td>3147</td>
+                                        <td>Norman</td>
+                                        <td>2005/09/08</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Willow Gilliam</td>
+                                        <td>3497</td>
+                                        <td>Amqui</td>
+                                        <td>2009/29/11</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Blossom Dickerson</td>
+                                        <td>5018</td>
+                                        <td>Kempten</td>
+                                        <td>2006/11/09</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Elliott Snyder</td>
+                                        <td>3925</td>
+                                        <td>Enines</td>
+                                        <td>2006/03/08</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Castor Pugh</td>
+                                        <td>9488</td>
+                                        <td>Neath</td>
+                                        <td>2014/23/12</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pearl Carlson</td>
+                                        <td>6231</td>
+                                        <td>Cobourg</td>
+                                        <td>2014/31/08</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Deirdre Bridges</td>
+                                        <td>1579</td>
+                                        <td>Eberswalde-Finow</td>
+                                        <td>2014/26/08</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Deirdre Bridges</td>
+                                        <td>1579</td>
+                                        <td>Eberswalde-Finow</td>
+                                        <td>2014/26/08</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Deirdre Bridges</td>
+                                        <td>1579</td>
+                                        <td>Eberswalde-Finow</td>
+                                        <td>2014/26/08</td>
+                                        <td><button type="button" class="btn btn-primary">Hoạt động</button></td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" id="viewButton">
+                                                <i class="bi bi-eye"></i> Xem
+                                            </button>
+                                            <!-- Nút Sửa -->
+                                            <button type="button" class="btn btn-warning text-white" id="editButton">
+                                                <i class="bi bi-pencil"></i> Sửa
+                                            </button>
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" id="deleteButton">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </td>
+                                    </tr>
+                            </table>
+                            <!-- End Table with stripped rows -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+</div>
+
