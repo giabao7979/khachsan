@@ -53,18 +53,15 @@ namespace HotelBK.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            try
-            {
-                // Sửa "RoomTypes" thành "RoomType" nếu tên bảng trong DB là RoomType
-                ViewBag.RoomTypes = new SelectList(await _context.RoomTypes.ToListAsync(), "RoomTypeID", "TypeName");
-                return PartialView("_Create", room);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading room types: {ex.Message}");
-                ViewBag.RoomTypes = new SelectList(new List<RoomType>(), "RoomTypeID", "TypeName");
-                return PartialView("_Create", room);
-            }
+            ViewBag.RoomTypes = new SelectList(
+                await _context.RoomTypes.ToListAsync(),
+                "RoomTypeID",
+                "TypeName",
+                room.RoomTypeID
+            );
+
+            // Trả về dữ liệu JSON để JavaScript có thể sử dụng
+            return Json(room);
         }
 
         [HttpPost]
@@ -72,24 +69,16 @@ namespace HotelBK.Areas.Admin.Controllers
         {
             try
             {
+                string[] validStatuses = { "Đang ở", "Bảo trì", "Còn trống" };
                 // Kiểm tra các trường bắt buộc
                 if (string.IsNullOrEmpty(room.RoomName))
                 {
                     return BadRequest("Tên phòng không được để trống");
                 }
                 // Đảm bảo Status là một trong các giá trị được chấp nhận
-                if (string.IsNullOrEmpty(room.Status))
+                if (string.IsNullOrEmpty(room.Status) || !validStatuses.Contains(room.Status))
                 {
-                    room.Status = "Available"; // hoặc "Còn trống" tùy theo bạn muốn
-                }
-                else
-                {
-                    // Kiểm tra giá trị Status có hợp lệ không
-                    var validStatuses = new[] { "Đang ở", "Còn trống", "Bảo trì", "Available", "Maintenance", "Occupied" };
-                    if (!validStatuses.Contains(room.Status))
-                    {
-                        room.Status = "Available"; // Đặt mặc định nếu không hợp lệ
-                    }
+                    room.Status = "Còn trống";
                 }
                 if (room.Price <= 0)
                 {
@@ -107,10 +96,6 @@ namespace HotelBK.Areas.Admin.Controllers
                 }
 
                 // Đặt giá trị mặc định cho các trường có thể NULL
-                if (string.IsNullOrEmpty(room.Status))
-                {
-                    room.Status = "Available";
-                }
 
                 // Xử lý RoomTypeID
                 if (room.RoomTypeID <= 0)

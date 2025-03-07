@@ -111,11 +111,22 @@
             });
         });
 
-        jQuery(".editRoom").click(function () {
-            var id = jQuery(this).data("id");
-            jQuery.get("/Admin/Rooms/Edit/" + id, function (data) {
-                jQuery("#roomModalBody").html(data);
-                jQuery("#roomModal").modal("show");
+        $(".editRoom").click(function () {
+            var id = $(this).data("id");
+            $.get("/Admin/Rooms/Edit/" + id, function (data) {
+                $("#roomModalBody").html(data);
+                $("#roomModal").modal("show");
+
+                // Điền dữ liệu cũ
+                $("#RoomID").val(data.roomID);
+                $("#RoomName").val(data.roomName);
+                $("#Price").val(data.price);
+                $("#StarRating").val(data.starRating);
+                $("#Beds").val(data.beds);
+                $("#Bathrooms").val(data.bathrooms);
+                $("#Description").val(data.description);
+                $("#RoomTypeID").val(data.roomTypeID);
+                $("#Status").val(data.status);
             });
         });
 

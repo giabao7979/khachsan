@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HotelBK.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace HotelBK.Data
 {
@@ -20,11 +21,35 @@ namespace HotelBK.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Cấu hình cho RoomType để khớp với bảng trong database
-            modelBuilder.Entity<RoomType>().ToTable("RoomType");
-            modelBuilder.Entity<RoomType>().HasKey(r => r.RoomTypeID);
+            modelBuilder.Entity<Room>()
+            .Property(r => r.Price)
+            .HasColumnType("decimal(18,2)");
 
-            // Các cấu hình khác
+            // Seed Roles
+            modelBuilder.Entity<Role>().HasData(
+                new Role { RoleID = 1, RoleName = "Admin" },
+                new Role { RoleID = 2, RoleName = "Customer" },
+                new Role { RoleID = 3, RoleName = "Staff" }
+            );
+
+            // Seed RoomTypes
+            modelBuilder.Entity<RoomType>().HasData(
+                new RoomType { RoomTypeID = 1, TypeName = "VIP", Description = "Phòng VIP cao cấp" },
+                new RoomType { RoomTypeID = 2, TypeName = "Standard", Description = "Phòng tiêu chuẩn" },
+                new RoomType { RoomTypeID = 3, TypeName = "Deluxe", Description = "Phòng sang trọng" }
+            );
+            var passwordHasher = new PasswordHasher<User>();
+            var adminUser = new User
+            {
+                UserID = 1,
+                FullName = "Admin",
+                Email = "admin@example.com",
+                Phone = "0123456789",
+                RoleID = 1, // ID của role Admin
+                PasswordHash = passwordHasher.HashPassword(null, "Admin@123")
+            };
+
+            modelBuilder.Entity<User>().HasData(adminUser);
         }
     }
 }

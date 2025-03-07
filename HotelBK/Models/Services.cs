@@ -8,12 +8,15 @@ namespace HotelBK.Models
         [Key]
         public int ServiceID { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required]
+        [StringLength(100)]
         public string ServiceName { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
+        [StringLength(255)]
         public string Description { get; set; }
 
         [ForeignKey("User")]

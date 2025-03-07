@@ -12,9 +12,11 @@ namespace HotelBK.Models
         public string RoomName { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
-        public int? StarRating { get; set; } // Nullable
+        [Range(1, 5)]
+        public int? StarRating { get; set; }
 
         [Required]
         public int Beds { get; set; }
@@ -23,16 +25,18 @@ namespace HotelBK.Models
         public int Bathrooms { get; set; }
 
         [StringLength(255)]
-        public string? Description { get; set; } // Nullable
+        public string? Description { get; set; }
 
+        [Required]
         [StringLength(20)]
-        public string? Status { get; set; } // Nullable
+        [RegularExpression(@"^(Đang ở|Bảo trì|Còn trống)$")]
+        public string Status { get; set; } = "Còn trống";
 
-        public string? Image { get; set; } // Nullable
+        public string? Image { get; set; }
 
-        public int? RoomTypeID { get; set; } // Nullable
+        public int? RoomTypeID { get; set; }
 
         [ForeignKey("RoomTypeID")]
-        public RoomType? RoomType { get; set; } // Nullable
+        public RoomType? RoomType { get; set; }
     }
 }
