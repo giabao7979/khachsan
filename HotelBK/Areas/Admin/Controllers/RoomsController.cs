@@ -45,13 +45,32 @@ namespace HotelBK.Areas.Admin.Controllers
                 return PartialView("_Create", new Room());
             }
         }
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> View(int id)
         {
-            var room = await _context.Rooms.FindAsync(id);
+            var room = await _context.Rooms
+                .Include(r => r.RoomType)
+                .FirstOrDefaultAsync(r => r.RoomID == id);
+
             if (room == null)
             {
                 return NotFound();
             }
+
+            return PartialView("_View", room);
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.RoomType)  // Đảm bảo bao gồm RoomType nếu cần
+                .FirstOrDefaultAsync(r => r.RoomID == id);
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            // Ghi log để debug
+            System.Diagnostics.Debug.WriteLine($"Edit: Tìm thấy phòng ID={id}, Tên={room.RoomName}");
 
             ViewBag.RoomTypes = new SelectList(
                 await _context.RoomTypes.ToListAsync(),
@@ -60,7 +79,21 @@ namespace HotelBK.Areas.Admin.Controllers
                 room.RoomTypeID
             );
 
-            // Trả về dữ liệu JSON để JavaScript có thể sử dụng
+            return PartialView("_Edit", room);
+        }
+        // Trong RoomsController
+        [HttpGet]
+        public async Task<IActionResult> GetRoomData(int id)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.RoomType)
+                .FirstOrDefaultAsync(r => r.RoomID == id);
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
             return Json(room);
         }
 

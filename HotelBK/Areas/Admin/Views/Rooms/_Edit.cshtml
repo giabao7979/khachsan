@@ -1,7 +1,11 @@
 ﻿@model HotelBK.Models.Room
 
 <form id="roomEditForm" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="RoomID" value="@Model.RoomID" />
+    <input type="hidden" asp-for="RoomID"/>
+
+    <div style="display:none">
+        Debug: @Model.RoomID - @Model.RoomName
+    </div>
 
     <div class="form-group mb-3">
         <label>Tên Phòng</label>
@@ -72,7 +76,6 @@
     $(document).ready(function() {
         $("#roomEditForm").submit(function(event) {
             event.preventDefault();
-
             var formData = new FormData(this);
 
             $.ajax({

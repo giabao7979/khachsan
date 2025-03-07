@@ -113,20 +113,26 @@
 
         $(".editRoom").click(function () {
             var id = $(this).data("id");
-            $.get("/Admin/Rooms/Edit/" + id, function (data) {
-                $("#roomModalBody").html(data);
-                $("#roomModal").modal("show");
 
-                // Điền dữ liệu cũ
-                $("#RoomID").val(data.roomID);
-                $("#RoomName").val(data.roomName);
-                $("#Price").val(data.price);
-                $("#StarRating").val(data.starRating);
-                $("#Beds").val(data.beds);
-                $("#Bathrooms").val(data.bathrooms);
-                $("#Description").val(data.description);
-                $("#RoomTypeID").val(data.roomTypeID);
-                $("#Status").val(data.status);
+            // Tải form trống trước
+            $("#roomModalBody").load("/Admin/Rooms/_Edit", function() {
+                // Sau khi form đã tải, lấy dữ liệu phòng và điền vào form
+                $.getJSON("/Admin/Rooms/GetRoomData/" + id, function(room) {
+                    console.log("Room data:", room);
+
+                    $("#RoomID").val(room.roomID);
+                    $("#RoomName").val(room.roomName);
+                    $("#Price").val(room.price);
+                    $("#StarRating").val(room.starRating);
+                    $("#Beds").val(room.beds);
+                    $("#Bathrooms").val(room.bathrooms);
+                    $("#Description").val(room.description);
+                    $("#RoomTypeID").val(room.roomTypeID);
+                    $("#Status").val(room.status);
+
+                    // Hiển thị form đã điền dữ liệu
+                    $("#roomModal").modal("show");
+                });
             });
         });
 
