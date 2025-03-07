@@ -499,8 +499,11 @@ wwwroot\admin\assets\vendor\tinymce\tinymce.min.js
 wwwroot\css\bootstrap.min.css
 wwwroot\css\style.css
 wwwroot\favicon.ico
+wwwroot\images\rooms\079e999d-51e0-4304-aba7-53f648645dda.png
+wwwroot\images\rooms\15e8001b-4fca-4e9a-b99a-192297ea58fc.png
 wwwroot\images\rooms\325a47f5-49e7-4053-a9f6-b4c404beed81.png
 wwwroot\images\rooms\6d807e0b-ec2c-437b-b41a-713ab85e04d7.png
+wwwroot\images\rooms\95221a19-6cad-46c9-8308-48cd1545245c.png
 wwwroot\images\rooms\f13f4bdf-e3c7-481c-9911-3e698ad03d7b.png
 wwwroot\img\about-1.jpg
 wwwroot\img\about-2.jpg

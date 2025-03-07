@@ -5,6 +5,7 @@ using HotelBK.Services;
 using HotelBK.Areas.Admin.Filters;
 using HotelBK.Data;
 using HotelBK.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HotelBK.Areas.Admin.Controllers
 {
@@ -28,20 +29,19 @@ namespace HotelBK.Areas.Admin.Controllers
             var rooms = await _roomService.GetAllRooms();
             return View(rooms);
         }
-
         public async Task<IActionResult> Create()
         {
             try
             {
-                // Sửa "RoomTypes" thành "RoomType" nếu tên bảng trong DB là RoomType
-                ViewBag.RoomTypes = new SelectList(await _context.RoomTypes.ToListAsync(), "RoomTypeID", "TypeName");
+                var roomTypes = await _context.RoomTypes.ToListAsync();
+                ViewBag.RoomTypes = new SelectList(roomTypes, "RoomTypeID", "TypeName");
+
+                System.Diagnostics.Debug.WriteLine($"Đã tìm thấy {roomTypes.Count} loại phòng");
                 return PartialView("_Create", new Room());
             }
             catch (Exception ex)
             {
-                // Log lỗi để debug
-                Console.WriteLine($"Error loading room types: {ex.Message}");
-                ViewBag.RoomTypes = new SelectList(new List<RoomType>(), "RoomTypeID", "TypeName");
+                System.Diagnostics.Debug.WriteLine($"Lỗi: {ex.Message}");
                 return PartialView("_Create", new Room());
             }
         }
@@ -72,16 +72,61 @@ namespace HotelBK.Areas.Admin.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                // Kiểm tra các trường bắt buộc
+                if (string.IsNullOrEmpty(room.RoomName))
                 {
-                    var errors = string.Join("; ", ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage));
-                    return BadRequest($"Dữ liệu không hợp lệ: {errors}");
+                    return BadRequest("Tên phòng không được để trống");
+                }
+                // Đảm bảo Status là một trong các giá trị được chấp nhận
+                if (string.IsNullOrEmpty(room.Status))
+                {
+                    room.Status = "Available"; // hoặc "Còn trống" tùy theo bạn muốn
+                }
+                else
+                {
+                    // Kiểm tra giá trị Status có hợp lệ không
+                    var validStatuses = new[] { "Đang ở", "Còn trống", "Bảo trì", "Available", "Maintenance", "Occupied" };
+                    if (!validStatuses.Contains(room.Status))
+                    {
+                        room.Status = "Available"; // Đặt mặc định nếu không hợp lệ
+                    }
+                }
+                if (room.Price <= 0)
+                {
+                    return BadRequest("Giá phải lớn hơn 0");
                 }
 
-                // Ghi log thông tin phòng
-                System.Diagnostics.Debug.WriteLine($"Đang xử lý phòng: ID={room.RoomID}, Tên={room.RoomName}, LoạiID={room.RoomTypeID}");
+                if (room.Beds <= 0)
+                {
+                    return BadRequest("Số giường phải lớn hơn 0");
+                }
+
+                if (room.Bathrooms <= 0)
+                {
+                    return BadRequest("Số phòng tắm phải lớn hơn 0");
+                }
+
+                // Đặt giá trị mặc định cho các trường có thể NULL
+                if (string.IsNullOrEmpty(room.Status))
+                {
+                    room.Status = "Available";
+                }
+
+                // Xử lý RoomTypeID
+                if (room.RoomTypeID <= 0)
+                {
+                    // Đặt giá trị mặc định là 1 (VIP)
+                    room.RoomTypeID = 1;
+                }
+                else
+                {
+                    // Kiểm tra xem RoomTypeID có tồn tại trong bảng RoomType không
+                    var roomTypeExists = await _context.RoomTypes.AnyAsync(rt => rt.RoomTypeID == room.RoomTypeID);
+                    if (!roomTypeExists)
+                    {
+                        return BadRequest($"Loại phòng với ID {room.RoomTypeID} không tồn tại");
+                    }
+                }
 
                 // Xử lý upload hình ảnh
                 if (imageFile != null && imageFile.Length > 0)
@@ -107,9 +152,20 @@ namespace HotelBK.Areas.Admin.Controllers
                     room.Image = "/images/rooms/" + fileName;
                 }
 
+                // Ghi log thông tin phòng
+                System.Diagnostics.Debug.WriteLine($"Thông tin phòng trước khi lưu:");
+                System.Diagnostics.Debug.WriteLine($"ID: {room.RoomID}");
+                System.Diagnostics.Debug.WriteLine($"Tên: {room.RoomName}");
+                System.Diagnostics.Debug.WriteLine($"Giá: {room.Price}");
+                System.Diagnostics.Debug.WriteLine($"Loại phòng ID: {room.RoomTypeID}");
+                System.Diagnostics.Debug.WriteLine($"Số giường: {room.Beds}");
+                System.Diagnostics.Debug.WriteLine($"Số phòng tắm: {room.Bathrooms}");
+                System.Diagnostics.Debug.WriteLine($"Trạng thái: {room.Status}");
+
+                // Lưu vào database
                 if (room.RoomID == 0)
                 {
-                    // Tạo mới
+                    // Thêm mới
                     System.Diagnostics.Debug.WriteLine("Đang thêm phòng mới");
                     _context.Rooms.Add(room);
                 }
@@ -117,19 +173,59 @@ namespace HotelBK.Areas.Admin.Controllers
                 {
                     // Cập nhật
                     System.Diagnostics.Debug.WriteLine($"Đang cập nhật phòng ID={room.RoomID}");
-                    _context.Rooms.Update(room);
+
+                    // Tìm phòng hiện tại
+                    var existingRoom = await _context.Rooms.FindAsync(room.RoomID);
+                    if (existingRoom == null)
+                    {
+                        return BadRequest($"Không tìm thấy phòng với ID {room.RoomID}");
+                    }
+
+                    // Cập nhật các trường
+                    existingRoom.RoomName = room.RoomName;
+                    existingRoom.Price = room.Price;
+                    existingRoom.StarRating = room.StarRating;
+                    existingRoom.Beds = room.Beds;
+                    existingRoom.Bathrooms = room.Bathrooms;
+                    existingRoom.Description = room.Description;
+                    existingRoom.Status = room.Status;
+                    existingRoom.RoomTypeID = room.RoomTypeID;
+
+                    // Chỉ cập nhật Image nếu có upload file mới
+                    if (!string.IsNullOrEmpty(room.Image))
+                    {
+                        existingRoom.Image = room.Image;
+                    }
+
+                    _context.Rooms.Update(existingRoom);
                 }
 
+                // Lưu thay đổi
                 await _context.SaveChangesAsync();
                 System.Diagnostics.Debug.WriteLine("Lưu thành công");
                 return Ok();
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Xử lý lỗi Entity Framework
+                System.Diagnostics.Debug.WriteLine($"DbUpdateException: {dbEx.Message}");
+                if (dbEx.InnerException != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Inner exception: {dbEx.InnerException.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Stack trace: {dbEx.InnerException.StackTrace}");
+                    return BadRequest($"Lỗi database: {dbEx.InnerException.Message}");
+                }
+                return BadRequest($"Lỗi khi lưu phòng: {dbEx.Message}");
+            }
             catch (Exception ex)
             {
-                // Log thông tin lỗi chi tiết
-                System.Diagnostics.Debug.WriteLine($"Lỗi trong CreateOrUpdate: {ex.Message}");
+                // Xử lý lỗi chung
+                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-
+                if (ex.InnerException != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
                 return BadRequest($"Lỗi khi lưu phòng: {ex.Message}");
             }
         }
@@ -145,6 +241,18 @@ namespace HotelBK.Areas.Admin.Controllers
 
             return Ok();
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetRoomTypes()
+        {
+            try
+            {
+                var roomTypes = await _context.RoomTypes.ToListAsync();
+                return Json(roomTypes);
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<RoomType>());
+            }
+        }
     }
 }

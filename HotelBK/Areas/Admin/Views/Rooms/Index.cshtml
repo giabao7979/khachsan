@@ -101,10 +101,13 @@
 
 <script>
     jQuery(document).ready(function () {
-        jQuery("#openAddRoom").click(function () {
-            jQuery.get("/Admin/Rooms/Create", function (data) {
-                jQuery("#roomModalBody").html(data);
-                jQuery("#roomModal").modal("show");
+        $("#openAddRoom").click(function () {
+            $.get("/Admin/Rooms/Create", function (data) {
+                $("#roomModalBody").html(data);
+                $("#roomModal").modal("show");
+
+                // Thêm log để kiểm tra dữ liệu loại phòng
+                console.log("Room types in dropdown:", $("#RoomTypeID option").length);
             });
         });
 

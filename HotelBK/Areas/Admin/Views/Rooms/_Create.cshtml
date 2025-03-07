@@ -1,23 +1,28 @@
 ﻿@model HotelBK.Models.Room
 
-<form id="roomForm" enctype="multipart/form-data">
-    <input type="hidden" asp-for="RoomID" />
+<form id="roomForm" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="RoomID" id="RoomID" value="0" />
 
     <div class="form-group mb-3">
         <label>Tên Phòng</label>
-        <input asp-for="RoomName" class="form-control" required />
+        <input type="text" name="RoomName" id="RoomName" class="form-control" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Loại Phòng</label>
-        <select asp-for="RoomTypeID" asp-items="ViewBag.RoomTypes" class="form-select" required>
+        <select name="RoomTypeID" id="RoomTypeID" class="form-select" required>
             <option value="">-- Chọn loại phòng --</option>
+            <option value="1">VIP</option>
+            <option value="2">Luxury</option>
+            <option value="3">Normal</option>
         </select>
+        <!-- Thêm hidden input để đảm bảo giá trị luôn được gửi đi -->
+        <input type="hidden" name="RoomTypeID" value="1" />
     </div>
 
     <div class="form-group mb-3">
         <label>Giá</label>
-        <input asp-for="Price" type="number" class="form-control" required />
+        <input type="number" name="Price" id="Price" class="form-control" min="0" step="0.01" required />
     </div>
 
     <div class="form-group mb-3">
@@ -27,12 +32,12 @@
 
     <div class="form-group mb-3">
         <label>Số giường</label>
-        <input asp-for="Beds" type="number" class="form-control" required />
+        <input type="number" name="Beds" id="Beds" class="form-control" min="1" value="" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Số phòng tắm</label>
-        <input asp-for="Bathrooms" type="number" class="form-control" required />
+        <input type="number" name="Bathrooms" id="Bathrooms" class="form-control" min="1" value="1" required />
     </div>
 
     <div class="form-group mb-3">
@@ -64,26 +69,110 @@
 </form>
 
 <script>
-    $(document).ready(function () {
-        $("#roomForm").submit(function (event) {
+        $(document).ready(function() {
+        // Bắt sự kiện khi submit form
+        $("#roomForm").submit(function(event) {
+            // Ngăn form submit theo cách thông thường
             event.preventDefault();
+
+            // Kiểm tra dữ liệu nhập vào
+            var roomName = $("#RoomName").val();
+            var roomTypeID = $("#RoomTypeID").val();
+            var price = $("#Price").val();
+            var beds = $("#Beds").val();
+            var bathrooms = $("#Bathrooms").val();
+
+            // Kiểm tra tên phòng
+            if (!roomName) {
+                alert("Vui lòng nhập tên phòng");
+                return false;
+            }
+
+            // Kiểm tra loại phòng
+            if (!roomTypeID) {
+                alert("Vui lòng chọn loại phòng");
+                return false;
+            }
+
+            // Kiểm tra giá
+            if (!price || isNaN(price) || price <= 0) {
+                alert("Vui lòng nhập giá hợp lệ");
+                return false;
+            }
+
+            // Kiểm tra số giường
+            if (!beds || isNaN(beds) || beds <= 0) {
+                alert("Vui lòng nhập số giường hợp lệ");
+                return false;
+            }
+
+            // Kiểm tra số phòng tắm
+            if (!bathrooms || isNaN(bathrooms) || bathrooms <= 0) {
+                alert("Vui lòng nhập số phòng tắm hợp lệ");
+                return false;
+            }
+
+            // Tạo FormData object để xử lý cả file upload
             var formData = new FormData(this);
 
+            // Gửi dữ liệu bằng AJAX
             $.ajax({
                 url: "/Admin/Rooms/CreateOrUpdate",
                 type: "POST",
                 data: formData,
-                processData: false,
-                contentType: false,
-                success: function () {
+                processData: false,  // Quan trọng khi dùng FormData
+                contentType: false,  // Quan trọng khi dùng FormData
+                success: function(result) {
+                    // Xử lý khi thành công
+                    alert("Thêm phòng thành công!");
+                    // Đóng modal nếu dùng modal
                     $("#roomModal").modal("hide");
+                    // Tải lại trang để cập nhật danh sách
                     location.reload();
                 },
-                error: function (xhr) {
-                    console.error("Lỗi:", xhr);
-                    alert(xhr.responseText || "Có lỗi xảy ra khi lưu phòng!");
+                error: function(xhr, status, error) {
+                    // Xử lý khi có lỗi
+                    alert("Lỗi: " + xhr.responseText);
                 }
             });
+        });
+
+        // Tải loại phòng cho dropdown
+        function loadRoomTypes() {
+            $.getJSON("/Admin/Rooms/GetRoomTypes", function(data) {
+                var dropdown = $("#RoomTypeID");
+                dropdown.empty();
+                dropdown.append('<option value="">-- Chọn loại phòng --</option>');
+
+                $.each(data, function(index, item) {
+                    dropdown.append($('<option></option>')
+                        .val(item.roomTypeID)
+                        .text(item.typeName));
+                });
+            }).fail(function() {
+                console.error("Không thể tải danh sách loại phòng");
+                // Hard-code các loại phòng nếu API fail
+                var dropdown = $("#RoomTypeID");
+                dropdown.empty();
+                dropdown.append('<option value="">-- Chọn loại phòng --</option>');
+                dropdown.append('<option value="1">VIP</option>');
+                dropdown.append('<option value="2">Luxury</option>');
+                dropdown.append('<option value="3">Normal</option>');
+            });
+        }
+
+        // Gọi hàm tải loại phòng khi trang đã sẵn sàng
+        loadRoomTypes();
+
+        // Hiển thị preview ảnh khi chọn file
+        $("#imageFile").change(function() {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#imagePreview').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
         });
     });
 </script>

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "bvpXK3t6LBX4xey6Isyo/FN3OpXCwK3qMg1yc4XAODs=",
+  "Hash": "hp9HfodlVjvtoZVPnRFZSvR1UW/Ao/s2ux9+Hg8JZ3g=",
   "Source": "HotelBK",
   "BasePath": "_content/HotelBK",
   "Mode": "Default",
@@ -10580,6 +10580,48 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
+      "Identity": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\079e999d-51e0-4304-aba7-53f648645dda.png",
+      "SourceId": "HotelBK",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\",
+      "BasePath": "_content/HotelBK",
+      "RelativePath": "images/rooms/079e999d-51e0-4304-aba7-53f648645dda#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "pheamiqgy7",
+      "Integrity": "3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\rooms\\079e999d-51e0-4304-aba7-53f648645dda.png"
+    },
+    {
+      "Identity": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\15e8001b-4fca-4e9a-b99a-192297ea58fc.png",
+      "SourceId": "HotelBK",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\",
+      "BasePath": "_content/HotelBK",
+      "RelativePath": "images/rooms/15e8001b-4fca-4e9a-b99a-192297ea58fc#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "pheamiqgy7",
+      "Integrity": "3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\rooms\\15e8001b-4fca-4e9a-b99a-192297ea58fc.png"
+    },
+    {
       "Identity": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\325a47f5-49e7-4053-a9f6-b4c404beed81.png",
       "SourceId": "HotelBK",
       "SourceType": "Discovered",
@@ -10620,6 +10662,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\rooms\\6d807e0b-ec2c-437b-b41a-713ab85e04d7.png"
+    },
+    {
+      "Identity": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\95221a19-6cad-46c9-8308-48cd1545245c.png",
+      "SourceId": "HotelBK",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\",
+      "BasePath": "_content/HotelBK",
+      "RelativePath": "images/rooms/95221a19-6cad-46c9-8308-48cd1545245c#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "pheamiqgy7",
+      "Integrity": "3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\rooms\\95221a19-6cad-46c9-8308-48cd1545245c.png"
     },
     {
       "Identity": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f13f4bdf-e3c7-481c-9911-3e698ad03d7b.png",
@@ -55613,7 +55676,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 07 Mar 2025 01:52:01 GMT"
+          "Value": "Fri, 07 Mar 2025 03:30:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -55658,7 +55721,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 07 Mar 2025 01:52:01 GMT"
+          "Value": "Fri, 07 Mar 2025 03:30:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -55703,7 +55766,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 07 Mar 2025 01:52:01 GMT"
+          "Value": "Fri, 07 Mar 2025 03:30:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -55740,7 +55803,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 07 Mar 2025 01:52:01 GMT"
+          "Value": "Fri, 07 Mar 2025 03:30:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -55751,6 +55814,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-0nzIFEveKF3EY6wlWctMXj3q4M921yzLm24JP8TmJVY="
+        }
+      ]
+    },
+    {
+      "Route": "images/rooms/079e999d-51e0-4304-aba7-53f648645dda.pheamiqgy7.png",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\079e999d-51e0-4304-aba7-53f648645dda.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6955"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Mar 2025 03:23:49 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pheamiqgy7"
+        },
+        {
+          "Name": "label",
+          "Value": "images/rooms/079e999d-51e0-4304-aba7-53f648645dda.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg="
+        }
+      ]
+    },
+    {
+      "Route": "images/rooms/079e999d-51e0-4304-aba7-53f648645dda.png",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\079e999d-51e0-4304-aba7-53f648645dda.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6955"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Mar 2025 03:23:49 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg="
+        }
+      ]
+    },
+    {
+      "Route": "images/rooms/15e8001b-4fca-4e9a-b99a-192297ea58fc.pheamiqgy7.png",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\15e8001b-4fca-4e9a-b99a-192297ea58fc.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6955"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Mar 2025 03:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pheamiqgy7"
+        },
+        {
+          "Name": "label",
+          "Value": "images/rooms/15e8001b-4fca-4e9a-b99a-192297ea58fc.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg="
+        }
+      ]
+    },
+    {
+      "Route": "images/rooms/15e8001b-4fca-4e9a-b99a-192297ea58fc.png",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\15e8001b-4fca-4e9a-b99a-192297ea58fc.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6955"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Mar 2025 03:45:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg="
         }
       ]
     },
@@ -55915,6 +56142,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-W6unYNZiCEz1KflltKImWBfs7GyaCYcGJiSrTxmyPhY="
+        }
+      ]
+    },
+    {
+      "Route": "images/rooms/95221a19-6cad-46c9-8308-48cd1545245c.pheamiqgy7.png",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\95221a19-6cad-46c9-8308-48cd1545245c.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6955"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Mar 2025 03:31:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "pheamiqgy7"
+        },
+        {
+          "Name": "label",
+          "Value": "images/rooms/95221a19-6cad-46c9-8308-48cd1545245c.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg="
+        }
+      ]
+    },
+    {
+      "Route": "images/rooms/95221a19-6cad-46c9-8308-48cd1545245c.png",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\95221a19-6cad-46c9-8308-48cd1545245c.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "6955"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Mar 2025 03:31:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-3WWkPlD9ip1GmtootAbgvf9zVWl62J2RBIR8g8TZzVg="
         }
       ]
     },

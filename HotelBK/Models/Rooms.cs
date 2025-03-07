@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotelBK.Models
 {
@@ -13,7 +14,7 @@ namespace HotelBK.Models
         [Required]
         public decimal Price { get; set; }
 
-        public int? StarRating { get; set; }
+        public int? StarRating { get; set; } // Nullable
 
         [Required]
         public int Beds { get; set; }
@@ -21,13 +22,17 @@ namespace HotelBK.Models
         [Required]
         public int Bathrooms { get; set; }
 
-        public string? Description { get; set; }
+        [StringLength(255)]
+        public string? Description { get; set; } // Nullable
 
-        public string? Status { get; set; }
+        [StringLength(20)]
+        public string? Status { get; set; } // Nullable
 
-        public string? Image { get; set; } // Lưu đường dẫn ảnh
+        public string? Image { get; set; } // Nullable
 
-        public int RoomTypeID { get; set; } // Foreign key for RoomType
-        public RoomType RoomType { get; set; }
+        public int? RoomTypeID { get; set; } // Nullable
+
+        [ForeignKey("RoomTypeID")]
+        public RoomType? RoomType { get; set; } // Nullable
     }
 }
