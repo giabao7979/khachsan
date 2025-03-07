@@ -2009,6 +2009,18 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\325a47f5-49e7-4053-a9f6-b4c404beed81.png",
+      "PackagePath": "staticwebassets\\images\\rooms\\325a47f5-49e7-4053-a9f6-b4c404beed81.png"
+    },
+    {
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6d807e0b-ec2c-437b-b41a-713ab85e04d7.png",
+      "PackagePath": "staticwebassets\\images\\rooms\\6d807e0b-ec2c-437b-b41a-713ab85e04d7.png"
+    },
+    {
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f13f4bdf-e3c7-481c-9911-3e698ad03d7b.png",
+      "PackagePath": "staticwebassets\\images\\rooms\\f13f4bdf-e3c7-481c-9911-3e698ad03d7b.png"
+    },
+    {
       "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\img\\about-1.jpg",
       "PackagePath": "staticwebassets\\img\\about-1.jpg"
     },
