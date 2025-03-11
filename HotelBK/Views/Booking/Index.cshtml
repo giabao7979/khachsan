@@ -1,16 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Booking";
+﻿@model HotelBK.Models.Booking
+
+@{
+    ViewData["Title"] = "Đặt phòng";
+    var room = ViewBag.Room as HotelBK.Models.Room;
 }
+
 <div>
     <!-- Page Header Start -->
     <div class="container-fluid page-header mb-5 p-0" style="background-image: url(img/carousel-1.jpg);">
         <div class="container-fluid page-header-inner py-5">
             <div class="container text-center pb-5">
-                <h1 class="display-3 text-white mb-3 animated slideInDown">Booking</h1>
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Đặt phòng</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center text-uppercase">
-                        <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                        <li class="breadcrumb-item text-white active" aria-current="page">Booking</li>
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/Room">Phòng</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Đặt phòng</li>
                     </ol>
                 </nav>
             </div>
@@ -20,93 +25,139 @@
     <!-- Booking Start -->
     <div class="container-xxl py-5">
         <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title text-center text-primary text-uppercase">Đặt phòng</h6>
-                <h1 class="mb-5">Đặt Phòng</h1>
-            </div>
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger mb-4">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
             <div class="row g-5">
-                <div class="col-lg-6">
-                    <div class="row g-3">
-                        <div class="col-6 text-end">
-                            <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.1s" src="img/about-1.jpg" style="margin-top: 25%;">
-                        </div>
-                        <div class="col-6 text-start">
-                            <img class="img-fluid rounded w-100 wow zoomIn" data-wow-delay="0.3s" src="img/about-2.jpg">
-                        </div>
-                        <div class="col-6 text-end">
-                            <img class="img-fluid rounded w-50 wow zoomIn" data-wow-delay="0.5s" src="img/about-3.jpg">
-                        </div>
-                        <div class="col-6 text-start">
-                            <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.7s" src="img/about-4.jpg">
+                @if (room != null)
+                {
+                    <div class="col-lg-6">
+                        <div class="row g-3">
+                            <div class="room-item shadow rounded overflow-hidden">
+                                <div class="position-relative">
+                                    @if (!string.IsNullOrEmpty(room.Image))
+                                    {
+                                        <img class="img-fluid" src="@room.Image" alt="@room.RoomName" style="width: 100%; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <img class="img-fluid" src="/img/room-1.jpg" alt="@room.RoomName" style="width: 100%; object-fit: cover;">
+                                    }
+                                </div>
+
+                                <div class="p-4 mt-2">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h5 class="mb-0">@room.RoomName</h5>
+                                        <div class="ps-2">
+                                            @for (int i = 0; i < (room.StarRating ?? 0); i++)
+                                            {
+                                                <small class="fa fa-star text-primary"></small>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>@room.Beds Giường</small>
+                                        <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>@room.Bathrooms Phòng tắm</small>
+                                        <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
+                                    </div>
+                                    <p class="text-body mb-3">@(string.IsNullOrEmpty(room.Description) ? "Phòng tiêu chuẩn với đầy đủ tiện nghi." : room.Description)</p>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-primary fw-bold">@room.Price.ToString("N0") VNĐ/đêm</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
                 <div class="col-lg-6">
                     <div class="wow fadeInUp" data-wow-delay="0.2s">
-                        <form>
+                        <form method="post" action="/Booking/BookRoom">
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <div class="alert alert-danger">
+                                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                </div>
+                            }
+
+                            @if (room != null)
+                            {
+                                <input type="hidden" name="RoomID" value="@room.RoomID" />
+                            }
+                            else
+                            {
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="RoomID" name="RoomID" required>
+                                                <option value="">-- Chọn phòng --</option>
+                                                @foreach (var r in await new HotelBK.Data.HotelContext(null).Rooms.Include(r => r.RoomType).ToListAsync())
+                                                {
+                                                    <option value="@r.RoomID">@r.RoomName - @r.Price.ToString("N0") VNĐ/đêm</option>
+                                                }
+                                            </select>
+                                            <label for="RoomID">Chọn phòng</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="name" placeholder="Your Name">
-                                        <label for="name">Your Name</label>
+                                        <input type="text" class="form-control" id="FullName" name="FullName" placeholder="Họ tên"
+                                               value="@(User.Identity.IsAuthenticated ? User.Identity.Name : "")" required>
+                                        <label for="FullName">Họ tên</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="email" class="form-control" id="phone" placeholder="Your Phone">
-                                        <label for="email">Your Phone</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" id="checkin" placeholder="Check In" data-target="#date3" data-toggle="datetimepicker" />
-                                        <label for="checkin">Check In</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating date" id="date4" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" id="checkout" placeholder="Check Out" data-target="#date4" data-toggle="datetimepicker" />
-                                        <label for="checkout">Check Out</label>
+                                        <input type="email" class="form-control" id="Email" name="Email" placeholder="Email"
+                                               value="@(User.Identity.IsAuthenticated ? User.FindFirstValue(ClaimTypes.Email) : "")" required>
+                                        <label for="Email">Email</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <select class="form-select" id="select1">
-                                            <option value="1">Adult 1</option>
-                                            <option value="2">Adult 2</option>
-                                            <option value="3">Adult 3</option>
-                                        </select>
-                                        <label for="select1">Select Adult</label>
+                                        <input type="text" class="form-control" id="Phone" name="Phone" placeholder="Số điện thoại" required>
+                                        <label for="Phone">Số điện thoại</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <select class="form-select" id="select2">
-                                            <option value="1">Child 1</option>
-                                            <option value="2">Child 2</option>
-                                            <option value="3">Child 3</option>
-                                        </select>
-                                        <label for="select2">Select Child</label>
+                                        <input type="number" class="form-control" id="RoomCount" name="RoomCount" placeholder="Số lượng phòng"
+                                               min="1" max="5" value="@(ViewBag.RoomCount ?? 1)" required>
+                                        <label for="RoomCount">Số lượng phòng</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="CheckInDate" name="CheckInDate" placeholder="Ngày nhận phòng"
+                                               value="@(ViewBag.CheckIn?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))"
+                                               min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                                        <label for="CheckInDate">Ngày nhận phòng</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate" placeholder="Ngày trả phòng"
+                                               value="@(ViewBag.CheckOut?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(2).ToString("yyyy-MM-dd"))"
+                                               min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required>
+                                        <label for="CheckOutDate">Ngày trả phòng</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Để lại ghi chú ở đây" id="SpecialRequest" name="SpecialRequest" style="height: 100px"></textarea>
+                                        <label for="SpecialRequest">Yêu cầu đặc biệt</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="select3">
-                                            <option value="1">Room 1</option>
-                                            <option value="2">Room 2</option>
-                                            <option value="3">Room 3</option>
-                                        </select>
-                                        <label for="select3">Select A Room</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Special Request" id="message" style="height: 100px"></textarea>
-                                        <label for="message">Special Request</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <a class="btn btn-primary w-100 py-3" href="Payment">Book Now</a>
+                                    <button class="btn btn-primary w-100 py-3" type="submit">Đặt phòng</button>
                                 </div>
                             </div>
                         </form>
@@ -116,21 +167,4 @@
         </div>
     </div>
     <!-- Booking End -->
-    <!-- Newsletter Start -->
-    <div class="container newsletter mt-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="row justify-content-center">
-            <div class="col-lg-10 border rounded p-1">
-                <div class="border rounded text-center p-1">
-                    <div class="bg-white rounded text-center p-5">
-                        <h4 class="mb-4">Đăng ký bản tin của chúng tôi </h4>
-                        <div class="position-relative mx-auto" style="max-width: 400px;">
-                            <input class="form-control w-100 py-3 ps-4 pe-5" type="text" placeholder="Nhập email của bạn">
-                            <button type="button" class="btn btn-primary py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">Xác nhận</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Newsletter Start -->
 </div>

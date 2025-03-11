@@ -25,7 +25,6 @@ namespace HotelBK.Controllers
             return View();
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Index(string email, string password)
         {
@@ -43,6 +42,27 @@ namespace HotelBK.Controllers
 
             if (passwordResult == PasswordVerificationResult.Success)
             {
+                // Tạo claims để lưu thông tin người dùng
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.FullName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role.RoleName)
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
                 // Chuyển hướng theo vai trò
                 if (user.Role.RoleName == "Admin")
                 {

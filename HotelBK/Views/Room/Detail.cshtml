@@ -1,0 +1,166 @@
+﻿@model HotelBK.Models.Room
+@{
+    ViewBag.Title = Model.RoomName;
+}
+
+<div>
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+        <div class="container-fluid page-header-inner py-5">
+            <div class="container text-center pb-5">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Chi tiết phòng</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center text-uppercase">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/Room">Phòng</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">@Model.RoomName</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <!-- Room Detail Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-8">
+                    <div class="mb-5">
+                        @if (!string.IsNullOrEmpty(Model.Image))
+                        {
+                            <img class="img-fluid w-100 rounded" src="@Model.Image" alt="@Model.RoomName">
+                        }
+                        else
+                        {
+                            <img class="img-fluid w-100 rounded" src="/img/room-1.jpg" alt="@Model.RoomName">
+                        }
+                    </div>
+
+                    <div class="mb-5">
+                        <div class="d-flex mb-3">
+                            <h1 class="mb-0">@Model.RoomName</h1>
+                            <div class="ps-3 d-flex align-items-center">
+                                @for (int i = 0; i < (Model.StarRating ?? 0); i++)
+                                {
+                                    <span class="fa fa-star text-primary"></span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap mb-3">
+                            <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                <i class="fa fa-bed text-primary me-2"></i>@Model.Beds Giường
+                            </span>
+                            <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                <i class="fa fa-bath text-primary me-2"></i>@Model.Bathrooms Phòng tắm
+                            </span>
+                            <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                <i class="fa fa-wifi text-primary me-2"></i>Wifi
+                            </span>
+                            <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                <i class="fa fa-tv text-primary me-2"></i>TV
+                            </span>
+                            <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                <i class="fa fa-fan text-primary me-2"></i>Điều hòa
+                            </span>
+                        </div>
+
+                        <h4 class="mb-3">Mô tả</h4>
+                        <p>@(string.IsNullOrEmpty(Model.Description) ? "Phòng tiêu chuẩn với đầy đủ tiện nghi hiện đại, không gian thoáng đãng, ánh sáng tự nhiên." : Model.Description)</p>
+                        <p>Phòng được thiết kế sang trọng với không gian rộng rãi, thoáng mát. Đầy đủ tiện nghi hiện đại như TV màn hình phẳng, tủ lạnh mini, két an toàn, wifi miễn phí. Phòng tắm riêng với đầy đủ đồ dùng vệ sinh cá nhân chất lượng cao.</p>
+
+                        <h4 class="mb-3">Tiện nghi</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>Wifi miễn phí</li>
+                                    <li>Điều hòa nhiệt độ</li>
+                                    <li>TV màn hình phẳng</li>
+                                    <li>Minibar</li>
+                                    <li>Két an toàn</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>Dịch vụ phòng 24/7</li>
+                                    <li>Dọn phòng hàng ngày</li>
+                                    <li>Nước uống miễn phí</li>
+                                    <li>Bàn làm việc</li>
+                                    <li>Đồ dùng vệ sinh cá nhân</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Booking Form Start -->
+                    <div class="bg-light p-3 mb-5 rounded">
+                        <h3 class="mb-4 text-center">Đặt phòng ngay</h3>
+                        <div class="border-bottom text-center mb-3 pb-3">
+                            <h4 class="mb-0">
+                                <span class="text-primary">@Model.Price.ToString("N0") VNĐ</span>
+                                <small>/ đêm</small>
+                            </h4>
+                        </div>
+                        <form action="/Booking" method="get">
+                            <input type="hidden" name="roomId" value="@Model.RoomID" />
+                            <div class="mb-3">
+                                <label class="form-label">Ngày nhận phòng</label>
+                                <input type="date" class="form-control" name="checkIn" required
+                                       min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ngày trả phòng</label>
+                                <input type="date" class="form-control" name="checkOut" required
+                                       min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số người lớn</label>
+                                <select class="form-select" name="adults">
+                                    <option value="1">1 người</option>
+                                    <option value="2" selected>2 người</option>
+                                    <option value="3">3 người</option>
+                                    <option value="4">4 người</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số trẻ em</label>
+                                <select class="form-select" name="children">
+                                    <option value="0" selected>0 trẻ em</option>
+                                    <option value="1">1 trẻ em</option>
+                                    <option value="2">2 trẻ em</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số phòng</label>
+                                <select class="form-select" name="roomCount">
+                                    <option value="1" selected>1 phòng</option>
+                                    <option value="2">2 phòng</option>
+                                    <option value="3">3 phòng</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-3">Đặt ngay</button>
+                        </form>
+                    </div>
+                    <!-- Booking Form End -->
+                    <!-- Liên hệ Start -->
+                    <div class="bg-light p-4 mb-5 rounded">
+                        <h4 class="mb-4">Cần hỗ trợ?</h4>
+                        <p>Hãy liên hệ ngay để được hỗ trợ và tư vấn nhanh nhất</p>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fa fa-phone-alt text-primary me-2"></i>
+                            <span>0333754437</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-envelope text-primary me-2"></i>
+                            <span>lotushotel@gmail.com</span>
+                        </div>
+                    </div>
+                    <!-- Liên hệ End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Room Detail End -->
+</div>

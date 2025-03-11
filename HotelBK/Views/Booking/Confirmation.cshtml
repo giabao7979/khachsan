@@ -1,0 +1,68 @@
+﻿@model HotelBK.Models.Booking
+@{
+    ViewData["Title"] = "Xác nhận đặt phòng";
+}
+
+<div>
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+        <div class="container-fluid page-header-inner py-5">
+            <div class="container text-center pb-5">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Xác nhận đặt phòng</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center text-uppercase">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Xác nhận đặt phòng</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <!-- Confirmation Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="bg-light p-4 rounded">
+                        <div class="text-center mb-4">
+                            <i class="fa fa-check-circle text-primary" style="font-size: 5rem;"></i>
+                            <h2 class="mt-3">Đặt phòng thành công!</h2>
+                            <p>Cảm ơn bạn đã lựa chọn Lotus Hotel. Đơn đặt phòng của bạn đã được xác nhận.</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Thông tin đặt phòng</h4>
+                                <p><strong>Mã đặt phòng:</strong> #@Model.BookingID</p>
+                                <p><strong>Họ tên:</strong> @Model.FullName</p>
+                                <p><strong>Email:</strong> @Model.Email</p>
+                                <p><strong>Số điện thoại:</strong> @Model.Phone</p>
+                                <p><strong>Ngày đặt:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Thông tin phòng</h4>
+                                <p><strong>Tên phòng:</strong> @Model.Room.RoomName</p>
+                                <p><strong>Số lượng phòng:</strong> @Model.RoomCount</p>
+                                <p><strong>Ngày nhận phòng:</strong> @Model.CheckInDate.ToString("dd/MM/yyyy")</p>
+                                <p><strong>Ngày trả phòng:</strong> @Model.CheckOutDate.ToString("dd/MM/yyyy")</p>
+                                <p><strong>Tổng tiền:</strong> @((Model.Room.Price * Model.RoomCount * (Model.CheckOutDate - Model.CheckInDate).Days).ToString("N0")) VNĐ</p>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <p>Chúng tôi sẽ liên hệ với bạn qua email hoặc số điện thoại để xác nhận đặt phòng này.</p>
+                            <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua số điện thoại: <strong>0333754437</strong></p>
+
+                            <div class="mt-4">
+                                <a href="/" class="btn btn-primary">Quay lại trang chủ</a>
+                                <a href="/Room" class="btn btn-secondary">Tiếp tục đặt phòng</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirmation End -->
+</div>
