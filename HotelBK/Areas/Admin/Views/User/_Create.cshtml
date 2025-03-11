@@ -1,0 +1,39 @@
+﻿@model HotelBK.Models.User
+
+<form action="/Admin/User/CreateOrUpdate" method="post">
+    <input type="hidden" name="UserID" value="0" />
+
+    <div class="form-group mb-3">
+        <label>Họ và tên</label>
+        <input type="text" name="FullName" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Email</label>
+        <input type="email" name="Email" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Số điện thoại</label>
+        <input type="text" name="Phone" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Mật khẩu</label>
+        <input type="password" name="password" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Vai trò</label>
+        <select name="RoleID" class="form-select" required>
+            <option value="">-- Chọn vai trò --</option>
+            @foreach (var item in ViewBag.Roles)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+</form>

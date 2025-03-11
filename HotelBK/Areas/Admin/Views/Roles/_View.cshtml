@@ -1,0 +1,52 @@
+﻿@model HotelBK.Models.Role
+
+<div class="role-details">
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">ID:</div>
+        <div class="col-md-8">@Model.RoleID</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Tên vai trò:</div>
+        <div class="col-md-8">@Model.RoleName</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Số lượng người dùng:</div>
+        <div class="col-md-8">@ViewBag.UserCount</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Loại vai trò:</div>
+        <div class="col-md-8">
+            @if (Model.RoleID <= 3)
+            {
+                <span class="badge bg-primary">Vai trò mặc định</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Vai trò tùy chỉnh</span>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        @if (Model.RoleID > 3)
+        {
+            <button type="button" class="btn btn-primary editRole" data-id="@Model.RoleID">Sửa thông tin</button>
+        }
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(".editRole").click(function() {
+            var id = $(this).data("id");
+            $.get("/Admin/Roles/Edit/" + id, function(data) {
+                $("#roleModalTitle").text("Chỉnh sửa vai trò");
+                $("#roleModalBody").html(data);
+            });
+        });
+    });
+</script>

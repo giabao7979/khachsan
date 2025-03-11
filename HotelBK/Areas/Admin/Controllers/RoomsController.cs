@@ -5,7 +5,6 @@ using HotelBK.Services;
 using HotelBK.Areas.Admin.Filters;
 using HotelBK.Data;
 using HotelBK.Models;
-using Microsoft.IdentityModel.Tokens;
 
 namespace HotelBK.Areas.Admin.Controllers
 {
@@ -29,6 +28,7 @@ namespace HotelBK.Areas.Admin.Controllers
             var rooms = await _roomService.GetAllRooms();
             return View(rooms);
         }
+
         public async Task<IActionResult> Create()
         {
             try
@@ -45,6 +45,7 @@ namespace HotelBK.Areas.Admin.Controllers
                 return PartialView("_Create", new Room());
             }
         }
+
         public async Task<IActionResult> View(int id)
         {
             var room = await _context.Rooms
@@ -58,10 +59,11 @@ namespace HotelBK.Areas.Admin.Controllers
 
             return PartialView("_View", room);
         }
+
         public async Task<IActionResult> Edit(int id)
         {
             var room = await _context.Rooms
-                .Include(r => r.RoomType)  // Đảm bảo bao gồm RoomType nếu cần
+                .Include(r => r.RoomType)
                 .FirstOrDefaultAsync(r => r.RoomID == id);
 
             if (room == null)
@@ -81,38 +83,33 @@ namespace HotelBK.Areas.Admin.Controllers
 
             return PartialView("_Edit", room);
         }
-        // Trong RoomsController
-        [HttpGet]
-        public async Task<IActionResult> GetRoomData(int id)
-        {
-            var room = await _context.Rooms
-                .Include(r => r.RoomType)
-                .FirstOrDefaultAsync(r => r.RoomID == id);
-
-            if (room == null)
-            {
-                return NotFound();
-            }
-
-            return Json(room);
-        }
 
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdate(Room room, IFormFile imageFile)
         {
             try
             {
+                // Ghi log thông tin phòng được gửi lên
+                System.Diagnostics.Debug.WriteLine($"Đã nhận request CreateOrUpdate");
+                System.Diagnostics.Debug.WriteLine($"Room ID: {room.RoomID}");
+                System.Diagnostics.Debug.WriteLine($"Room Name: {room.RoomName}");
+                System.Diagnostics.Debug.WriteLine($"Room Type ID: {room.RoomTypeID}");
+                System.Diagnostics.Debug.WriteLine($"Image file: {(imageFile != null ? imageFile.FileName : "null")}");
+
                 string[] validStatuses = { "Đang ở", "Bảo trì", "Còn trống" };
+
                 // Kiểm tra các trường bắt buộc
                 if (string.IsNullOrEmpty(room.RoomName))
                 {
                     return BadRequest("Tên phòng không được để trống");
                 }
+
                 // Đảm bảo Status là một trong các giá trị được chấp nhận
                 if (string.IsNullOrEmpty(room.Status) || !validStatuses.Contains(room.Status))
                 {
                     room.Status = "Còn trống";
                 }
+
                 if (room.Price <= 0)
                 {
                     return BadRequest("Giá phải lớn hơn 0");
@@ -129,8 +126,6 @@ namespace HotelBK.Areas.Admin.Controllers
                 }
 
                 // Đặt giá trị mặc định cho các trường có thể NULL
-
-                // Xử lý RoomTypeID
                 if (room.RoomTypeID <= 0)
                 {
                     // Đặt giá trị mặc định là 1 (VIP)
@@ -221,7 +216,17 @@ namespace HotelBK.Areas.Admin.Controllers
                 // Lưu thay đổi
                 await _context.SaveChangesAsync();
                 System.Diagnostics.Debug.WriteLine("Lưu thành công");
-                return Ok();
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    // AJAX request
+                    return Ok(new { success = true, message = "Lưu phòng thành công" });
+                }
+                else
+                {
+                    // Normal form submit
+                    return RedirectToAction("Index");
+                }
             }
             catch (DbUpdateException dbEx)
             {
@@ -259,6 +264,7 @@ namespace HotelBK.Areas.Admin.Controllers
 
             return Ok();
         }
+
         [HttpGet]
         public async Task<IActionResult> GetRoomTypes()
         {
@@ -269,6 +275,7 @@ namespace HotelBK.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Lỗi lấy danh sách loại phòng: {ex.Message}");
                 return Json(new List<RoomType>());
             }
         }

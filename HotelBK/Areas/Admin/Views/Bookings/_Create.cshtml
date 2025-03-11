@@ -1,27 +1,38 @@
 ﻿@model HotelBK.Models.Booking
 
-<form id="bookingForm">
-    <input type="hidden" asp-for="BookingID" />
+<form id="bookingForm" action="/Admin/Bookings/CreateOrUpdate" method="post">
+    <input type="hidden" name="BookingID" value="@Model.BookingID" />
 
     <div class="form-group mb-3">
         <label>Họ tên khách hàng</label>
-        <input asp-for="FullName" class="form-control" required />
+        <input type="text" name="FullName" class="form-control" value="@Model.FullName" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Email</label>
-        <input asp-for="Email" type="email" class="form-control" required />
+        <input type="email" name="Email" class="form-control" value="@Model.Email" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Số điện thoại</label>
-        <input asp-for="Phone" class="form-control" required />
+        <input type="text" name="Phone" class="form-control" value="@Model.Phone" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Phòng</label>
-        <select asp-for="RoomID" asp-items="ViewBag.Rooms" class="form-select" required>
+        <select name="RoomID" class="form-select" required>
             <option value="">-- Chọn phòng --</option>
+            @foreach (var item in ViewBag.Rooms)
+            {
+                if (Model.RoomID == int.Parse(item.Value))
+                {
+                    <option value="@item.Value" selected>@item.Text</option>
+                }
+                else
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
         </select>
     </div>
 
@@ -29,89 +40,94 @@
         <div class="col-md-6">
             <div class="form-group mb-3">
                 <label>Ngày nhận phòng</label>
-                <input asp-for="CheckInDate" type="date" class="form-control" required />
+                <input type="date" name="CheckInDate" class="form-control"
+                       value="@(Model.BookingID == 0 ? DateTime.Now.ToString("yyyy-MM-dd") : Model.CheckInDate.ToString("yyyy-MM-dd"))"
+                       min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="form-group mb-3">
                 <label>Ngày trả phòng</label>
-                <input asp-for="CheckOutDate" type="date" class="form-control" required />
+                <input type="date" name="CheckOutDate" class="form-control"
+                       value="@(Model.BookingID == 0 ? DateTime.Now.AddDays(1).ToString("yyyy-MM-dd") : Model.CheckOutDate.ToString("yyyy-MM-dd"))"
+                       min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required />
             </div>
         </div>
     </div>
 
     <div class="form-group mb-3">
         <label>Số lượng phòng</label>
-        <input asp-for="RoomCount" type="number" min="1" class="form-control" required />
+        <input type="number" name="RoomCount" min="1" class="form-control" value="@(Model.RoomCount == 0 ? 1 : Model.RoomCount)" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Trạng thái</label>
-        <select asp-for="Status" class="form-select">
-            <option value="Pending">Chờ xác nhận</option>
-            <option value="Confirmed">Đã xác nhận</option>
-            <option value="Checked-in">Đã nhận phòng</option>
-            <option value="Checked-out">Đã trả phòng</option>
-            <option value="Cancelled">Đã hủy</option>
+        <select name="Status" class="form-select">
+            <option value="Pending" @(Model.Status == "Pending" ? "selected" : "")>Chờ xác nhận</option>
+            <option value="Confirmed" @(Model.Status == "Confirmed" ? "selected" : "")>Đã xác nhận</option>
+            <option value="Checked-in" @(Model.Status == "Checked-in" ? "selected" : "")>Đã nhận phòng</option>
+            <option value="Checked-out" @(Model.Status == "Checked-out" ? "selected" : "")>Đã trả phòng</option>
+            <option value="Cancelled" @(Model.Status == "Cancelled" ? "selected" : "")>Đã hủy</option>
         </select>
     </div>
 
     <button type="submit" class="btn btn-success">Lưu</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
 </form>
 
 <script>
     $(document).ready(function () {
-        // Đặt giá trị mặc định cho ngày nếu là tạo mới
-        if ($("#BookingID").val() === "0") {
-            var today = new Date();
-            var tomorrow = new Date();
-            tomorrow.setDate(today.getDate() + 1);
-
-            $("#CheckInDate").val(today.toISOString().substring(0, 10));
-            $("#CheckOutDate").val(tomorrow.toISOString().substring(0, 10));
-        }
-
         $("#bookingForm").submit(function (event) {
             event.preventDefault();
-            var formData = new FormData(this);
+
+            // Thêm validate
+            var checkIn = new Date($("#bookingForm [name='CheckInDate']").val());
+            var checkOut = new Date($("#bookingForm [name='CheckOutDate']").val());
+
+            if (checkIn >= checkOut) {
+                alert("Ngày nhận phòng phải trước ngày trả phòng!");
+                return false;
+            }
+
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (checkIn < today) {
+                alert("Ngày nhận phòng không thể trong quá khứ!");
+                return false;
+            }
+
+            var formData = $(this).serialize();
 
             $.ajax({
                 url: "/Admin/Bookings/CreateOrUpdate",
                 type: "POST",
                 data: formData,
-                processData: false,
-                contentType: false,
-                success: function () {
+                success: function (response) {
+                    alert("Lưu thông tin đặt phòng thành công!");
                     $("#bookingModal").modal("hide");
                     location.reload();
                 },
                 error: function (xhr) {
-                    alert(xhr.responseText || "Có lỗi xảy ra!");
+                    alert(xhr.responseText || "Có lỗi xảy ra khi lưu thông tin!");
                 }
             });
         });
 
-        // Kiểm tra ngày check-out phải sau ngày check-in
-        $("#CheckOutDate").change(function() {
-            var checkIn = new Date($("#CheckInDate").val());
-            var checkOut = new Date($(this).val());
-
-            if (checkOut <= checkIn) {
-                alert("Ngày trả phòng phải sau ngày nhận phòng!");
-                $(this).val("");
-            }
-        });
-
-        // Cập nhật khi ngày check-in thay đổi
-        $("#CheckInDate").change(function() {
+        // Kiểm tra ngày
+        $("[name='CheckInDate']").change(function() {
             var checkIn = new Date($(this).val());
-            var checkOut = new Date($("#CheckOutDate").val());
+            var checkOut = new Date($("[name='CheckOutDate']").val());
 
-            if (checkOut <= checkIn) {
-                var nextDay = new Date(checkIn);
-                nextDay.setDate(checkIn.getDate() + 1);
-                $("#CheckOutDate").val(nextDay.toISOString().substring(0, 10));
+            if (checkIn >= checkOut) {
+                var newCheckOut = new Date(checkIn);
+                newCheckOut.setDate(newCheckOut.getDate() + 1);
+
+                var month = (newCheckOut.getMonth() + 1).toString().padStart(2, '0');
+                var day = newCheckOut.getDate().toString().padStart(2, '0');
+
+                $("[name='CheckOutDate']").val(newCheckOut.getFullYear() + '-' + month + '-' + day);
             }
         });
     });

@@ -1,0 +1,13 @@
+﻿@model HotelBK.Models.Role
+
+<form action="/Admin/Roles/CreateOrUpdate" method="post">
+    <input type="hidden" name="RoleID" value="0" />
+
+    <div class="form-group mb-3">
+        <label>Tên vai trò</label>
+        <input type="text" name="RoleName" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+</form>

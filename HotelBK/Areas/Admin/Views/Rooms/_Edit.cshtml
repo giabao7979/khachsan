@@ -1,60 +1,62 @@
 ﻿@model HotelBK.Models.Room
 
-<form id="roomEditForm" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="RoomID"/>
-
-    <div style="display:none">
-        Debug: @Model.RoomID - @Model.RoomName
-    </div>
+<form action="/Admin/Rooms/CreateOrUpdate" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="RoomID" value="@Model.RoomID" />
 
     <div class="form-group mb-3">
         <label>Tên Phòng</label>
-        <input type="text" asp-for="RoomName" class="form-control" required />
+        <input type="text" name="RoomName" class="form-control" value="@Model.RoomName" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Loại Phòng</label>
-        <select name="RoomTypeID" id="RoomTypeID" class="form-select" required>
+        <select name="RoomTypeID" class="form-select" required>
             <option value="">-- Chọn loại phòng --</option>
-            <option value="1">VIP</option>
-            <option value="2">Luxury</option>
-            <option value="3">Normal</option>
+            @foreach (var item in ViewBag.RoomTypes)
+            {
+                if (item.Value == Model.RoomTypeID.ToString())
+                {
+                    <option value="@item.Value" selected>@item.Text</option>
+                }
+                else
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
         </select>
-        <!-- Thêm hidden input để đảm bảo giá trị luôn được gửi đi -->
-        <input type="hidden" name="RoomTypeID" value="1" />
     </div>
 
     <div class="form-group mb-3">
         <label>Giá</label>
-        <input type="number" asp-for="Price" class="form-control" min="0" step="0.01" required />
+        <input type="number" name="Price" class="form-control" min="0" step="0.01" value="@Model.Price" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Số sao</label>
-        <input type="number" asp-for="StarRating" class="form-control" min="1" max="5" />
+        <input type="number" name="StarRating" min="1" max="5" class="form-control" value="@Model.StarRating" />
     </div>
 
     <div class="form-group mb-3">
         <label>Số giường</label>
-        <input type="number" asp-for="Beds" class="form-control" min="1" required />
+        <input type="number" name="Beds" class="form-control" min="1" value="@Model.Beds" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Số phòng tắm</label>
-        <input type="number" asp-for="Bathrooms" class="form-control" min="1" required />
+        <input type="number" name="Bathrooms" class="form-control" min="1" value="@Model.Bathrooms" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Mô tả</label>
-        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <textarea name="Description" class="form-control" rows="3">@Model.Description</textarea>
     </div>
 
     <div class="form-group mb-3">
         <label>Trạng thái</label>
-        <select asp-for="Status" class="form-select">
-            <option value="Còn trống">Còn trống</option>
-            <option value="Đang ở">Đang ở</option>
-            <option value="Bảo trì">Bảo trì</option>
+        <select name="Status" class="form-select">
+            <option value="Còn trống" @(Model.Status == "Còn trống" ? "selected" : "")>Còn trống</option>
+            <option value="Đang ở" @(Model.Status == "Đang ở" ? "selected" : "")>Đang ở</option>
+            <option value="Bảo trì" @(Model.Status == "Bảo trì" ? "selected" : "")>Bảo trì</option>
         </select>
     </div>
 
@@ -65,34 +67,11 @@
         {
             <div class="mt-2">
                 <img src="@Model.Image" alt="@Model.RoomName" width="100" />
+                <p class="text-muted">Ảnh hiện tại. Tải lên ảnh mới để thay đổi.</p>
             </div>
         }
     </div>
 
     <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
 </form>
-
-<script>
-    $(document).ready(function() {
-        $("#roomEditForm").submit(function(event) {
-            event.preventDefault();
-            var formData = new FormData(this);
-
-            $.ajax({
-                url: "/Admin/Rooms/CreateOrUpdate",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(result) {
-                    alert("Cập nhật phòng thành công!");
-                    $("#roomModal").modal("hide");
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    alert("Lỗi: " + xhr.responseText);
-                }
-            });
-        });
-    });
-</script>

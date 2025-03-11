@@ -1,64 +1,155 @@
-﻿@{
+﻿@model IEnumerable<HotelBK.Models.Payment>
+@{
+    ViewData["Title"] = "Quản lý thanh toán";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
 <div>
     <main id="main" class="main">
-
         <div class="pagetitle">
-            <h1>Category</h1>
+            <h1>Quản lý thanh toán</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Category</li>
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AdminHome">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Quản lý thanh toán</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
 
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-
                     <div class="card">
                         <div class="card-body">
-                            <div class="top-row">
-                                <!-- Thanh tìm kiếm ở góc trái -->
+                            <div class="top-row d-flex justify-content-between my-3">
                                 <div class="search-container">
                                     <label for="searchInput">Tìm kiếm:</label>
                                     <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm">
                                 </div>
 
-                                <!-- Nút Thêm Category ở góc phải -->
-                                <div class="add-category-button">
-                                    <button type="button" class="btn btn-success">
-                                        <i class="bi bi-plus-circle"></i> Thêm Category
-                                    </button>
-                                </div>
+                                <button class="btn btn-primary" id="openAddPayment">Thêm thanh toán</button>
                             </div>
-                            <!-- Table with stripped rows -->
+
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            Product_ID
-                                        </th>
-                                        <th>Img</th>
-                                        <th>Name</th>
-                                        <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                        <th>Status</th>
-                                        <th>Operate</th>
+                                        <th>ID</th>
+                                        <th>Khách hàng</th>
+                                        <th>Phòng</th>
+                                        <th>Số tiền</th>
+                                        <th>Phương thức</th>
+                                        <th>Ngày thanh toán</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    
+                                <tbody id="paymentTableBody">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="paymentRow_@item.PaymentID">
+                                            <td>@item.PaymentID</td>
+                                            <td>@item.Booking.FullName</td>
+                                            <td>@item.Booking.Room.RoomName</td>
+                                            <td>@item.Amount.ToString("N0") VNĐ</td>
+                                            <td>@item.PaymentMethod</td>
+                                            <td>@item.PaymentDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>
+                                                @switch (item.Status)
+                                                {
+                                                    case "Completed":
+                                                        <span class="badge bg-success">Hoàn thành</span>
+                                                        break;
+                                                    case "Pending":
+                                                        <span class="badge bg-warning">Đang xử lý</span>
+                                                        break;
+                                                    case "Cancelled":
+                                                        <span class="badge bg-danger">Đã hủy</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-secondary">@item.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-info btn-sm viewPayment" data-id="@item.PaymentID">Chi tiết</button>
+                                                @if (DateTime.Now.Subtract(item.PaymentDate).TotalDays <= 1)
+                                                {
+                                                    <button class="btn btn-danger btn-sm deletePayment" data-id="@item.PaymentID">Xóa</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
                             </table>
-                            <!-- End Table with stripped rows -->
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
-
-    </main><!-- End #main -->
+    </main>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalTitle">Thêm/Chi tiết thanh toán</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="paymentModalBody"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Mở modal Thêm thanh toán
+            $("#openAddPayment").click(function () {
+                $.get("/Admin/Payments/Create", function (data) {
+                    $("#paymentModalTitle").text("Thêm mới thanh toán");
+                    $("#paymentModalBody").html(data);
+                    $("#paymentModal").modal("show");
+                });
+            });
+
+            // Mở modal Xem chi tiết thanh toán
+            $(document).on("click", ".viewPayment", function () {
+                var id = $(this).data("id");
+                $.get("/Admin/Payments/View/" + id, function (data) {
+                    $("#paymentModalTitle").text("Chi tiết thanh toán");
+                    $("#paymentModalBody").html(data);
+                    $("#paymentModal").modal("show");
+                });
+            });
+
+            // Xử lý xóa thanh toán
+            $(document).on("click", ".deletePayment", function () {
+                var id = $(this).data("id");
+
+                if (confirm("Bạn có chắc muốn xóa thanh toán này? Chỉ có thể xóa thanh toán trong vòng 24 giờ.")) {
+                    $.ajax({
+                        url: "/Admin/Payments/Delete/" + id,
+                        type: "POST",
+                        success: function () {
+                            $("#paymentRow_" + id).remove();
+                            alert("Xóa thanh toán thành công!");
+                        },
+                        error: function (xhr) {
+                            alert(xhr.responseText || "Có lỗi xảy ra khi xóa thanh toán!");
+                        }
+                    });
+                }
+            });
+
+            // Tìm kiếm
+            $("#searchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#paymentTableBody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

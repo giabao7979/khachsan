@@ -10,7 +10,7 @@
             <h1>Quản lý phòng</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Index">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AdminHome">Trang chủ</a></li>
                     <li class="breadcrumb-item active">Quản lý phòng</li>
                 </ol>
             </nav>
@@ -21,7 +21,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="top-row d-flex justify-content-between">
+                            <div class="top-row d-flex justify-content-between my-3">
                                 <div class="search-container">
                                     <label for="searchInput">Tìm kiếm:</label>
                                     <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm">
@@ -50,7 +50,7 @@
                                         <tr id="roomRow_@item.RoomID">
                                             <td>@item.RoomID</td>
                                             <td>@item.RoomName</td>
-                                            <td>@item.Price.ToString("C")</td>
+                                            <td>@item.Price.ToString("N0") VNĐ</td>
                                             <td>@item.Beds</td>
                                             <td>@item.Bathrooms</td>
                                             <td>@item.Status</td>
@@ -69,10 +69,15 @@
                                                 {
                                                     <img src="@item.Image" width="100" />
                                                 }
+                                                else
+                                                {
+                                                    <span>Không có ảnh</span>
+                                                }
                                             </td>
                                             <td>
                                                 <button class="btn btn-warning text-white editRoom" data-id="@item.RoomID">Sửa</button>
-                                                <button class="btn btn-danger deleteRoom" data-id="@item.RoomID">Xóa</button>
+                                                <button class="btn btn-danger mt-2 deleteRoom" data-id="@item.RoomID">Xóa</button>
+                                                <button class="btn btn-info mt-2 viewRoom" data-id="@item.RoomID">Chi tiết</button>
                                             </td>
                                         </tr>
                                     }
@@ -91,58 +96,64 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm/Sửa Phòng</h5>
+                <h5 class="modal-title" id="roomModalTitle">Thêm/Sửa Phòng</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" id="roomModalBody"></div>
+            <div class="modal-body" id="roomModalBody">
+                <!-- Nội dung form sẽ được load động -->
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Script -->
 <script>
-    jQuery(document).ready(function () {
+    $(document).ready(function () {
+        // Mở modal Thêm phòng
         $("#openAddRoom").click(function () {
             $.get("/Admin/Rooms/Create", function (data) {
+                $("#roomModalTitle").text("Thêm mới phòng");
                 $("#roomModalBody").html(data);
                 $("#roomModal").modal("show");
-
-                // Thêm log để kiểm tra dữ liệu loại phòng
-                console.log("Room types in dropdown:", $("#RoomTypeID option").length);
             });
         });
 
+        // Mở modal Sửa phòng
         $(".editRoom").click(function () {
             var id = $(this).data("id");
-
-            // Tải form trống trước
-            $("#roomModalBody").load("/Admin/Rooms/_Edit", function() {
-                // Sau khi form đã tải, lấy dữ liệu phòng và điền vào form
-                $.getJSON("/Admin/Rooms/GetRoomData/" + id, function(room) {
-                    console.log("Room data:", room);
-
-                    $("#RoomID").val(room.roomID);
-                    $("#RoomName").val(room.roomName);
-                    $("#Price").val(room.price);
-                    $("#StarRating").val(room.starRating);
-                    $("#Beds").val(room.beds);
-                    $("#Bathrooms").val(room.bathrooms);
-                    $("#Description").val(room.description);
-                    $("#RoomTypeID").val(room.roomTypeID);
-                    $("#Status").val(room.status);
-
-                    // Hiển thị form đã điền dữ liệu
-                    $("#roomModal").modal("show");
-                });
+            $.get("/Admin/Rooms/Edit/" + id, function (data) {
+                $("#roomModalTitle").text("Chỉnh sửa phòng");
+                $("#roomModalBody").html(data);
+                $("#roomModal").modal("show");
             });
         });
 
-        jQuery(".deleteRoom").click(function () {
-            var id = jQuery(this).data("id");
+        // Xem chi tiết phòng
+        $(".viewRoom").click(function () {
+            var id = $(this).data("id");
+            $.get("/Admin/Rooms/View/" + id, function (data) {
+                $("#roomModalTitle").text("Chi tiết phòng");
+                $("#roomModalBody").html(data);
+                $("#roomModal").modal("show");
+            });
+        });
+
+        // Xử lý xóa phòng
+        $(".deleteRoom").click(function () {
+            var id = $(this).data("id");
             if (confirm("Bạn có chắc muốn xóa phòng này?")) {
-                jQuery.post("/Admin/Rooms/Delete/" + id, function () {
-                    jQuery("#roomRow_" + id).remove();
+                $.post("/Admin/Rooms/Delete/" + id, function () {
+                    $("#roomRow_" + id).remove();
                 });
             }
+        });
+
+        // Tìm kiếm
+        $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#roomTableBody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
         });
     });
 </script>

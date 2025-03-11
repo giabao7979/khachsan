@@ -14,8 +14,6 @@ namespace HotelBK.Data
         public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<Service> Services { get; set; }
-        public DbSet<BookingService> BookingServices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

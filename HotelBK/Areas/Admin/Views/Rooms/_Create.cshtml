@@ -1,178 +1,88 @@
 ﻿@model HotelBK.Models.Room
 
-<form id="roomForm" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="RoomID" id="RoomID" value="0" />
+<form action="/Admin/Rooms/CreateOrUpdate" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="RoomID" value="0" />
 
     <div class="form-group mb-3">
         <label>Tên Phòng</label>
-        <input type="text" name="RoomName" id="RoomName" class="form-control" required />
+        <input type="text" name="RoomName" class="form-control" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Loại Phòng</label>
-        <select name="RoomTypeID" id="RoomTypeID" class="form-select" required>
+        <select name="RoomTypeID" class="form-select" required>
             <option value="">-- Chọn loại phòng --</option>
-            <option value="1">VIP</option>
-            <option value="2">Luxury</option>
-            <option value="3">Normal</option>
+            @foreach (var item in ViewBag.RoomTypes)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
         </select>
-        <!-- Thêm hidden input để đảm bảo giá trị luôn được gửi đi -->
-        <input type="hidden" name="RoomTypeID" value="1" />
     </div>
 
     <div class="form-group mb-3">
         <label>Giá</label>
-        <input type="number" name="Price" id="Price" class="form-control" min="0" step="0.01" required />
+        <input type="number" name="Price" class="form-control" min="0" step="0.01" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Số sao</label>
-        <input asp-for="StarRating" type="number" min="1" max="5" class="form-control" />
+        <input type="number" name="StarRating" min="1" max="5" class="form-control" value="3" />
     </div>
 
     <div class="form-group mb-3">
         <label>Số giường</label>
-        <input type="number" name="Beds" id="Beds" class="form-control" min="1" value="" required />
+        <input type="number" name="Beds" class="form-control" min="1" value="1" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Số phòng tắm</label>
-        <input type="number" name="Bathrooms" id="Bathrooms" class="form-control" min="1" value="1" required />
+        <input type="number" name="Bathrooms" class="form-control" min="1" value="1" required />
     </div>
 
     <div class="form-group mb-3">
         <label>Mô tả</label>
-        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <textarea name="Description" class="form-control" rows="3"></textarea>
     </div>
 
     <div class="form-group mb-3">
         <label>Trạng thái</label>
-        <select asp-for="Status" class="form-select">
-            <option value="Available">Còn trống</option>
-            <option value="Maintenance">Bảo trì</option>
-            <option value="Unavailable">Không khả dụng</option>
+        <select name="Status" class="form-select">
+            <option value="Còn trống" selected>Còn trống</option>
+            <option value="Đang ở">Đang ở</option>
+            <option value="Bảo trì">Bảo trì</option>
         </select>
     </div>
 
     <div class="form-group mb-3">
         <label>Ảnh</label>
         <input type="file" name="imageFile" class="form-control" />
-        @if (!string.IsNullOrEmpty(Model.Image))
-        {
-            <div class="mt-2">
-                <img src="@Model.Image" alt="@Model.RoomName" width="100" />
-            </div>
-        }
+        <div id="imagePreviewContainer" class="mt-2" style="display: none">
+            <img id="imagePreview" src="" alt="Preview" width="100" />
+        </div>
     </div>
 
     <button type="submit" class="btn btn-success">Lưu</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
 </form>
 
 <script>
-        $(document).ready(function() {
-        // Bắt sự kiện khi submit form
-        $("#roomForm").submit(function(event) {
-            // Ngăn form submit theo cách thông thường
-            event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hiển thị preview ảnh khi chọn file
+        var imageFile = document.querySelector('input[name="imageFile"]');
+        var imagePreview = document.getElementById('imagePreview');
+        var previewContainer = document.getElementById('imagePreviewContainer');
 
-            // Kiểm tra dữ liệu nhập vào
-            var roomName = $("#RoomName").val();
-            var roomTypeID = $("#RoomTypeID").val();
-            var price = $("#Price").val();
-            var beds = $("#Beds").val();
-            var bathrooms = $("#Bathrooms").val();
-
-            // Kiểm tra tên phòng
-            if (!roomName) {
-                alert("Vui lòng nhập tên phòng");
-                return false;
-            }
-
-            // Kiểm tra loại phòng
-            if (!roomTypeID) {
-                alert("Vui lòng chọn loại phòng");
-                return false;
-            }
-
-            // Kiểm tra giá
-            if (!price || isNaN(price) || price <= 0) {
-                alert("Vui lòng nhập giá hợp lệ");
-                return false;
-            }
-
-            // Kiểm tra số giường
-            if (!beds || isNaN(beds) || beds <= 0) {
-                alert("Vui lòng nhập số giường hợp lệ");
-                return false;
-            }
-
-            // Kiểm tra số phòng tắm
-            if (!bathrooms || isNaN(bathrooms) || bathrooms <= 0) {
-                alert("Vui lòng nhập số phòng tắm hợp lệ");
-                return false;
-            }
-
-            // Tạo FormData object để xử lý cả file upload
-            var formData = new FormData(this);
-
-            // Gửi dữ liệu bằng AJAX
-            $.ajax({
-                url: "/Admin/Rooms/CreateOrUpdate",
-                type: "POST",
-                data: formData,
-                processData: false,  // Quan trọng khi dùng FormData
-                contentType: false,  // Quan trọng khi dùng FormData
-                success: function(result) {
-                    // Xử lý khi thành công
-                    alert("Thêm phòng thành công!");
-                    // Đóng modal nếu dùng modal
-                    $("#roomModal").modal("hide");
-                    // Tải lại trang để cập nhật danh sách
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    // Xử lý khi có lỗi
-                    alert("Lỗi: " + xhr.responseText);
+        if (imageFile && imagePreview) {
+            imageFile.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        previewContainer.style.display = 'block';
+                    };
+                    reader.readAsDataURL(this.files[0]);
                 }
-            });
-        });
-
-        // Tải loại phòng cho dropdown
-        function loadRoomTypes() {
-            $.getJSON("/Admin/Rooms/GetRoomTypes", function(data) {
-                var dropdown = $("#RoomTypeID");
-                dropdown.empty();
-                dropdown.append('<option value="">-- Chọn loại phòng --</option>');
-
-                $.each(data, function(index, item) {
-                    dropdown.append($('<option></option>')
-                        .val(item.roomTypeID)
-                        .text(item.typeName));
-                });
-            }).fail(function() {
-                console.error("Không thể tải danh sách loại phòng");
-                // Hard-code các loại phòng nếu API fail
-                var dropdown = $("#RoomTypeID");
-                dropdown.empty();
-                dropdown.append('<option value="">-- Chọn loại phòng --</option>');
-                dropdown.append('<option value="1">VIP</option>');
-                dropdown.append('<option value="2">Luxury</option>');
-                dropdown.append('<option value="3">Normal</option>');
             });
         }
-
-        // Gọi hàm tải loại phòng khi trang đã sẵn sàng
-        loadRoomTypes();
-
-        // Hiển thị preview ảnh khi chọn file
-        $("#imageFile").change(function() {
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#imagePreview').attr('src', e.target.result).show();
-                }
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
     });
 </script>

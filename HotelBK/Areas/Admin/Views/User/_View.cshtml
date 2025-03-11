@@ -1,0 +1,61 @@
+﻿@model HotelBK.Models.User
+
+<div class="user-details">
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Họ và tên:</div>
+        <div class="col-md-8">@Model.FullName</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Email:</div>
+        <div class="col-md-8">@Model.Email</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Số điện thoại:</div>
+        <div class="col-md-8">@Model.Phone</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Vai trò:</div>
+        <div class="col-md-8">
+            @switch (Model.Role.RoleName)
+            {
+                case "Admin":
+                    <span class="badge bg-danger">@Model.Role.RoleName</span>
+                    break;
+                case "Staff":
+                    <span class="badge bg-primary">@Model.Role.RoleName</span>
+                    break;
+                case "Customer":
+                    <span class="badge bg-success">@Model.Role.RoleName</span>
+                    break;
+                default:
+                    <span class="badge bg-secondary">@Model.Role.RoleName</span>
+                    break;
+            }
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Ngày tạo:</div>
+        <div class="col-md-8">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss")</div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <button type="button" class="btn btn-primary editUser" data-id="@Model.UserID">Sửa thông tin</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(".editUser").click(function() {
+            var id = $(this).data("id");
+            $.get("/Admin/User/Edit/" + id, function(data) {
+                $("#userModalTitle").text("Chỉnh sửa người dùng");
+                $("#userModalBody").html(data);
+            });
+        });
+    });
+</script>

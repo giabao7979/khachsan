@@ -79,8 +79,11 @@
                                             </td>
                                             <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
                                             <td>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="statusDropdown_@item.BookingID" data-bs-toggle="dropdown">
+                                                <button class="btn btn-info btn-sm viewBooking" data-id="@item.BookingID">Chi tiết</button>
+                                                <button class="btn btn-warning btn-sm text-white editBooking mt-1" data-id="@item.BookingID">Sửa</button>
+                                                <button class="btn btn-danger btn-sm deleteBooking mt-1" data-id="@item.BookingID">Xóa</button>
+                                                <div class="dropdown mt-1">
+                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="statusDropdown_@item.BookingID" data-bs-toggle="dropdown">
                                                         Đổi trạng thái
                                                     </button>
                                                     <ul class="dropdown-menu">
@@ -91,8 +94,6 @@
                                                         <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Cancelled">Đã hủy</a></li>
                                                     </ul>
                                                 </div>
-                                                <button class="btn btn-warning text-white mt-2 editBooking" data-id="@item.BookingID">Sửa</button>
-                                                <button class="btn btn-danger mt-2 deleteBooking" data-id="@item.BookingID">Xóa</button>
                                             </td>
                                         </tr>
                                     }
@@ -111,7 +112,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm/Sửa Đặt Phòng</h5>
+                <h5 class="modal-title" id="bookingModalTitle">Thêm/Sửa Đặt Phòng</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="bookingModalBody"></div>
@@ -125,22 +126,34 @@
             // Mở modal Thêm đặt phòng
             $("#openAddBooking").click(function () {
                 $.get("/Admin/Bookings/Create", function (data) {
+                    $("#bookingModalTitle").text("Thêm mới đặt phòng");
                     $("#bookingModalBody").html(data);
                     $("#bookingModal").modal("show");
                 });
             });
 
             // Mở modal Sửa đặt phòng
-            $(".editBooking").click(function () {
+            $(document).on("click", ".editBooking", function () {
                 var id = $(this).data("id");
                 $.get("/Admin/Bookings/Edit/" + id, function (data) {
+                    $("#bookingModalTitle").text("Chỉnh sửa đặt phòng");
+                    $("#bookingModalBody").html(data);
+                    $("#bookingModal").modal("show");
+                });
+            });
+
+            // Mở modal Xem chi tiết đặt phòng
+            $(document).on("click", ".viewBooking", function () {
+                var id = $(this).data("id");
+                $.get("/Admin/Bookings/View/" + id, function (data) {
+                    $("#bookingModalTitle").text("Chi tiết đặt phòng");
                     $("#bookingModalBody").html(data);
                     $("#bookingModal").modal("show");
                 });
             });
 
             // Xử lý đổi trạng thái
-            $(".change-status").click(function (e) {
+            $(document).on("click", ".change-status", function (e) {
                 e.preventDefault();
                 var id = $(this).data("id");
                 var status = $(this).data("status");
@@ -161,7 +174,7 @@
             });
 
             // Xử lý xóa đặt phòng
-            $(".deleteBooking").click(function () {
+            $(document).on("click", ".deleteBooking", function () {
                 var id = $(this).data("id");
 
                 if (confirm("Bạn có chắc muốn xóa đặt phòng này?")) {
@@ -170,6 +183,7 @@
                         type: "POST",
                         success: function () {
                             $("#bookingRow_" + id).remove();
+                            alert("Xóa đặt phòng thành công!");
                         },
                         error: function (xhr) {
                             alert(xhr.responseText || "Có lỗi xảy ra khi xóa đặt phòng!");

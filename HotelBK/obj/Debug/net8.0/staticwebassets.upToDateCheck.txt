@@ -510,10 +510,13 @@ wwwroot\images\rooms\4d55636c-3bf7-4b5f-8924-dd2e9916da17.png
 wwwroot\images\rooms\5d17f6ea-03a5-47a1-89a0-7b0e5a71d1c8.png
 wwwroot\images\rooms\6c52c177-b9c5-4208-a8a8-6c8355ba17df.png
 wwwroot\images\rooms\6d807e0b-ec2c-437b-b41a-713ab85e04d7.png
+wwwroot\images\rooms\7381f624-bbf5-4c1e-97ff-8b3152365cd0.png
 wwwroot\images\rooms\8ce860da-951b-4e8b-bf89-1e2e10af4b3e.png
 wwwroot\images\rooms\8e1142ef-7e52-4018-b5f4-50f802567008.png
 wwwroot\images\rooms\95221a19-6cad-46c9-8308-48cd1545245c.png
+wwwroot\images\rooms\cc505f64-1b07-4d63-90a9-e934c33a5055.png
 wwwroot\images\rooms\d70893aa-ae01-4ec6-8bf5-6063626b3fb6.png
+wwwroot\images\rooms\da711e95-660a-4cae-bffd-4691bb9289eb.png
 wwwroot\images\rooms\f13f4bdf-e3c7-481c-9911-3e698ad03d7b.png
 wwwroot\images\rooms\f357d6cb-2779-4307-bdfb-3e5fb9b1a253.png
 wwwroot\images\rooms\f95fc800-eb38-4232-8a79-ae424b1fe2c0.png

@@ -1,0 +1,140 @@
+﻿@model HotelBK.Models.Payment
+
+<form id="paymentForm" action="/Admin/Payments/Create" method="post">
+    <input type="hidden" name="PaymentID" value="0" />
+
+    <div class="form-group mb-3">
+        <label>Đặt phòng</label>
+        <select name="BookingID" id="BookingID" class="form-select" required>
+            <option value="">-- Chọn đặt phòng --</option>
+            @foreach (var item in ViewBag.Bookings)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+
+    <div id="bookingDetails" class="card mb-3" style="display:none;">
+        <div class="card-header bg-info text-white">
+            <h6 class="mb-0">Chi tiết đặt phòng</h6>
+        </div>
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-md-5 fw-bold">Khách hàng:</div>
+                <div class="col-md-7" id="customerName"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5 fw-bold">Phòng:</div>
+                <div class="col-md-7" id="roomName"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5 fw-bold">Check-in:</div>
+                <div class="col-md-7" id="checkInDate"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5 fw-bold">Check-out:</div>
+                <div class="col-md-7" id="checkOutDate"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5 fw-bold">Tổng tiền:</div>
+                <div class="col-md-7" id="totalAmount"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5 fw-bold">Đã thanh toán:</div>
+                <div class="col-md-7" id="paidAmount"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-5 fw-bold">Còn lại:</div>
+                <div class="col-md-7 fw-bold text-danger" id="remainingAmount"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Số tiền thanh toán</label>
+        <input type="number" name="Amount" id="Amount" class="form-control" min="0" step="1000" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Phương thức thanh toán</label>
+        <select name="PaymentMethod" class="form-select" required>
+            <option value="Cash">Tiền mặt</option>
+            <option value="BankTransfer">Chuyển khoản</option>
+            <option value="CreditCard">Thẻ tín dụng</option>
+            <option value="Momo">Ví MoMo</option>
+            <option value="ZaloPay">ZaloPay</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Ghi chú</label>
+        <textarea name="Notes" class="form-control" rows="2"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Thanh toán</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        // Load thông tin booking khi chọn
+        $("#BookingID").change(function () {
+            var bookingId = $(this).val();
+            if (bookingId) {
+                $.getJSON("/Admin/Payments/GetBookingDetails/" + bookingId, function (data) {
+                    $("#customerName").text(data.customerName);
+                    $("#roomName").text(data.roomName);
+                    $("#checkInDate").text(data.checkInDate);
+                    $("#checkOutDate").text(data.checkOutDate);
+                    $("#totalAmount").text(data.totalAmount.toLocaleString() + " VNĐ");
+                    $("#paidAmount").text(data.paidAmount.toLocaleString() + " VNĐ");
+                    $("#remainingAmount").text(data.remainingAmount.toLocaleString() + " VNĐ");
+
+                    // Hiển thị chi tiết booking
+                    $("#bookingDetails").show();
+
+                    // Đặt giá trị mặc định cho số tiền
+                    $("#Amount").val(data.remainingAmount);
+                });
+            } else {
+                $("#bookingDetails").hide();
+                $("#Amount").val("");
+            }
+        });
+
+        // Xử lý submit form
+        $("#paymentForm").submit(function (event) {
+            event.preventDefault();
+
+            // Validate form
+            var bookingId = $("#BookingID").val();
+            var amount = $("#Amount").val();
+
+            if (!bookingId) {
+                alert("Vui lòng chọn đặt phòng cần thanh toán");
+                return false;
+            }
+
+            if (!amount || parseFloat(amount) <= 0) {
+                alert("Số tiền thanh toán phải lớn hơn 0");
+                return false;
+            }
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "POST",
+                data: formData,
+                success: function () {
+                    alert("Thanh toán thành công!");
+                    $("#paymentModal").modal("hide");
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText || "Có lỗi xảy ra khi thanh toán!");
+                }
+            });
+        });
+    });
+</script>

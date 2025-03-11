@@ -1,5 +1,96 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model HotelBK.Models.Room
+
+<div class="room-details">
+    <div class="text-center mb-4">
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@Model.Image" alt="@Model.RoomName" class="img-fluid rounded" style="max-height: 300px" />
+        }
+        else
+        {
+            <div class="bg-light text-center p-5 rounded">
+                <i class="fa fa-image fa-3x text-muted"></i>
+                <p class="mt-2">Không có ảnh</p>
+            </div>
+        }
+    </div>
+
+    <h4 class="mb-3">@Model.RoomName</h4>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Loại phòng:</div>
+        <div class="col-md-8">@(Model.RoomType?.TypeName ?? "Không xác định")</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Giá:</div>
+        <div class="col-md-8">@Model.Price.ToString("N0") VNĐ / đêm</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Đánh giá:</div>
+        <div class="col-md-8">
+            @for (int i = 0; i < Model.StarRating; i++)
+            {
+                <i class="fa fa-star text-warning"></i>
+            }
+            @for (int i = Model.StarRating ?? 0; i < 5; i++)
+            {
+                <i class="fa fa-star text-muted"></i>
+            }
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Số giường:</div>
+        <div class="col-md-8">@Model.Beds</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Số phòng tắm:</div>
+        <div class="col-md-8">@Model.Bathrooms</div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Trạng thái:</div>
+        <div class="col-md-8">
+            @switch (Model.Status)
+            {
+                case "Còn trống":
+                    <span class="badge bg-success">@Model.Status</span>
+                    break;
+                case "Đang ở":
+                    <span class="badge bg-primary">@Model.Status</span>
+                    break;
+                case "Bảo trì":
+                    <span class="badge bg-warning">@Model.Status</span>
+                    break;
+                default:
+                    <span class="badge bg-secondary">@Model.Status</span>
+                    break;
+            }
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-4 fw-bold">Mô tả:</div>
+        <div class="col-md-8">@(string.IsNullOrEmpty(Model.Description) ? "Không có mô tả" : Model.Description)</div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <button type="button" class="btn btn-primary editRoom" data-id="@Model.RoomID">Sửa phòng</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(".editRoom").click(function() {
+            var id = $(this).data("id");
+            $.get("/Admin/Rooms/Edit/" + id, function(data) {
+                $("#roomModalTitle").text("Chỉnh sửa phòng");
+                $("#roomModalBody").html(data);
+            });
+        });
+    });
+</script>

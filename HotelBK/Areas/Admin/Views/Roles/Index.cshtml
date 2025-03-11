@@ -1,64 +1,144 @@
-﻿@{
+﻿@model IEnumerable<HotelBK.Models.Role>
+@{
+    ViewData["Title"] = "Quản lý vai trò";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
 <div>
     <main id="main" class="main">
-
         <div class="pagetitle">
-            <h1>Category</h1>
+            <h1>Quản lý vai trò</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Category</li>
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AdminHome">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Quản lý vai trò</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
 
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-
                     <div class="card">
                         <div class="card-body">
-                            <div class="top-row">
-                                <!-- Thanh tìm kiếm ở góc trái -->
+                            <div class="top-row d-flex justify-content-between my-3">
                                 <div class="search-container">
                                     <label for="searchInput">Tìm kiếm:</label>
                                     <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm">
                                 </div>
 
-                                <!-- Nút Thêm Category ở góc phải -->
-                                <div class="add-category-button">
-                                    <button type="button" class="btn btn-success">
-                                        <i class="bi bi-plus-circle"></i> Thêm Category
-                                    </button>
-                                </div>
+                                <button class="btn btn-primary" id="openAddRole">Thêm vai trò</button>
                             </div>
-                            <!-- Table with stripped rows -->
+
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            Product_ID
-                                        </th>
-                                        <th>Img</th>
-                                        <th>Name</th>
-                                        <th data-type="date" data-format="YYYY/DD/MM">Start Date</th>
-                                        <th>Status</th>
-                                        <th>Operate</th>
+                                        <th>ID</th>
+                                        <th>Tên vai trò</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="roleTableBody">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="roleRow_@item.RoleID">
+                                            <td>@item.RoleID</td>
+                                            <td>@item.RoleName</td>
+                                            <td>
+                                                <button class="btn btn-info viewRole" data-id="@item.RoleID">Chi tiết</button>
+                                                @if (item.RoleID > 3)
+                                                {
+                                                    <button class="btn btn-warning text-white ms-2 editRole" data-id="@item.RoleID">Sửa</button>
+                                                    <button class="btn btn-danger ms-2 deleteRole" data-id="@item.RoleID">Xóa</button>
+                                                }
+                                                else
+                                                {
+                                                    <span class="ms-2 text-muted">(Vai trò mặc định)</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
                             </table>
-                            <!-- End Table with stripped rows -->
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
-
-    </main><!-- End #main -->
+    </main>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="roleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleModalTitle">Thêm/Sửa vai trò</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="roleModalBody">
+                <!-- Nội dung form sẽ được load động -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script -->
+<script>
+    $(document).ready(function () {
+        // Mở modal Thêm vai trò
+        $("#openAddRole").click(function () {
+            $.get("/Admin/Roles/Create", function (data) {
+                $("#roleModalTitle").text("Thêm mới vai trò");
+                $("#roleModalBody").html(data);
+                $("#roleModal").modal("show");
+            });
+        });
+
+        // Mở modal Sửa vai trò
+        $(".editRole").click(function () {
+            var id = $(this).data("id");
+            $.get("/Admin/Roles/Edit/" + id, function (data) {
+                $("#roleModalTitle").text("Chỉnh sửa vai trò");
+                $("#roleModalBody").html(data);
+                $("#roleModal").modal("show");
+            });
+        });
+
+        // Xem chi tiết vai trò
+        $(".viewRole").click(function () {
+            var id = $(this).data("id");
+            $.get("/Admin/Roles/View/" + id, function (data) {
+                $("#roleModalTitle").text("Chi tiết vai trò");
+                $("#roleModalBody").html(data);
+                $("#roleModal").modal("show");
+            });
+        });
+
+        // Xử lý xóa vai trò
+        $(".deleteRole").click(function () {
+            var id = $(this).data("id");
+            if (confirm("Bạn có chắc muốn xóa vai trò này?")) {
+                $.ajax({
+                    url: "/Admin/Roles/Delete/" + id,
+                    type: "POST",
+                    success: function () {
+                        $("#roleRow_" + id).remove();
+                        alert("Xóa vai trò thành công!");
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText || "Có lỗi xảy ra khi xóa vai trò!");
+                    }
+                });
+            }
+        });
+
+        // Tìm kiếm
+        $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#roleTableBody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
