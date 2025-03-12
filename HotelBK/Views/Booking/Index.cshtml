@@ -1,6 +1,4 @@
 ﻿@model HotelBK.Models.Booking
-@using System.Security.Claims
-@using Microsoft.EntityFrameworkCore
 @{
     ViewData["Title"] = "Đặt phòng";
     var room = ViewBag.Room as HotelBK.Models.Room;
@@ -33,6 +31,18 @@
                 </div>
             }
 
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger mb-4">
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
             <div class="row g-5">
                 <!-- Room Details (if a specific room is selected) -->
                 @if (room != null)
@@ -42,12 +52,13 @@
                             <div class="position-relative">
                                 @if (!string.IsNullOrEmpty(room.Image))
                                 {
-                                    <img class="img-fluid" src="@room.Image" alt="@room.RoomName" style="width: 100%; object-fit: cover;">
+                                    <img class="img-fluid" src="@room.Image" alt="@room.RoomName" style="width: 100%; height: 300px; object-fit: cover;">
                                 }
                                 else
                                 {
-                                    <img class="img-fluid" src="/img/room-1.jpg" alt="@room.RoomName" style="width: 100%; object-fit: cover;">
+                                    <img class="img-fluid" src="/img/room-1.jpg" alt="@room.RoomName" style="width: 100%; height: 300px; object-fit: cover;">
                                 }
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">@room.Price.ToString("N0") VNĐ/Đêm</small>
                             </div>
 
                             <div class="p-4 mt-2">
@@ -66,9 +77,6 @@
                                     <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
                                 </div>
                                 <p class="text-body mb-3">@(string.IsNullOrEmpty(room.Description) ? "Phòng tiêu chuẩn với đầy đủ tiện nghi." : room.Description)</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-primary fw-bold fs-5">@room.Price.ToString("N0") VNĐ/đêm</span>
-                                </div>
                             </div>
                         </div>
 
@@ -95,124 +103,120 @@
                             <h4 class="mb-0 text-center">Thông tin đặt phòng</h4>
                         </div>
                         <div class="card-body p-4">
-                            <div class="wow fadeInUp" data-wow-delay="0.2s">
-                                <form method="post" action="/Booking/BookRoom" id="bookingForm">
-                                    @if (!ViewData.ModelState.IsValid)
-                                    {
-                                        <div class="alert alert-danger">
-                                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                                        </div>
-                                    }
+                            <form method="post" action="/Booking/BookRoom" id="bookingForm">
+                                <input type="hidden" name="BookingID" value="0" />
 
-                                    @if (room != null)
-                                    {
-                                        <input type="hidden" name="RoomID" value="@room.RoomID" />
-                                    }
-                                    else
-                                    {
-                                        <div class="row g-3 mb-4">
-                                            <div class="col-12">
-                                                <div class="form-floating">
-                                                    <select class="form-select" id="RoomID" name="RoomID" required>
-                                                        <option value="">-- Chọn phòng --</option>
-                                                        @foreach (var r in await new HotelBK.Data.HotelContext(null).Rooms.Include(r => r.RoomType).ToListAsync())
+                                @if (room != null)
+                                {
+                                    <input type="hidden" name="RoomID" value="@room.RoomID" />
+                                }
+                                else
+                                {
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <select class="form-select" id="RoomID" name="RoomID" required>
+                                                    <option value="">-- Chọn phòng --</option>
+                                                    @if (ViewBag.AvailableRooms != null)
+                                                    {
+                                                        @foreach (var r in ViewBag.AvailableRooms)
                                                         {
                                                             <option value="@r.RoomID">@r.RoomName - @r.Price.ToString("N0") VNĐ/đêm</option>
                                                         }
-                                                    </select>
-                                                    <label for="RoomID">Chọn phòng</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="FullName" name="FullName" placeholder="Họ tên"
-                                                       value="@(User.Identity.IsAuthenticated ? User.Identity.Name : "")" required>
-                                                <label for="FullName">Họ tên</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="email" class="form-control" id="Email" name="Email" placeholder="Email"
-                                                       value="@(User.Identity.IsAuthenticated ? User.FindFirstValue(System.Security.Claims.ClaimTypes.Email) : "")" required>
-                                                <label for="Email">Email</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="Phone" name="Phone" placeholder="Số điện thoại" required>
-                                                <label for="Phone">Số điện thoại</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" class="form-control" id="RoomCount" name="RoomCount" placeholder="Số lượng phòng"
-                                                       min="1" max="5" value="@(ViewBag.RoomCount ?? 1)" required>
-                                                <label for="RoomCount">Số lượng phòng</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating date-picker">
-                                                <input type="date" class="form-control" id="CheckInDate" name="CheckInDate" placeholder="Ngày nhận phòng"
-                                                       value="@(ViewBag.CheckIn?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))"
-                                                       min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
-                                                <label for="CheckInDate">Ngày nhận phòng</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating date-picker">
-                                                <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate" placeholder="Ngày trả phòng"
-                                                       value="@(ViewBag.CheckOut?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(2).ToString("yyyy-MM-dd"))"
-                                                       min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required>
-                                                <label for="CheckOutDate">Ngày trả phòng</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <div class="form-floating">
-                                                <textarea class="form-control" placeholder="Để lại ghi chú ở đây" id="SpecialRequest" name="SpecialRequest" style="height: 100px"></textarea>
-                                                <label for="SpecialRequest">Yêu cầu đặc biệt</label>
-                                            </div>
-                                        </div>
-
-                                        <!-- Price Summary -->
-                                        <div class="col-12">
-                                            <div class="card bg-light mt-3 mb-3">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Thông tin thanh toán</h5>
-                                                    <div class="d-flex justify-content-between mt-3">
-                                                        <span>Giá phòng:</span>
-                                                        <span id="roomPrice">@(room != null ? room.Price.ToString("N0") : "0") VNĐ/đêm</span>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between">
-                                                        <span>Số đêm:</span>
-                                                        <span id="nightCount">1</span>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between">
-                                                        <span>Số phòng:</span>
-                                                        <span id="roomCountDisplay">@(ViewBag.RoomCount ?? 1)</span>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="d-flex justify-content-between fw-bold">
-                                                        <span>Tổng cộng:</span>
-                                                        <span id="totalPrice" class="text-primary">@(room != null ? (room.Price * (ViewBag.RoomCount ?? 1)).ToString("N0") : "0") VNĐ</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <button class="btn btn-primary w-100 py-3" type="submit" id="bookRoomBtn">Đặt phòng</button>
-                                            <div class="text-center mt-2">
-                                                <small class="text-muted">Bằng cách đặt phòng, bạn đồng ý với <a href="#">điều khoản và điều kiện</a> của chúng tôi</small>
+                                                    }
+                                                </select>
+                                                <label for="RoomID">Chọn phòng</label>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                }
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="FullName" name="FullName" placeholder="Họ tên"
+                                                   value="@(User.Identity.IsAuthenticated ? User.Identity.Name : "")" required>
+                                            <label for="FullName">Họ tên</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="email" class="form-control" id="Email" name="Email" placeholder="Email"
+                                                   value="@(User.Identity.IsAuthenticated ? User.FindFirstValue(System.Security.Claims.ClaimTypes.Email) : "")" required>
+                                            <label for="Email">Email</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="Phone" name="Phone" placeholder="Số điện thoại" required>
+                                            <label for="Phone">Số điện thoại</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="RoomCount" name="RoomCount" placeholder="Số lượng phòng"
+                                                   min="1" max="5" value="@(ViewBag.RoomCount ?? 1)" required>
+                                            <label for="RoomCount">Số lượng phòng</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating date-picker">
+                                            <input type="date" class="form-control" id="CheckInDate" name="CheckInDate" placeholder="Ngày nhận phòng"
+                                                   value="@(ViewBag.CheckIn?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))"
+                                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                                            <label for="CheckInDate">Ngày nhận phòng</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating date-picker">
+                                            <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate" placeholder="Ngày trả phòng"
+                                                   value="@(ViewBag.CheckOut?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(2).ToString("yyyy-MM-dd"))"
+                                                   min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required>
+                                            <label for="CheckOutDate">Ngày trả phòng</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Để lại ghi chú ở đây" id="SpecialRequest" name="SpecialRequest" style="height: 100px"></textarea>
+                                            <label for="SpecialRequest">Yêu cầu đặc biệt</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price Summary -->
+                                    <div class="col-12">
+                                        <div class="card bg-light mt-3 mb-3">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Thông tin thanh toán</h5>
+                                                <div class="d-flex justify-content-between mt-3">
+                                                    <span>Giá phòng:</span>
+                                                    <span id="roomPrice">@(room != null ? room.Price.ToString("N0") : "0") VNĐ/đêm</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Số đêm:</span>
+                                                    <span id="nightCount">@(ViewBag.TotalNights ?? 1)</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <span>Số phòng:</span>
+                                                    <span id="roomCountDisplay">@(ViewBag.RoomCount ?? 1)</span>
+                                                </div>
+                                                <hr>
+                                                <div class="d-flex justify-content-between fw-bold">
+                                                    <span>Tổng cộng:</span>
+                                                    <span id="totalPrice" class="text-primary">@(ViewBag.TotalPrice?.ToString("N0") ?? "0") VNĐ</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100 py-3" type="submit" id="bookRoomBtn">Đặt phòng</button>
+                                        <div class="text-center mt-2">
+                                            <small class="text-muted">Bằng cách đặt phòng, bạn đồng ý với <a href="#">điều khoản và điều kiện</a> của chúng tôi</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

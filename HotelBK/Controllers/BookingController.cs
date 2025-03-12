@@ -1,10 +1,9 @@
-﻿using HotelBK.Data;
-using HotelBK.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using HotelBK.Services;
-using Microsoft.EntityFrameworkCore; // Thêm dòng này
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims; // Thêm dòng này
+using HotelBK.Data;
+using HotelBK.Models;
+using System.Security.Claims;
 
 namespace HotelBK.Controllers
 {
@@ -19,8 +18,12 @@ namespace HotelBK.Controllers
             _bookingService = bookingService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index(int? roomId, DateTime? checkIn, DateTime? checkOut, int? adults, int? children, int? roomCount)
         {
+            // Ghi log để debug
+            System.Diagnostics.Debug.WriteLine($"Received booking request: RoomID={roomId}, CheckIn={checkIn}, CheckOut={checkOut}");
+
             // Thiết lập giá trị mặc định nếu không có
             if (!checkIn.HasValue)
                 checkIn = DateTime.Now.AddDays(1);
@@ -82,15 +85,55 @@ namespace HotelBK.Controllers
                 ViewBag.AvailableRooms = availableRooms;
             }
 
-            return View();
+            // Tạo đối tượng Booking mới để dùng cho view
+            var model = new Booking
+            {
+                CheckInDate = checkIn.Value,
+                CheckOutDate = checkOut.Value,
+                RoomCount = roomCount ?? 1
+            };
+
+            // Nếu người dùng đã đăng nhập, lấy thông tin từ tài khoản
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                model.FullName = User.Identity.Name;
+                model.Email = User.FindFirstValue(ClaimTypes.Email);
+
+                var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userIdInt))
+                {
+                    var user = await _context.Users.FindAsync(userIdInt);
+                    if (user != null)
+                    {
+                        model.Phone = user.Phone;
+                    }
+                }
+            }
+
+            // Nếu có roomId, thì gán cho model
+            if (roomId.HasValue)
+            {
+                model.RoomID = roomId.Value;
+            }
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> BookRoom(Booking model)
         {
+            // Log để debug
+            System.Diagnostics.Debug.WriteLine($"Received booking: RoomID={model.RoomID}, CheckIn={model.CheckInDate}, CheckOut={model.CheckOutDate}");
+
             if (!ModelState.IsValid)
             {
-                // Trả về form đặt phòng với thông báo lỗi
+                // Ghi lại lỗi model state để debug
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    System.Diagnostics.Debug.WriteLine($"ModelState Error: {error.ErrorMessage}");
+                }
+
+                // Lấy lại thông tin phòng
                 var room = await _context.Rooms
                     .Include(r => r.RoomType)
                     .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
@@ -107,12 +150,28 @@ namespace HotelBK.Controllers
             if (model.CheckInDate >= model.CheckOutDate)
             {
                 ModelState.AddModelError("", "Ngày nhận phòng phải trước ngày trả phòng.");
+                var room = await _context.Rooms
+                    .Include(r => r.RoomType)
+                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                ViewBag.Room = room;
                 return View("Index", model);
             }
 
             if (model.CheckInDate.Date < DateTime.Now.Date)
             {
                 ModelState.AddModelError("", "Ngày nhận phòng không thể trong quá khứ.");
+                var room = await _context.Rooms
+                    .Include(r => r.RoomType)
+                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                ViewBag.Room = room;
+                return View("Index", model);
+            }
+
+            // Kiểm tra phòng có tồn tại không
+            var roomExists = await _context.Rooms.AnyAsync(r => r.RoomID == model.RoomID);
+            if (!roomExists)
+            {
+                ModelState.AddModelError("", "Phòng không tồn tại.");
                 return View("Index", model);
             }
 
@@ -125,46 +184,92 @@ namespace HotelBK.Controllers
             if (!isRoomAvailable)
             {
                 ModelState.AddModelError("", "Phòng này đã được đặt trong khoảng thời gian bạn chọn. Vui lòng chọn ngày khác hoặc phòng khác.");
+                var room = await _context.Rooms
+                    .Include(r => r.RoomType)
+                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                ViewBag.Room = room;
                 return View("Index", model);
+            }
+
+            // Đảm bảo các trường không null
+            if (string.IsNullOrWhiteSpace(model.FullName) ||
+                string.IsNullOrWhiteSpace(model.Email) ||
+                string.IsNullOrWhiteSpace(model.Phone))
+            {
+                // Nếu người dùng đã đăng nhập, lấy thông tin từ tài khoản
+                if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userIdInt))
+                    {
+                        var user = await _context.Users.FindAsync(userIdInt);
+                        if (user != null)
+                        {
+                            if (string.IsNullOrWhiteSpace(model.FullName))
+                                model.FullName = user.FullName;
+
+                            if (string.IsNullOrWhiteSpace(model.Email))
+                                model.Email = user.Email;
+
+                            if (string.IsNullOrWhiteSpace(model.Phone))
+                                model.Phone = user.Phone;
+                        }
+                    }
+                }
+            }
+
+            // Kiểm tra lại sau khi lấy thông tin từ user
+            if (string.IsNullOrWhiteSpace(model.FullName) ||
+                string.IsNullOrWhiteSpace(model.Email) ||
+                string.IsNullOrWhiteSpace(model.Phone))
+            {
+                ModelState.AddModelError("", "Vui lòng điền đầy đủ thông tin cá nhân.");
+                var room = await _context.Rooms
+                    .Include(r => r.RoomType)
+                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                ViewBag.Room = room;
+                return View("Index", model);
+            }
+
+            // Xác định số phòng nếu chưa có
+            if (model.RoomCount <= 0)
+            {
+                model.RoomCount = 1;
             }
 
             // Thiết lập trạng thái và ngày tạo
             model.Status = "Pending";
             model.CreatedAt = DateTime.Now;
 
-            // Nếu người dùng đã đăng nhập, sử dụng thông tin từ tài khoản
-            if (User.Identity != null && User.Identity.IsAuthenticated)
+            try
             {
-                var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userIdInt))
+                // Tạo đặt phòng
+                _context.Bookings.Add(model);
+                await _context.SaveChangesAsync();
+
+                if (model.BookingID > 0)
                 {
-                    var user = await _context.Users.FindAsync(userIdInt);
-                    if (user != null)
-                    {
-                        // Chỉ ghi đè nếu người dùng không cung cấp thông tin tùy chỉnh
-                        if (string.IsNullOrEmpty(model.FullName))
-                            model.FullName = user.FullName;
-
-                        if (string.IsNullOrEmpty(model.Email))
-                            model.Email = user.Email;
-
-                        if (string.IsNullOrEmpty(model.Phone))
-                            model.Phone = user.Phone;
-                    }
+                    TempData["SuccessMessage"] = "Đặt phòng thành công! Mã đặt phòng của bạn là: " + model.BookingID;
+                    return RedirectToAction("Confirmation", new { id = model.BookingID });
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại sau.");
+                    var room = await _context.Rooms
+                        .Include(r => r.RoomType)
+                        .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                    ViewBag.Room = room;
+                    return View("Index", model);
                 }
             }
-
-            // Tạo đặt phòng
-            var booking = await _bookingService.TaoDatPhong(model);
-
-            if (booking != null && booking.BookingID > 0)
+            catch (Exception ex)
             {
-                TempData["SuccessMessage"] = "Đặt phòng thành công! Mã đặt phòng của bạn là: " + booking.BookingID;
-                return RedirectToAction("Confirmation", new { id = booking.BookingID });
-            }
-            else
-            {
-                ModelState.AddModelError("", "Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại sau.");
+                System.Diagnostics.Debug.WriteLine($"Exception when booking: {ex.Message}");
+                ModelState.AddModelError("", $"Có lỗi xảy ra khi đặt phòng: {ex.Message}");
+                var room = await _context.Rooms
+                    .Include(r => r.RoomType)
+                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                ViewBag.Room = room;
                 return View("Index", model);
             }
         }
@@ -191,7 +296,7 @@ namespace HotelBK.Controllers
             return View(booking);
         }
 
-        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> MyBookings()
         {
             if (User.Identity == null || !User.Identity.IsAuthenticated)
@@ -211,7 +316,6 @@ namespace HotelBK.Controllers
             return View(bookings);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CancelBooking(int id)
         {

@@ -117,7 +117,11 @@
                                     </p>
                                     <div class="d-flex justify-content-between">
                                         <a class="btn btn-sm btn-primary rounded py-2 px-4" href="/Room/Detail/@room.RoomID">Xem chi tiết</a>
-                                        <a class="btn btn-sm btn-dark rounded py-2 px-4" href="/Booking?roomId=@room.RoomID">Đặt ngay</a>
+                                        <!-- Sửa nút đặt phòng ở đây -->
+                                        <form action="/Booking/Index" method="get">
+                                            <input type="hidden" name="roomId" value="@room.RoomID" />
+                                            <button type="submit" class="btn btn-sm btn-dark rounded py-2 px-4">Đặt ngay</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
