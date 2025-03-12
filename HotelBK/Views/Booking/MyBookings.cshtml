@@ -1,0 +1,421 @@
+﻿@model IEnumerable<HotelBK.Models.Booking>
+@{
+    ViewData["Title"] = "Đặt phòng của tôi";
+}
+
+<div>
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+        <div class="container-fluid page-header-inner py-5">
+            <div class="container text-center pb-5">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Đặt phòng của tôi</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center text-uppercase">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Đặt phòng của tôi</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <!-- My Bookings Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="row g-4 mb-5">
+                <div class="col-lg-12">
+                    <!-- Booking Summary Cards -->
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fa fa-calendar-check text-primary" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h5 class="card-title">Tổng số đặt phòng</h5>
+                                    <p class="card-text display-6">@Model.Count()</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fa fa-spinner text-warning" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h5 class="card-title">Đang chờ xác nhận</h5>
+                                    <p class="card-text display-6">@Model.Count(b => b.Status == "Pending")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fa fa-check-circle text-success" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h5 class="card-title">Đã xác nhận</h5>
+                                    <p class="card-text display-6">@Model.Count(b => b.Status == "Confirmed" || b.Status == "Checked-in")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fa fa-history text-info" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h5 class="card-title">Sắp tới</h5>
+                                    <p class="card-text display-6">@Model.Count(b => (b.Status == "Pending" || b.Status == "Confirmed") && b.CheckInDate > DateTime.Now)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!Model.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="fa fa-calendar-alt text-muted mb-4" style="font-size: 5rem;"></i>
+                            <h3>Bạn chưa có đặt phòng nào</h3>
+                            <p class="text-muted">Khi bạn đặt phòng, chúng sẽ xuất hiện ở đây.</p>
+                            <a href="/Room" class="btn btn-primary mt-3">Đặt phòng ngay</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Booking Tabs -->
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white">
+                                <ul class="nav nav-tabs card-header-tabs" id="bookingTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="true">Sắp tới</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="false">Tất cả</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="past-tab" data-bs-toggle="tab" data-bs-target="#past" type="button" role="tab" aria-controls="past" aria-selected="false">Đã kết thúc</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled" type="button" role="tab" aria-controls="cancelled" aria-selected="false">Đã hủy</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="tab-content" id="bookingTabsContent">
+                                    <!-- Upcoming Bookings Tab -->
+                                    <div class="tab-pane fade show active p-4" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+                                        @{
+                                            var upcomingBookings = Model.Where(b => (b.Status == "Pending" || b.Status == "Confirmed") && b.CheckInDate > DateTime.Now).ToList();
+                                        }
+
+                                        @if (!upcomingBookings.Any())
+                                        {
+                                            <div class="text-center py-4">
+                                                <p class="text-muted">Không có đặt phòng sắp tới nào.</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Mã đặt phòng</th>
+                                                            <th>Loại phòng</th>
+                                                            <th>Ngày nhận phòng</th>
+                                                            <th>Ngày trả phòng</th>
+                                                            <th>Trạng thái</th>
+                                                            <th>Thao tác</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var booking in upcomingBookings)
+                                                        {
+                                                            <tr>
+                                                                <td>#@booking.BookingID</td>
+                                                                <td>@booking.Room.RoomName</td>
+                                                                <td>@booking.CheckInDate.ToString("dd/MM/yyyy")</td>
+                                                                <td>@booking.CheckOutDate.ToString("dd/MM/yyyy")</td>
+                                                                <td>
+                                                                    @switch (booking.Status)
+                                                                    {
+                                                                        case "Pending":
+                                                                            <span class="badge bg-warning">Chờ xác nhận</span>
+                                                                            break;
+                                                                        case "Confirmed":
+                                                                            <span class="badge bg-info">Đã xác nhận</span>
+                                                                            break;
+                                                                        case "Checked-in":
+                                                                            <span class="badge bg-primary">Đã nhận phòng</span>
+                                                                            break;
+                                                                        default:
+                                                                            <span class="badge bg-secondary">@booking.Status</span>
+                                                                            break;
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <a href="/Booking/Confirmation/@booking.BookingID" class="btn btn-sm btn-outline-primary">Chi tiết</a>
+                                                                    @if (booking.Status == "Pending" || booking.Status == "Confirmed")
+                                                                    {
+                                                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#cancelModal"
+                                                                                data-booking-id="@booking.BookingID"
+                                                                                data-booking-room="@booking.Room.RoomName"
+                                                                                data-booking-dates="@booking.CheckInDate.ToString("dd/MM/yyyy") - @booking.CheckOutDate.ToString("dd/MM/yyyy")">
+                                                                            Hủy
+                                                                        </button>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <!-- All Bookings Tab -->
+                                    <div class="tab-pane fade p-4" id="all" role="tabpanel" aria-labelledby="all-tab">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Mã đặt phòng</th>
+                                                        <th>Loại phòng</th>
+                                                        <th>Ngày nhận phòng</th>
+                                                        <th>Ngày trả phòng</th>
+                                                        <th>Trạng thái</th>
+                                                        <th>Ngày đặt</th>
+                                                        <th>Thao tác</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var booking in Model)
+                                                    {
+                                                        <tr>
+                                                            <td>#@booking.BookingID</td>
+                                                            <td>@booking.Room.RoomName</td>
+                                                            <td>@booking.CheckInDate.ToString("dd/MM/yyyy")</td>
+                                                            <td>@booking.CheckOutDate.ToString("dd/MM/yyyy")</td>
+                                                            <td>
+                                                                @switch (booking.Status)
+                                                                {
+                                                                    case "Pending":
+                                                                        <span class="badge bg-warning">Chờ xác nhận</span>
+                                                                        break;
+                                                                    case "Confirmed":
+                                                                        <span class="badge bg-info">Đã xác nhận</span>
+                                                                        break;
+                                                                    case "Checked-in":
+                                                                        <span class="badge bg-primary">Đã nhận phòng</span>
+                                                                        break;
+                                                                    case "Checked-out":
+                                                                        <span class="badge bg-success">Đã trả phòng</span>
+                                                                        break;
+                                                                    case "Cancelled":
+                                                                        <span class="badge bg-danger">Đã hủy</span>
+                                                                        break;
+                                                                    default:
+                                                                        <span class="badge bg-secondary">@booking.Status</span>
+                                                                        break;
+                                                                }
+                                                            </td>
+                                                            <td>@booking.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                                            <td>
+                                                                <a href="/Booking/Confirmation/@booking.BookingID" class="btn btn-sm btn-outline-primary">Chi tiết</a>
+                                                                @if (booking.Status == "Pending" || booking.Status == "Confirmed")
+                                                                {
+                                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#cancelModal"
+                                                                            data-booking-id="@booking.BookingID"
+                                                                            data-booking-room="@booking.Room.RoomName"
+                                                                            data-booking-dates="@booking.CheckInDate.ToString("dd/MM/yyyy") - @booking.CheckOutDate.ToString("dd/MM/yyyy")">
+                                                                        Hủy
+                                                                    </button>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Past Bookings Tab -->
+                                    <div class="tab-pane fade p-4" id="past" role="tabpanel" aria-labelledby="past-tab">
+                                        @{
+                                            var pastBookings = Model.Where(b => b.Status == "Checked-out" || b.CheckOutDate < DateTime.Now).ToList();
+                                        }
+
+                                        @if (!pastBookings.Any())
+                                        {
+                                            <div class="text-center py-4">
+                                                <p class="text-muted">Không có đặt phòng đã kết thúc nào.</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Mã đặt phòng</th>
+                                                            <th>Loại phòng</th>
+                                                            <th>Ngày nhận phòng</th>
+                                                            <th>Ngày trả phòng</th>
+                                                            <th>Trạng thái</th>
+                                                            <th>Thao tác</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var booking in pastBookings)
+                                                        {
+                                                            <tr>
+                                                                <td>#@booking.BookingID</td>
+                                                                <td>@booking.Room.RoomName</td>
+                                                                <td>@booking.CheckInDate.ToString("dd/MM/yyyy")</td>
+                                                                <td>@booking.CheckOutDate.ToString("dd/MM/yyyy")</td>
+                                                                <td>
+                                                                    @switch (booking.Status)
+                                                                    {
+                                                                        case "Checked-out":
+                                                                            <span class="badge bg-success">Đã trả phòng</span>
+                                                                            break;
+                                                                        default:
+                                                                            <span class="badge bg-secondary">@booking.Status</span>
+                                                                            break;
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    <a href="/Booking/Confirmation/@booking.BookingID" class="btn btn-sm btn-outline-primary">Chi tiết</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <!-- Cancelled Bookings Tab -->
+                                    <div class="tab-pane fade p-4" id="cancelled" role="tabpanel" aria-labelledby="cancelled-tab">
+                                        @{
+                                            var cancelledBookings = Model.Where(b => b.Status == "Cancelled").ToList();
+                                        }
+
+                                        @if (!cancelledBookings.Any())
+                                        {
+                                            <div class="text-center py-4">
+                                                <p class="text-muted">Không có đặt phòng đã hủy nào.</p>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Mã đặt phòng</th>
+                                                            <th>Loại phòng</th>
+                                                            <th>Ngày nhận phòng</th>
+                                                            <th>Ngày trả phòng</th>
+                                                            <th>Ngày hủy</th>
+                                                            <th>Thao tác</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var booking in cancelledBookings)
+                                                        {
+                                                            <tr>
+                                                                <td>#@booking.BookingID</td>
+                                                                <td>@booking.Room.RoomName</td>
+                                                                <td>@booking.CheckInDate.ToString("dd/MM/yyyy")</td>
+                                                                <td>@booking.CheckOutDate.ToString("dd/MM/yyyy")</td>
+                                                                <td>@booking.CreatedAt.ToString("dd/MM/yyyy")</td>
+                                                                <td>
+                                                                    <a href="/Booking/Confirmation/@booking.BookingID" class="btn btn-sm btn-outline-primary">Chi tiết</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- My Bookings End -->
+    <!-- Cancel Booking Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="cancelModalLabel">Xác nhận hủy đặt phòng</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc muốn hủy đặt phòng này?</p>
+                    <div class="mb-3">
+                        <strong>Phòng:</strong> <span id="bookingRoomName"></span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Thời gian:</strong> <span id="bookingDates"></span>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fa fa-exclamation-triangle me-2"></i> Lưu ý: Việc hủy phòng phải được thực hiện trước 24 giờ so với thời gian nhận phòng.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <form id="cancelForm" method="post" action="/Booking/CancelBooking">
+                        <input type="hidden" id="bookingIdInput" name="id" value="">
+                        <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Set up the cancel modal with booking details
+            $('#cancelModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var bookingId = button.data('booking-id');
+                var bookingRoom = button.data('booking-room');
+                var bookingDates = button.data('booking-dates');
+
+                $('#bookingIdInput').val(bookingId);
+                $('#bookingRoomName').text(bookingRoom);
+                $('#bookingDates').text(bookingDates);
+            });
+        });
+    </script>
+}
