@@ -104,65 +104,42 @@
                         </div>
                         <div class="card-body p-4">
                             <form method="post" action="/Booking/BookRoom" id="bookingForm">
-                                <input type="hidden" name="BookingID" value="0" />
-
-                                @if (room != null)
-                                {
-                                    <input type="hidden" name="RoomID" value="@room.RoomID" />
-                                }
-                                else
-                                {
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-12">
-                                            <div class="form-floating">
-                                                <select class="form-select" id="RoomID" name="RoomID" required>
-                                                    <option value="">-- Chọn phòng --</option>
-                                                    @if (ViewBag.AvailableRooms != null)
-                                                    {
-                                                        @foreach (var r in ViewBag.AvailableRooms)
-                                                        {
-                                                            <option value="@r.RoomID">@r.RoomName - @r.Price.ToString("N0") VNĐ/đêm</option>
-                                                        }
-                                                    }
-                                                </select>
-                                                <label for="RoomID">Chọn phòng</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+                                <!-- Important: Add hidden input for RoomID -->
+                                <input type="hidden" name="RoomID" value="@(Model.RoomID > 0 ? Model.RoomID : (ViewBag.Room != null ? ((HotelBK.Models.Room)ViewBag.Room).RoomID : 0))" />
 
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="FullName" name="FullName" placeholder="Họ tên"
-                                                   value="@(User.Identity.IsAuthenticated ? User.Identity.Name : "")" required>
+                                                   value="@(User.Identity.IsAuthenticated ? User.Identity.Name : Model.FullName)" required>
                                             <label for="FullName">Họ tên</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
                                             <input type="email" class="form-control" id="Email" name="Email" placeholder="Email"
-                                                   value="@(User.Identity.IsAuthenticated ? User.FindFirstValue(System.Security.Claims.ClaimTypes.Email) : "")" required>
+                                                   value="@(User.Identity.IsAuthenticated ? User.FindFirstValue(System.Security.Claims.ClaimTypes.Email) : Model.Email)" required>
                                             <label for="Email">Email</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" id="Phone" name="Phone" placeholder="Số điện thoại" required>
+                                            <input type="text" class="form-control" id="Phone" name="Phone" placeholder="Số điện thoại"
+                                                   value="@Model.Phone" required>
                                             <label for="Phone">Số điện thoại</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <input type="number" class="form-control" id="RoomCount" name="RoomCount" placeholder="Số lượng phòng"
-                                                   min="1" max="5" value="@(ViewBag.RoomCount ?? 1)" required>
-                                            <label for="RoomCount">Số lượng phòng</label>
+                                            <input type="number" class="form-control" id="RoomCount" name="RoomCount" placeholder="Số lượng người"
+                                                   min="1" max="10" value="@(ViewBag.RoomCount ?? Model.RoomCount)" required>
+                                            <label for="RoomCount">Số lượng người</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating date-picker">
                                             <input type="date" class="form-control" id="CheckInDate" name="CheckInDate" placeholder="Ngày nhận phòng"
-                                                   value="@(ViewBag.CheckIn?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))"
+                                                   value="@(ViewBag.CheckIn?.ToString("yyyy-MM-dd") ?? Model.CheckInDate.ToString("yyyy-MM-dd"))"
                                                    min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
                                             <label for="CheckInDate">Ngày nhận phòng</label>
                                         </div>
@@ -170,7 +147,7 @@
                                     <div class="col-md-6">
                                         <div class="form-floating date-picker">
                                             <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate" placeholder="Ngày trả phòng"
-                                                   value="@(ViewBag.CheckOut?.ToString("yyyy-MM-dd") ?? DateTime.Now.AddDays(2).ToString("yyyy-MM-dd"))"
+                                                   value="@(ViewBag.CheckOut?.ToString("yyyy-MM-dd") ?? Model.CheckOutDate.ToString("yyyy-MM-dd"))"
                                                    min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required>
                                             <label for="CheckOutDate">Ngày trả phòng</label>
                                         </div>
@@ -198,7 +175,7 @@
                                                 </div>
                                                 <div class="d-flex justify-content-between">
                                                     <span>Số phòng:</span>
-                                                    <span id="roomCountDisplay">@(ViewBag.RoomCount ?? 1)</span>
+                                                    <span id="roomCountDisplay">@(ViewBag.RoomCount ?? Model.RoomCount)</span>
                                                 </div>
                                                 <hr>
                                                 <div class="d-flex justify-content-between fw-bold">
@@ -301,6 +278,12 @@
             $("#bookingForm").submit(function(event) {
                 var isValid = true;
 
+                // Ensure RoomID exists in the form data
+                if (!$("input[name='RoomID']").val()) {
+                    alert("Vui lòng chọn phòng trước khi đặt");
+                    isValid = false;
+                }
+
                 // Check for valid dates
                 var checkIn = new Date($("#CheckInDate").val());
                 var checkOut = new Date($("#CheckOutDate").val());
@@ -314,6 +297,12 @@
 
                 if (checkIn >= checkOut) {
                     alert("Ngày nhận phòng phải trước ngày trả phòng!");
+                    isValid = false;
+                }
+
+                // Check other required fields
+                if (!$("#FullName").val() || !$("#Email").val() || !$("#Phone").val()) {
+                    alert("Vui lòng điền đầy đủ thông tin cá nhân");
                     isValid = false;
                 }
 

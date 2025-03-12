@@ -22,7 +22,7 @@ namespace HotelBK.Controllers
         public async Task<IActionResult> Index(int? roomId, DateTime? checkIn, DateTime? checkOut, int? adults, int? children, int? roomCount)
         {
             // Ghi log để debug
-            System.Diagnostics.Debug.WriteLine($"Received booking request: RoomID={roomId}, CheckIn={checkIn}, CheckOut={checkOut}");
+            System.Diagnostics.Debug.WriteLine($"Received roomId parameter: {roomId}");
 
             // Thiết lập giá trị mặc định nếu không có
             if (!checkIn.HasValue)
@@ -41,13 +41,25 @@ namespace HotelBK.Controllers
             ViewBag.Children = children ?? 0;
             ViewBag.RoomCount = roomCount ?? 1;
 
-            if (roomId.HasValue)
+            // Tạo đối tượng Booking mới để dùng cho view
+            var model = new Booking
             {
+                CheckInDate = checkIn.Value,
+                CheckOutDate = checkOut.Value,
+                RoomCount = roomCount ?? 1
+            };
+
+            // Đảm bảo RoomID được gán đúng
+            if (roomId.HasValue && roomId.Value > 0)
+            {
+                model.RoomID = roomId.Value;
+                System.Diagnostics.Debug.WriteLine($"Set model.RoomID to {model.RoomID}");
+
                 var room = await _context.Rooms
                     .Include(r => r.RoomType)
                     .FirstOrDefaultAsync(r => r.RoomID == roomId.Value);
 
-                if (room != null) // Kiểm tra null
+                if (room != null)
                 {
                     // Kiểm tra phòng có trống không
                     bool isAvailable = await _bookingService.KiemTraPhongTrong(
@@ -76,22 +88,10 @@ namespace HotelBK.Controllers
             }
             else
             {
-                // Lấy danh sách phòng trống
-                var availableRooms = await _context.Rooms
-                    .Include(r => r.RoomType)
-                    .Where(r => r.Status == "Còn trống")
-                    .ToListAsync();
-
-                ViewBag.AvailableRooms = availableRooms;
+                System.Diagnostics.Debug.WriteLine("Warning: roomId parameter is missing or invalid");
+                TempData["ErrorMessage"] = "Vui lòng chọn phòng trước khi đặt";
+                return RedirectToAction("Index", "Room");
             }
-
-            // Tạo đối tượng Booking mới để dùng cho view
-            var model = new Booking
-            {
-                CheckInDate = checkIn.Value,
-                CheckOutDate = checkOut.Value,
-                RoomCount = roomCount ?? 1
-            };
 
             // Nếu người dùng đã đăng nhập, lấy thông tin từ tài khoản
             if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -110,12 +110,6 @@ namespace HotelBK.Controllers
                 }
             }
 
-            // Nếu có roomId, thì gán cho model
-            if (roomId.HasValue)
-            {
-                model.RoomID = roomId.Value;
-            }
-
             return View(model);
         }
 
@@ -123,11 +117,10 @@ namespace HotelBK.Controllers
         public async Task<IActionResult> BookRoom(Booking model)
         {
             // Log để debug
-            System.Diagnostics.Debug.WriteLine($"Received booking: RoomID={model.RoomID}, CheckIn={model.CheckInDate}, CheckOut={model.CheckOutDate}");
+            System.Diagnostics.Debug.WriteLine($"Received booking POST with RoomID={model.RoomID}");
 
             if (!ModelState.IsValid)
             {
-                // Ghi lại lỗi model state để debug
                 foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
                     System.Diagnostics.Debug.WriteLine($"ModelState Error: {error.ErrorMessage}");
@@ -143,6 +136,17 @@ namespace HotelBK.Controllers
                 ViewBag.CheckOut = model.CheckOutDate;
                 ViewBag.RoomCount = model.RoomCount;
 
+                return View("Index", model);
+            }
+
+            // Kiểm tra RoomID
+            if (model.RoomID <= 0)
+            {
+                ModelState.AddModelError("RoomID", "Vui lòng chọn phòng");
+                var room = await _context.Rooms
+                    .Include(r => r.RoomType)
+                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                ViewBag.Room = room;
                 return View("Index", model);
             }
 
@@ -191,6 +195,12 @@ namespace HotelBK.Controllers
                 return View("Index", model);
             }
 
+            // Đảm bảo SpecialRequest không vượt quá độ dài cho phép
+            if (!string.IsNullOrEmpty(model.SpecialRequest) && model.SpecialRequest.Length > 500)
+            {
+                model.SpecialRequest = model.SpecialRequest.Substring(0, 500);
+            }
+
             // Đảm bảo các trường không null
             if (string.IsNullOrWhiteSpace(model.FullName) ||
                 string.IsNullOrWhiteSpace(model.Email) ||
@@ -231,7 +241,7 @@ namespace HotelBK.Controllers
                 return View("Index", model);
             }
 
-            // Xác định số phòng nếu chưa có
+            // Xác định số người nếu chưa có
             if (model.RoomCount <= 0)
             {
                 model.RoomCount = 1;
