@@ -32,7 +32,7 @@ namespace HotelBK.Models
         [Range(1, int.MaxValue, ErrorMessage = "Vui lòng chọn phòng")]
         [ForeignKey("Room")]
         public int RoomID { get; set; }
-        public Room Room { get; set; }
+        public virtual Room? Room { get; set; }
 
         [Required]
         public string Status { get; set; } = "Pending";
@@ -41,6 +41,6 @@ namespace HotelBK.Models
 
         [MaxLength(500)]
         [Display(Name = "Yêu cầu đặc biệt")]
-        public string SpecialRequest { get; set; }
+        public string? SpecialRequest { get; set; } = string.Empty;
     }
 }

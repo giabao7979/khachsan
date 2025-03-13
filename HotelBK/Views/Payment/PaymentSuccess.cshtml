@@ -1,0 +1,65 @@
+﻿@model HotelBK.Models.Payment
+@{
+    ViewData["Title"] = "Thanh toán thành công";
+}
+
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center pb-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Thanh toán thành công</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Thanh toán thành công</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-success text-white text-center py-4">
+                        <h3 class="mb-0"><i class="fa fa-check-circle me-2"></i>Thanh toán thành công</h3>
+                    </div>
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h4>Cảm ơn bạn đã thanh toán!</h4>
+                            <p class="text-muted">Mã thanh toán: #@Model.PaymentID</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="mb-3">Thông tin thanh toán</h5>
+                                <p><strong>Ngày thanh toán:</strong> @Model.PaymentDate.ToString("dd/MM/yyyy HH:mm")</p>
+                                <p><strong>Phương thức:</strong> @Model.PaymentMethod</p>
+                                <p><strong>Số tiền:</strong> <span class="text-primary fw-bold">@Model.Amount.ToString("N0") VNĐ</span></p>
+                                <p><strong>Trạng thái:</strong> <span class="badge bg-success">@Model.Status</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="mb-3">Thông tin đặt phòng</h5>
+                                <p><strong>Mã đặt phòng:</strong> #@Model.Booking.BookingID</p>
+                                <p><strong>Phòng:</strong> @Model.Booking.Room.RoomName</p>
+                                <p><strong>Ngày nhận phòng:</strong> @Model.Booking.CheckInDate.ToString("dd/MM/yyyy")</p>
+                                <p><strong>Ngày trả phòng:</strong> @Model.Booking.CheckOutDate.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="text-center mt-4">
+                            <p>Biên lai thanh toán đã được gửi đến email của bạn.</p>
+                            <div class="mt-4">
+                                <a href="/Booking/MyBookings" class="btn btn-primary me-2">Xem đặt phòng của tôi</a>
+                                <a href="/Payment/PaymentHistory" class="btn btn-outline-secondary">Lịch sử thanh toán</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

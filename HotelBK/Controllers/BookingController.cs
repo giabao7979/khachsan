@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using HotelBK.Services;
 using HotelBK.Data;
 using HotelBK.Models;
@@ -46,7 +47,8 @@ namespace HotelBK.Controllers
             {
                 CheckInDate = checkIn.Value,
                 CheckOutDate = checkOut.Value,
-                RoomCount = roomCount ?? 1
+                RoomCount = roomCount ?? 1,
+                SpecialRequest = string.Empty // Khởi tạo với chuỗi rỗng
             };
 
             // Đảm bảo RoomID được gán đúng
@@ -61,6 +63,13 @@ namespace HotelBK.Controllers
 
                 if (room != null)
                 {
+                    // Kiểm tra nếu phòng đang "Bảo trì"
+                    if (room.Status == "Bảo trì")
+                    {
+                        TempData["ErrorMessage"] = "Phòng này đang trong quá trình bảo trì và không thể đặt.";
+                        return RedirectToAction("Index", "Room");
+                    }
+
                     // Kiểm tra phòng có trống không
                     bool isAvailable = await _bookingService.KiemTraPhongTrong(
                         room.RoomID,
@@ -117,13 +126,33 @@ namespace HotelBK.Controllers
         public async Task<IActionResult> BookRoom(Booking model)
         {
             // Log để debug
-            System.Diagnostics.Debug.WriteLine($"Received booking POST with RoomID={model.RoomID}");
+            System.Diagnostics.Debug.WriteLine($"RoomID in form: {model.RoomID}");
+            if (model.RoomID <= 0)
+            {
+                TempData["ErrorMessage"] = "Vui lòng chọn phòng trước khi đặt";
+                return RedirectToAction("Index", "Room");
+            }
+            // Đảm bảo SpecialRequest không null
+            if (model.SpecialRequest == null)
+            {
+                model.SpecialRequest = string.Empty;
+            }
 
+            // Khai báo biến ở đầu phương thức để tránh lỗi scope
+            List<string> errorMessages = new List<string>();
+
+            // Hiển thị chi tiết lỗi ModelState để debug
             if (!ModelState.IsValid)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                System.Diagnostics.Debug.WriteLine("ModelState is invalid. Details:");
+
+                foreach (var state in ModelState)
                 {
-                    System.Diagnostics.Debug.WriteLine($"ModelState Error: {error.ErrorMessage}");
+                    foreach (var error in state.Value.Errors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Field: {state.Key}, Error: {error.ErrorMessage}");
+                        errorMessages.Add($"{state.Key}: {error.ErrorMessage}");
+                    }
                 }
 
                 // Lấy lại thông tin phòng
@@ -136,123 +165,123 @@ namespace HotelBK.Controllers
                 ViewBag.CheckOut = model.CheckOutDate;
                 ViewBag.RoomCount = model.RoomCount;
 
-                return View("Index", model);
-            }
-
-            // Kiểm tra RoomID
-            if (model.RoomID <= 0)
-            {
-                ModelState.AddModelError("RoomID", "Vui lòng chọn phòng");
-                var room = await _context.Rooms
-                    .Include(r => r.RoomType)
-                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
-                ViewBag.Room = room;
-                return View("Index", model);
-            }
-
-            // Kiểm tra ngày
-            if (model.CheckInDate >= model.CheckOutDate)
-            {
-                ModelState.AddModelError("", "Ngày nhận phòng phải trước ngày trả phòng.");
-                var room = await _context.Rooms
-                    .Include(r => r.RoomType)
-                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
-                ViewBag.Room = room;
-                return View("Index", model);
-            }
-
-            if (model.CheckInDate.Date < DateTime.Now.Date)
-            {
-                ModelState.AddModelError("", "Ngày nhận phòng không thể trong quá khứ.");
-                var room = await _context.Rooms
-                    .Include(r => r.RoomType)
-                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
-                ViewBag.Room = room;
-                return View("Index", model);
-            }
-
-            // Kiểm tra phòng có tồn tại không
-            var roomExists = await _context.Rooms.AnyAsync(r => r.RoomID == model.RoomID);
-            if (!roomExists)
-            {
-                ModelState.AddModelError("", "Phòng không tồn tại.");
-                return View("Index", model);
-            }
-
-            // Kiểm tra phòng có trống không
-            bool isRoomAvailable = await _bookingService.KiemTraPhongTrong(
-                model.RoomID,
-                model.CheckInDate,
-                model.CheckOutDate);
-
-            if (!isRoomAvailable)
-            {
-                ModelState.AddModelError("", "Phòng này đã được đặt trong khoảng thời gian bạn chọn. Vui lòng chọn ngày khác hoặc phòng khác.");
-                var room = await _context.Rooms
-                    .Include(r => r.RoomType)
-                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
-                ViewBag.Room = room;
-                return View("Index", model);
-            }
-
-            // Đảm bảo SpecialRequest không vượt quá độ dài cho phép
-            if (!string.IsNullOrEmpty(model.SpecialRequest) && model.SpecialRequest.Length > 500)
-            {
-                model.SpecialRequest = model.SpecialRequest.Substring(0, 500);
-            }
-
-            // Đảm bảo các trường không null
-            if (string.IsNullOrWhiteSpace(model.FullName) ||
-                string.IsNullOrWhiteSpace(model.Email) ||
-                string.IsNullOrWhiteSpace(model.Phone))
-            {
-                // Nếu người dùng đã đăng nhập, lấy thông tin từ tài khoản
-                if (User.Identity != null && User.Identity.IsAuthenticated)
+                // Hiển thị thông báo lỗi cụ thể hơn
+                if (errorMessages.Any())
                 {
-                    var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userIdInt))
-                    {
-                        var user = await _context.Users.FindAsync(userIdInt);
-                        if (user != null)
-                        {
-                            if (string.IsNullOrWhiteSpace(model.FullName))
-                                model.FullName = user.FullName;
-
-                            if (string.IsNullOrWhiteSpace(model.Email))
-                                model.Email = user.Email;
-
-                            if (string.IsNullOrWhiteSpace(model.Phone))
-                                model.Phone = user.Phone;
-                        }
-                    }
+                    TempData["ErrorMessage"] = "Vui lòng điền đầy đủ thông tin đặt phòng: " + string.Join(", ", errorMessages);
                 }
-            }
+                else
+                {
+                    TempData["ErrorMessage"] = "Vui lòng điền đầy đủ thông tin đặt phòng.";
+                }
 
-            // Kiểm tra lại sau khi lấy thông tin từ user
-            if (string.IsNullOrWhiteSpace(model.FullName) ||
-                string.IsNullOrWhiteSpace(model.Email) ||
-                string.IsNullOrWhiteSpace(model.Phone))
-            {
-                ModelState.AddModelError("", "Vui lòng điền đầy đủ thông tin cá nhân.");
-                var room = await _context.Rooms
-                    .Include(r => r.RoomType)
-                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
-                ViewBag.Room = room;
                 return View("Index", model);
             }
-
-            // Xác định số người nếu chưa có
-            if (model.RoomCount <= 0)
-            {
-                model.RoomCount = 1;
-            }
-
-            // Thiết lập trạng thái và ngày tạo
-            model.Status = "Pending";
-            model.CreatedAt = DateTime.Now;
 
             try
             {
+                // Kiểm tra RoomID
+                if (model.RoomID <= 0)
+                {
+                    TempData["ErrorMessage"] = "Vui lòng chọn phòng";
+                    return RedirectToAction("Index", "Room");
+                }
+
+                // Kiểm tra ngày
+                if (model.CheckInDate >= model.CheckOutDate)
+                {
+                    ModelState.AddModelError("", "Ngày nhận phòng phải trước ngày trả phòng.");
+                    var room = await _context.Rooms
+                        .Include(r => r.RoomType)
+                        .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                    ViewBag.Room = room;
+                    return View("Index", model);
+                }
+
+                if (model.CheckInDate.Date < DateTime.Now.Date)
+                {
+                    ModelState.AddModelError("", "Ngày nhận phòng không thể trong quá khứ.");
+                    var room = await _context.Rooms
+                        .Include(r => r.RoomType)
+                        .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
+                    ViewBag.Room = room;
+                    return View("Index", model);
+                }
+
+                // Kiểm tra phòng có tồn tại không
+                var roomExists = await _context.Rooms.AnyAsync(r => r.RoomID == model.RoomID);
+                if (!roomExists)
+                {
+                    TempData["ErrorMessage"] = "Phòng không tồn tại.";
+                    return RedirectToAction("Index", "Room");
+                }
+
+                // Kiểm tra trạng thái phòng
+                var roomToBook = await _context.Rooms.FindAsync(model.RoomID);
+                if (roomToBook.Status == "Bảo trì")
+                {
+                    TempData["ErrorMessage"] = "Không thể đặt phòng đang bảo trì.";
+                    return RedirectToAction("Detail", "Room", new { id = model.RoomID });
+                }
+
+                // Kiểm tra phòng có trống không
+                bool isRoomAvailable = await _bookingService.KiemTraPhongTrong(
+                    model.RoomID,
+                    model.CheckInDate,
+                    model.CheckOutDate);
+
+                if (!isRoomAvailable)
+                {
+                    TempData["ErrorMessage"] = "Phòng này đã được đặt trong khoảng thời gian bạn chọn. Vui lòng chọn ngày khác hoặc phòng khác.";
+                    return RedirectToAction("Detail", "Room", new { id = model.RoomID });
+                }
+
+                // Đảm bảo các trường không null
+                if (string.IsNullOrWhiteSpace(model.FullName) ||
+                    string.IsNullOrWhiteSpace(model.Email) ||
+                    string.IsNullOrWhiteSpace(model.Phone))
+                {
+                    // Nếu người dùng đã đăng nhập, lấy thông tin từ tài khoản
+                    if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userIdInt))
+                        {
+                            var user = await _context.Users.FindAsync(userIdInt);
+                            if (user != null)
+                            {
+                                if (string.IsNullOrWhiteSpace(model.FullName))
+                                    model.FullName = user.FullName;
+
+                                if (string.IsNullOrWhiteSpace(model.Email))
+                                    model.Email = user.Email;
+
+                                if (string.IsNullOrWhiteSpace(model.Phone))
+                                    model.Phone = user.Phone;
+                            }
+                        }
+                    }
+                }
+
+                // Kiểm tra lại sau khi lấy thông tin từ user
+                if (string.IsNullOrWhiteSpace(model.FullName) ||
+                    string.IsNullOrWhiteSpace(model.Email) ||
+                    string.IsNullOrWhiteSpace(model.Phone))
+                {
+                    TempData["ErrorMessage"] = "Vui lòng điền đầy đủ thông tin cá nhân.";
+                    return RedirectToAction("Detail", "Room", new { id = model.RoomID });
+                }
+
+                // Xác định số người nếu chưa có
+                if (model.RoomCount <= 0)
+                {
+                    model.RoomCount = 1;
+                }
+
+                // Thiết lập trạng thái và ngày tạo
+                model.Status = "Pending";
+                model.CreatedAt = DateTime.Now;
+
                 // Tạo đặt phòng
                 _context.Bookings.Add(model);
                 await _context.SaveChangesAsync();
@@ -264,23 +293,16 @@ namespace HotelBK.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại sau.");
-                    var room = await _context.Rooms
-                        .Include(r => r.RoomType)
-                        .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
-                    ViewBag.Room = room;
-                    return View("Index", model);
+                    TempData["ErrorMessage"] = "Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại sau.";
+                    return RedirectToAction("Detail", "Room", new { id = model.RoomID });
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Exception when booking: {ex.Message}");
-                ModelState.AddModelError("", $"Có lỗi xảy ra khi đặt phòng: {ex.Message}");
-                var room = await _context.Rooms
-                    .Include(r => r.RoomType)
-                    .FirstOrDefaultAsync(r => r.RoomID == model.RoomID);
-                ViewBag.Room = room;
-                return View("Index", model);
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                TempData["ErrorMessage"] = $"Có lỗi xảy ra khi đặt phòng: {ex.Message}";
+                return RedirectToAction("Detail", "Room", new { id = model.RoomID });
             }
         }
 

@@ -106,7 +106,12 @@
                             <form method="post" action="/Booking/BookRoom" id="bookingForm">
                                 <!-- Important: Add hidden input for RoomID -->
                                 <input type="hidden" name="RoomID" value="@(Model.RoomID > 0 ? Model.RoomID : (ViewBag.Room != null ? ((HotelBK.Models.Room)ViewBag.Room).RoomID : 0))" />
-
+                                <div class="form-group mb-3">
+                                    <div class="alert alert-info">
+                                        <strong>Phòng đang đặt:</strong> @(ViewBag.Room?.RoomName ?? "Không xác định")
+                                        <input type="hidden" name="RoomID" value="@(Model.RoomID > 0 ? Model.RoomID : (ViewBag.Room != null ? ViewBag.Room.RoomID : 0))" />
+                                    </div>
+                                </div>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="form-floating">
@@ -153,13 +158,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            <textarea class="form-control" placeholder="Để lại ghi chú ở đây" id="SpecialRequest" name="SpecialRequest" style="height: 100px"></textarea>
-                                            <label for="SpecialRequest">Yêu cầu đặc biệt</label>
-                                        </div>
+                                    <div class="form-group mb-3">
+                                        <label for="SpecialRequest">Yêu cầu đặc biệt</label>
+                                        <textarea class="form-control" placeholder="Để lại ghi chú ở đây" id="SpecialRequest" name="SpecialRequest" style="height: 100px">@Model.SpecialRequest</textarea>
                                     </div>
-
                                     <!-- Price Summary -->
                                     <div class="col-12">
                                         <div class="card bg-light mt-3 mb-3">

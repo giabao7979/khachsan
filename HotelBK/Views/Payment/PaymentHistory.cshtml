@@ -1,0 +1,107 @@
+﻿@model IEnumerable<HotelBK.Models.Payment>
+@{
+    ViewData["Title"] = "Lịch sử thanh toán";
+}
+
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center pb-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Lịch sử thanh toán</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Lịch sử thanh toán</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0">Lịch sử thanh toán của bạn</h4>
+            </div>
+
+            <div class="card-body">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Ngày thanh toán</th>
+                                    <th>Mã đặt phòng</th>
+                                    <th>Phòng</th>
+                                    <th>Số tiền</th>
+                                    <th>Phương thức</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var payment in Model)
+                                {
+                                    <tr>
+                                        <td>#@payment.PaymentID</td>
+                                        <td>@payment.PaymentDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td><a href="/Booking/Confirmation/@payment.BookingID">#@payment.BookingID</a></td>
+                                        <td>@payment.Booking.Room.RoomName</td>
+                                        <td class="fw-bold text-primary">@payment.Amount.ToString("N0") VNĐ</td>
+                                        <td>@payment.PaymentMethod</td>
+                                        <td>
+                                            @if (payment.Status == "Completed")
+                                            {
+                                                <span class="badge bg-success">Hoàn thành</span>
+                                            }
+                                            else if (payment.Status == "Pending")
+                                            {
+                                                <span class="badge bg-warning">Đang xử lý</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">@payment.Status</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="/Payment/PaymentSuccess/@payment.PaymentID" class="btn btn-sm btn-info">
+                                                <i class="fa fa-eye"></i> Chi tiết
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <div class="mb-4">
+                            <i class="fa fa-receipt fa-4x text-muted"></i>
+                        </div>
+                        <h4>Bạn chưa có thanh toán nào</h4>
+                        <p class="text-muted">Các thanh toán của bạn sẽ được hiển thị ở đây</p>
+                        <a href="/Booking/MyBookings" class="btn btn-primary mt-3">Xem đặt phòng của tôi</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

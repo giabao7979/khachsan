@@ -60,7 +60,6 @@ namespace HotelBK.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SpecialRequest")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -88,6 +87,11 @@ namespace HotelBK.Migrations
 
                     b.Property<int>("BookingID")
                         .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
@@ -274,10 +278,10 @@ namespace HotelBK.Migrations
                         new
                         {
                             UserID = 1,
-                            CreatedAt = new DateTime(2025, 3, 12, 11, 5, 53, 584, DateTimeKind.Local).AddTicks(1180),
+                            CreatedAt = new DateTime(2025, 3, 13, 9, 29, 57, 145, DateTimeKind.Local).AddTicks(76),
                             Email = "admin@example.com",
                             FullName = "Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKvgxwRO5NO/fR9tcFpxbQ+FlqnJEE5SACORtbR6bM/UyVHLi258kUIvQ2+zBETjSQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEObt96aWNoPpDdjVPJiCVCj1D5VN8YGUt74hKLqo9AoujtXGTzyfZuaEo43IJYMqQA==",
                             Phone = "0123456789",
                             RoleID = 1
                         });

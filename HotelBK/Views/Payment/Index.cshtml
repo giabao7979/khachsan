@@ -1,148 +1,214 @@
-﻿@{
-    ViewData["Title"] = "Booking";
+﻿@model HotelBK.Models.Payment
+@{
+    ViewData["Title"] = "Thanh toán đặt phòng";
+    var booking = ViewBag.Booking as HotelBK.Models.Booking;
 }
-<div>
 
-    <!-- Booking Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h1 class="mb-5">Thanh toán </h1>
+<div class="container-fluid page-header mb-5 p-0" style="background-image: url(/img/carousel-1.jpg);">
+    <div class="container-fluid page-header-inner py-5">
+        <div class="container text-center pb-5">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Thanh toán đặt phòng</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">Thanh toán</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
             </div>
-            <div class="row g-5">
-                <div class="col-lg-6">
-                    <div class="row g-3">
-                        <div class="room-item shadow rounded overflow-hidden">
-                            <div class="d-flex justify-content-center">
-                                <div class="position-relative">
-                                    <img class="img-fluid" src="img/room-1.jpg" alt="">
-                                </div>
-                            </div>
+        }
 
-                            <div class="p-4 mt-2">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <h5 class="mb-0">Junior Suite</h5>
-                                    <div class="ps-2">
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                    </div>
-                                </div>
-                                <div class="d-flex mb-3">
-                                    <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                                    <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                                </div>
-                                <p class="text-body mb-3">
-                                    Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.
-                                    Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.
-                                    Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.
-                                    Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.
-                                    Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.
-                                    Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.
+        <div class="row g-5">
+            <!-- Thông tin đặt phòng -->
+            <div class="col-lg-6">
+                <div class="card shadow rounded overflow-hidden">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h4 class="mb-0">Thông tin đặt phòng #@booking.BookingID</h4>
+                    </div>
 
-                                </p>
-                                <div class="d-flex justify-content-between">
-                                    <a class="btn btn-sm btn-primary rounded py-2 px-4">$100/Night</a>
-                                </div>
-                            </div>
+                    <div class="card-body p-4">
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Khách hàng:</div>
+                            <div class="col-md-8">@booking.FullName</div>
                         </div>
 
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Phòng:</div>
+                            <div class="col-md-8">@booking.Room.RoomName (@booking.Room.RoomType?.TypeName)</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Ngày nhận phòng:</div>
+                            <div class="col-md-8">@booking.CheckInDate.ToString("dd/MM/yyyy")</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Ngày trả phòng:</div>
+                            <div class="col-md-8">@booking.CheckOutDate.ToString("dd/MM/yyyy")</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Số đêm:</div>
+                            <div class="col-md-8">@ViewBag.TotalDays</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Số người:</div>
+                            <div class="col-md-8">@booking.RoomCount</div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Tổng tiền:</div>
+                            <div class="col-md-8 fs-5">@ViewBag.TotalAmount.ToString("N0") VNĐ</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Đã thanh toán:</div>
+                            <div class="col-md-8">@ViewBag.PaidAmount.ToString("N0") VNĐ</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Còn lại:</div>
+                            <div class="col-md-8 fs-5 text-danger fw-bold">@ViewBag.RemainingAmount.ToString("N0") VNĐ</div>
+                        </div>
+
+                        <div class="row mb-2 mt-3">
+                            <div class="col-md-4 fw-bold">Trạng thái:</div>
+                            <div class="col-md-8">
+                                @switch (booking.Status)
+                                {
+                                    case "Pending":
+                                        <span class="badge bg-warning">Chờ xác nhận</span>
+                                        break;
+                                    case "Confirmed":
+                                        <span class="badge bg-info">Đã xác nhận</span>
+                                        break;
+                                    case "Paid":
+                                        <span class="badge bg-success">Đã thanh toán</span>
+                                        break;
+                                    case "Checked-in":
+                                        <span class="badge bg-primary">Đã nhận phòng</span>
+                                        break;
+                                    case "Checked-out":
+                                        <span class="badge bg-secondary">Đã trả phòng</span>
+                                        break;
+                                    case "Cancelled":
+                                        <span class="badge bg-danger">Đã hủy</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">@booking.Status</span>
+                                        break;
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="wow fadeInUp" data-wow-delay="0.2s">
-                        <form>
-                            <div class="room-item shadow rounded overflow-hidden" style="padding-bottom: 20px;">
-                                <div class="customer-info">
-                                    <h4 class="mb-0"> Tên khách hàng:</h4>
+            </div>
+
+            <!-- Form thanh toán -->
+            <div class="col-lg-6">
+                <div class="card shadow rounded overflow-hidden">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h4 class="mb-0">Thông tin thanh toán</h4>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <form action="/Payment/ProcessPayment" method="post">
+                            <input type="hidden" name="BookingID" value="@Model.BookingID" />
+
+                            <div class="form-group mb-3">
+                                <label class="form-label">Số tiền thanh toán</label>
+                                <input type="number" name="Amount" class="form-control"
+                                       value="@Model.Amount.ToString("0")"
+                                       min="1" max="@ViewBag.RemainingAmount" required />
+                                <small class="text-muted">Số tiền tối đa: @ViewBag.RemainingAmount.ToString("N0") VNĐ</small>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label">Phương thức thanh toán</label>
+                                <select name="PaymentMethod" class="form-select" required>
+                                    <option value="Cash">Tiền mặt</option>
+                                    <option value="BankTransfer">Chuyển khoản</option>
+                                    <option value="CreditCard">Thẻ tín dụng</option>
+                                    <option value="Momo">Ví MoMo</option>
+                                    <option value="ZaloPay">ZaloPay</option>
+                                </select>
+                            </div>
+
+                            <div class="payment-details mt-4">
+                                <!-- Thông tin phương thức thanh toán sẽ được hiển thị tại đây qua JavaScript -->
+                                <div id="bank-transfer-details" class="payment-method-details" style="display: none;">
+                                    <div class="alert alert-info">
+                                        <h5>Thông tin chuyển khoản</h5>
+                                        <p>Ngân hàng: <strong>BIDV</strong></p>
+                                        <p>Số tài khoản: <strong>12345678900</strong></p>
+                                        <p>Chủ tài khoản: <strong>KHÁCH SẠN LOTUS</strong></p>
+                                        <p>Nội dung: <strong>THANHTOAN @booking.BookingID</strong></p>
+                                    </div>
                                 </div>
-                                <div class="customer-info1">
-                                    <h5 class="mb-0"> Số điện thoại:</h5>
+
+                                <div id="momo-details" class="payment-method-details" style="display: none;">
+                                    <div class="alert alert-info">
+                                        <h5>Thông tin ví MoMo</h5>
+                                        <p>Số điện thoại: <strong>0333754437</strong></p>
+                                        <p>Tên: <strong>KHÁCH SẠN LOTUS</strong></p>
+                                        <p>Nội dung: <strong>THANHTOAN @booking.BookingID</strong></p>
+                                    </div>
                                 </div>
-                                <div class="row g-3" style="padding-left: 20px;">
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <h6> Ngày bắt đầu:</h6>
+
+                                <div id="zalopay-details" class="payment-method-details" style="display: none;">
+                                    <div class="alert alert-info">
+                                        <h5>Thông tin ZaloPay</h5>
+                                        <p>Số điện thoại: <strong>0333754437</strong></p>
+                                        <p>Tên: <strong>KHÁCH SẠN LOTUS</strong></p>
+                                        <p>Nội dung: <strong>THANHTOAN @booking.BookingID</strong></p>
+                                    </div>
+                                </div>
+
+                                <div id="credit-card-details" class="payment-method-details" style="display: none;">
+                                    <div class="alert alert-info">
+                                        <h5>Thông tin thẻ tín dụng</h5>
+                                        <div class="form-group mb-3">
+                                            <label>Số thẻ</label>
+                                            <input type="text" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label>Hạn thẻ</label>
+                                                    <input type="text" class="form-control" placeholder="MM/YY">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-3">
+                                                    <label>CVV</label>
+                                                    <input type="text" class="form-control" placeholder="XXX">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <h6> Ngày kết thúc:</h6>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                            <!-- style="padding-left: 20px;padding-top: 30px;padding-bottom: 20px; -->
-                            <div class="room-item shadow rounded overflow-hidden">
-                                <div style="padding-left: 20px;padding-top: 30px;padding-bottom: 20px;padding-right: 20px;">
-                                    <div>
-                                        <label for="payment-method">Chọn phương thức thanh toán:</label><br>
-                                        <input type="radio" id="cash" name="payment-method" value="cash" checked> Tiền mặt<br>
-                                        <input type="radio" id="bank-transfer" name="payment-method" value="bank-transfer"> Chuyển khoản<br>
-                                        <input type="radio" id="visa-mastercard" name="payment-method" value="visa-mastercard"> Visa/Mastercard<br>
-                                    </div>
 
-                                    <!-- Form chuyển khoản -->
-                                    <div id="bank-transfer-form" style="display: none;">
-                                        <h4>Thông tin chuyển khoản:</h4>
-                                        <label for="bank">Chọn ngân hàng:</label>
-                                        <div class="bank-select-container">
-                                            <select id="bank" name="bank" class="form-control">
-                                                <option value="vietin">VietinBank</option>
-                                                <option value="mbank">MBBank</option>
-                                                <option value="msb">MSB</option>
-                                                <option value="bidv">BIDV</option>
-                                            </select>
-                                        </div><br>
-
-                                        <label for="full-name">Họ và tên:</label>
-                                        <input type="text" id="full-name" name="full-name" class="form-control"><br>
-
-                                        <label for="account-number">Số tài khoản:</label>
-                                        <input type="text" id="account-number" name="account-number" class="form-control"><br>
-                                    </div>
-
-                                    <!-- Form Visa/Mastercard -->
-                                    <div id="visa-mastercard-form" style="display: none;">
-                                        <h4>Thông tin thẻ:</h4>
-                                        <label for="card-number">Số tài khoản:</label>
-                                        <input type="text" id="card-number" name="card-number" class="form-control"><br>
-
-                                        <label for="card-holder">Tên chủ thẻ:</label>
-                                        <input type="text" id="card-holder" name="card-holder" class="form-control"><br>
-
-                                        <label for="cvv">CVV:</label>
-                                        <input type="text" id="cvv" name="cvv" class="form-control"><br>
-
-                                        <label for="expiry-date">Ngày hết hạn (Tháng/Năm):</label>
-                                        <div class="date-input-container">
-                                            <input type="text" id="expiry-month" name="expiry-month" class="expiry-input" maxlength="2" placeholder="MM">
-                                            <span>/</span>
-                                            <input type="text" id="expiry-year" name="expiry-year" class="expiry-input" maxlength="4" placeholder="YYYY">
-                                        </div><br>
-
-                                        <label for="issue-date">Ngày phát hành (Tháng/Năm):</label>
-                                        <div class="date-input-container">
-                                            <input type="text" id="issue-month" name="issue-month" class="expiry-input" maxlength="2" placeholder="MM">
-                                            <span>/</span>
-                                            <input type="text" id="issue-year" name="issue-year" class="expiry-input" maxlength="4" placeholder="YYYY">
-                                        </div><br>
-                                    </div>
-
-
-                                </div>
-
+                            <div class="form-group mb-3">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea name="Notes" class="form-control" rows="3" placeholder="Ghi chú về thanh toán (không bắt buộc)"></textarea>
                             </div>
-                            <div class="customer-info">
-                                <h4 class="mb-0"> Tổng thanh toán:</h4>
-                            </div>
-                            <div class="row g-3" style="padding-top: 20px;">
-                                <div class="col-12">
-                                    <button class="btn btn-primary w-100 py-3" type="submit">Thanh toán</button>
-                                </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Xác nhận thanh toán</button>
+                                <a href="/Booking/MyBookings" class="btn btn-outline-secondary">Quay lại</a>
                             </div>
                         </form>
                     </div>
@@ -150,23 +216,32 @@
             </div>
         </div>
     </div>
-    <!-- Booking End -->
-    <!-- Newsletter Start -->
-    <div class="container newsletter mt-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="row justify-content-center">
-            <div class="col-lg-10 border rounded p-1">
-                <div class="border rounded text-center p-1">
-                    <div class="bg-white rounded text-center p-5">
-                        <h4 class="mb-4">Đăng ký bản tin của chúng tôi </h4>
-                        <div class="position-relative mx-auto" style="max-width: 400px;">
-                            <input class="form-control w-100 py-3 ps-4 pe-5" type="text" placeholder="Nhập email của bạn">
-                            <button type="button" class="btn btn-primary py-2 px-3 position-absolute top-0 end-0 mt-2 me-2">Xác nhận</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Newsletter Start -->
-
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Hiển thị thông tin chi tiết theo phương thức thanh toán
+            $('select[name="PaymentMethod"]').change(function() {
+                var method = $(this).val();
+
+                // Ẩn tất cả các phương thức
+                $('.payment-method-details').hide();
+
+                // Hiển thị phương thức được chọn
+                if (method === 'BankTransfer') {
+                    $('#bank-transfer-details').show();
+                } else if (method === 'Momo') {
+                    $('#momo-details').show();
+                } else if (method === 'ZaloPay') {
+                    $('#zalopay-details').show();
+                } else if (method === 'CreditCard') {
+                    $('#credit-card-details').show();
+                }
+            });
+
+            // Kích hoạt thay đổi ban đầu
+            $('select[name="PaymentMethod"]').trigger('change');
+        });
+    </script>
+}

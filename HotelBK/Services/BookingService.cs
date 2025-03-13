@@ -22,17 +22,21 @@ namespace HotelBK.Services
                 if (room == null)
                     return false;
 
-                // Nếu phòng không ở trạng thái trống và không phải trường hợp cập nhật
+                // Nếu phòng trong trạng thái "Bảo trì", luôn trả về false
+                if (room.Status == "Bảo trì")
+                    return false;
+
+                // Nếu phòng không ở trạng thái "Còn trống" và không phải trường hợp cập nhật
                 if (room.Status != "Còn trống" && excludeBookingId == null)
                     return false;
 
                 // Kiểm tra xem phòng có trống trong khoảng thời gian này không
                 var query = _context.Bookings
                     .Where(b => b.RoomID == roomId &&
-                             b.Status != "Cancelled" &&
-                             ((checkIn >= b.CheckInDate && checkIn < b.CheckOutDate) ||
-                              (checkOut > b.CheckInDate && checkOut <= b.CheckOutDate) ||
-                              (checkIn <= b.CheckInDate && checkOut >= b.CheckOutDate)));
+                            b.Status != "Cancelled" &&
+                            ((checkIn >= b.CheckInDate && checkIn < b.CheckOutDate) ||
+                            (checkOut > b.CheckInDate && checkOut <= b.CheckOutDate) ||
+                            (checkIn <= b.CheckInDate && checkOut >= b.CheckOutDate)));
 
                 // Nếu đang sửa booking, loại trừ booking hiện tại
                 if (excludeBookingId.HasValue)
@@ -43,7 +47,7 @@ namespace HotelBK.Services
                 var existingBookings = await query.AnyAsync();
 
                 // Ghi log để debug
-                System.Diagnostics.Debug.WriteLine($"Room {roomId} availability check from {checkIn} to {checkOut}: {!existingBookings}");
+                System.Diagnostics.Debug.WriteLine($"Room {roomId} availability check from {checkIn} to {checkOut}: {!existingBookings}, Room status: {room.Status}");
 
                 return !existingBookings;
             }

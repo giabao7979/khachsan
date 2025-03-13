@@ -92,6 +92,12 @@
                                                 <a href="/Booking/Confirmation/@booking.BookingID" class="btn btn-sm btn-info">
                                                     <i class="fa fa-eye"></i> Chi tiết
                                                 </a>
+                                                @if (booking.Status != "Cancelled" && booking.Status != "Paid")
+                                                {
+                                                    <a href="/Payment/Index?bookingId=@booking.BookingID" class="btn btn-sm btn-success">
+                                                        <i class="fa fa-credit-card"></i> Thanh toán
+                                                    </a>
+                                                }
                                                 @if (booking.Status == "Pending" || booking.Status == "Confirmed")
                                                 {
                                                     if (booking.CheckInDate > DateTime.Now.AddHours(24))
