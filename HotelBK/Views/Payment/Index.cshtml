@@ -124,13 +124,13 @@
                     </div>
 
                     <div class="card-body p-4">
-                        <form action="/Payment/ProcessPayment" method="post">
-                            <input type="hidden" name="BookingID" value="@Model.BookingID" />
+                        <form action="/Payment/ProcessPayment" method="post" id="paymentForm">
+                            <input type="hidden" name="BookingID" value="@booking.BookingID" />
 
                             <div class="form-group mb-3">
                                 <label class="form-label">Số tiền thanh toán</label>
                                 <input type="number" name="Amount" class="form-control"
-                                       value="@Model.Amount.ToString("0")"
+                                       value="@ViewBag.RemainingAmount.ToString("0")"
                                        min="1" max="@ViewBag.RemainingAmount" required />
                                 <small class="text-muted">Số tiền tối đa: @ViewBag.RemainingAmount.ToString("N0") VNĐ</small>
                             </div>
@@ -138,6 +138,7 @@
                             <div class="form-group mb-3">
                                 <label class="form-label">Phương thức thanh toán</label>
                                 <select name="PaymentMethod" class="form-select" required>
+                                    <option value="">-- Chọn phương thức --</option>
                                     <option value="Cash">Tiền mặt</option>
                                     <option value="BankTransfer">Chuyển khoản</option>
                                     <option value="CreditCard">Thẻ tín dụng</option>
@@ -240,8 +241,33 @@
                 }
             });
 
-            // Kích hoạt thay đổi ban đầu
-            $('select[name="PaymentMethod"]').trigger('change');
+            // Form validation
+            $('#paymentForm').submit(function(e) {
+                var amount = $('input[name="Amount"]').val();
+                var paymentMethod = $('select[name="PaymentMethod"]').val();
+
+                if (!amount || parseFloat(amount) <= 0) {
+                    e.preventDefault();
+                    alert('Vui lòng nhập số tiền thanh toán hợp lệ');
+                    return false;
+                }
+
+                if (!paymentMethod) {
+                    e.preventDefault();
+                    alert('Vui lòng chọn phương thức thanh toán');
+                    return false;
+                }
+
+                // Kiểm tra số tiền không vượt quá số tiền còn lại
+                var remainingAmount = @ViewBag.RemainingAmount;
+                if (parseFloat(amount) > remainingAmount) {
+                    e.preventDefault();
+                    alert('Số tiền thanh toán không thể lớn hơn số tiền còn lại: ' + remainingAmount.toLocaleString('vi-VN') + ' VNĐ');
+                    return false;
+                }
+
+                return true;
+            });
         });
     </script>
 }

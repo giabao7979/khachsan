@@ -1,45 +1,63 @@
 ﻿@{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Đăng ký";
 }
 <div>
-    <!-- Contact Start -->
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-4">
                 <div>
                     <div class="wow fadeInUp" data-wow-delay="0.2s">
-                        <form class="container mt-5 p-4 rounded-4 shadow" style="max-width: 500px; background-color: white;">
+                        <form method="post" action="/Register/Index" class="container mt-5 p-4 rounded-4 shadow" style="max-width: 500px; background-color: white;">
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <div class="alert alert-danger">
+                                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                </div>
+                            }
+
+                            @if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @TempData["ErrorMessage"]
+                                </div>
+                            }
+
+                            @if (TempData["SuccessMessage"] != null)
+                            {
+                                <div class="alert alert-success">
+                                    @TempData["SuccessMessage"]
+                                </div>
+                            }
+
                             <h2 class="text-center mb-4">Đăng ký</h2>
                             <div class="mb-3">
-                                <label for="fullname" class="form-label">Họ và Tên</label>
-                                <input type="text" class="form-control rounded-3" id="fullname" placeholder="Nhập họ và tên">
+                                <label for="fullName" class="form-label">Họ và Tên</label>
+                                <input type="text" name="fullName" class="form-control rounded-3" id="fullName" placeholder="Nhập họ và tên" required>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control rounded-3" id="email" placeholder="Nhập email">
+                                <input type="email" name="email" class="form-control rounded-3" id="email" placeholder="Nhập email" required>
                             </div>
                             <div class="mb-3">
-                                <label for="username" class="form-label">Tài khoản</label>
-                                <input type="text" class="form-control rounded-3" id="username" placeholder="Nhập tài khoản">
+                                <label for="phone" class="form-label">Số điện thoại</label>
+                                <input type="text" name="phone" class="form-control rounded-3" id="phone" placeholder="Nhập số điện thoại" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Mật khẩu</label>
-                                <input type="password" class="form-control rounded-3" id="password" placeholder="Nhập mật khẩu">
+                                <input type="password" name="password" class="form-control rounded-3" id="password" placeholder="Nhập mật khẩu" required>
                             </div>
                             <div class="mb-3">
-                                <label for="confirm-password" class="form-label">Xác nhận mật khẩu</label>
-                                <input type="password" class="form-control rounded-3" id="confirm-password" placeholder="Nhập lại mật khẩu">
+                                <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                                <input type="password" name="confirmPassword" class="form-control rounded-3" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
                             </div>
                             <button class="btn btn-primary w-100 py-2 rounded-3" type="submit">Đăng ký</button>
-                            <p class="text-center mt-3">Bạn đã có tài khoản? <a href="Login" class="text-primary">Đăng nhập</a></p>
+                            <p class="text-center mt-3">Bạn đã có tài khoản? <a href="/Login" class="text-primary">Đăng nhập</a></p>
                         </form>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Contact End -->
     <!-- Newsletter Start -->
     <div class="container newsletter mt-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="row justify-content-center">
@@ -58,3 +76,23 @@
     </div>
     <!-- Newsletter Start -->
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Kiểm tra mật khẩu nhập lại
+            $('form').on('submit', function(e) {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    alert("Mật khẩu xác nhận không khớp với mật khẩu đã nhập!");
+                    return false;
+                }
+
+                return true;
+            });
+        });
+    </script>
+}

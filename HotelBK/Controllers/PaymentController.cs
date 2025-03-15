@@ -60,12 +60,27 @@ namespace HotelBK.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProcessPayment(Payment payment)
+        public async Task<IActionResult> ProcessPayment(int BookingID, decimal Amount, string PaymentMethod, string? Notes)
         {
-            if (!ModelState.IsValid)
+            // Ghi log để debug
+            System.Diagnostics.Debug.WriteLine($"BookingID: {BookingID}, Amount: {Amount}, PaymentMethod: {PaymentMethod}, Notes: {Notes}");
+
+            if (BookingID <= 0)
             {
-                TempData["ErrorMessage"] = "Vui lòng điền đầy đủ thông tin thanh toán.";
-                return RedirectToAction("Index", new { bookingId = payment.BookingID });
+                TempData["ErrorMessage"] = "Mã đặt phòng không hợp lệ.";
+                return RedirectToAction("MyBookings", "Booking");
+            }
+
+            if (Amount <= 0)
+            {
+                TempData["ErrorMessage"] = "Số tiền thanh toán phải lớn hơn 0.";
+                return RedirectToAction("Index", new { bookingId = BookingID });
+            }
+
+            if (string.IsNullOrEmpty(PaymentMethod))
+            {
+                TempData["ErrorMessage"] = "Vui lòng chọn phương thức thanh toán.";
+                return RedirectToAction("Index", new { bookingId = BookingID });
             }
 
             try
@@ -73,7 +88,7 @@ namespace HotelBK.Controllers
                 // Kiểm tra booking
                 var booking = await _context.Bookings
                     .Include(b => b.Room)
-                    .FirstOrDefaultAsync(b => b.BookingID == payment.BookingID);
+                    .FirstOrDefaultAsync(b => b.BookingID == BookingID);
 
                 if (booking == null)
                 {
@@ -88,34 +103,35 @@ namespace HotelBK.Controllers
 
                 // Tính số tiền đã thanh toán
                 var paidAmount = await _context.Payments
-                    .Where(p => p.BookingID == payment.BookingID && p.Status == "Completed")
+                    .Where(p => p.BookingID == BookingID && p.Status == "Completed")
                     .SumAsync(p => p.Amount);
 
                 // Tính số tiền còn lại
                 var remainingAmount = totalAmount - paidAmount;
 
                 // Kiểm tra số tiền thanh toán
-                if (payment.Amount <= 0)
-                {
-                    TempData["ErrorMessage"] = "Số tiền thanh toán phải lớn hơn 0.";
-                    return RedirectToAction("Index", new { bookingId = payment.BookingID });
-                }
-
-                if (payment.Amount > remainingAmount)
+                if (Amount > remainingAmount)
                 {
                     TempData["ErrorMessage"] = $"Số tiền thanh toán không thể lớn hơn số tiền còn lại ({remainingAmount:N0} VNĐ).";
-                    return RedirectToAction("Index", new { bookingId = payment.BookingID });
+                    return RedirectToAction("Index", new { bookingId = BookingID });
                 }
 
-                // Cập nhật thông tin thanh toán
-                payment.PaymentDate = DateTime.Now;
-                payment.Status = "Completed";
+                // Tạo đối tượng Payment
+                var payment = new Payment
+                {
+                    BookingID = BookingID,
+                    Amount = Amount,
+                    PaymentDate = DateTime.Now,
+                    PaymentMethod = PaymentMethod,
+                    Status = "Completed",
+                    Notes = Notes ?? string.Empty
+                };
 
                 _context.Payments.Add(payment);
                 await _context.SaveChangesAsync();
 
                 // Kiểm tra nếu đã thanh toán đủ
-                if (paidAmount + payment.Amount >= totalAmount)
+                if (paidAmount + Amount >= totalAmount)
                 {
                     booking.Status = "Paid";
                     _context.Bookings.Update(booking);
@@ -127,8 +143,9 @@ namespace HotelBK.Controllers
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Lỗi thanh toán: {ex.Message}");
                 TempData["ErrorMessage"] = $"Lỗi khi xử lý thanh toán: {ex.Message}";
-                return RedirectToAction("Index", new { bookingId = payment.BookingID });
+                return RedirectToAction("Index", new { bookingId = BookingID });
             }
         }
 

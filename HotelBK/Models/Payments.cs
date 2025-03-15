@@ -28,6 +28,6 @@ namespace HotelBK.Models
         public string Status { get; set; } = "Pending";
 
         [StringLength(500)]
-        public string Notes { get; set; } = string.Empty;
+        public string? Notes { get; set; } = string.Empty;
     }
 }

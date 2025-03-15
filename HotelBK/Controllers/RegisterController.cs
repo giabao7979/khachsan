@@ -3,6 +3,8 @@ using HotelBK.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace HotelBK.Controllers
 {
@@ -39,6 +41,27 @@ namespace HotelBK.Controllers
                 return View();
             }
 
+            // Kiểm tra độ dài và định dạng email
+            if (!IsValidEmail(email))
+            {
+                ModelState.AddModelError("", "Email không hợp lệ");
+                return View();
+            }
+
+            // Kiểm tra số điện thoại
+            if (!IsValidPhoneNumber(phone))
+            {
+                ModelState.AddModelError("", "Số điện thoại không hợp lệ");
+                return View();
+            }
+
+            // Kiểm tra độ mạnh của mật khẩu
+            if (password.Length < 6)
+            {
+                ModelState.AddModelError("", "Mật khẩu phải có ít nhất 6 ký tự");
+                return View();
+            }
+
             // Kiểm tra email đã tồn tại chưa
             var existingUser = await _context.Users.AnyAsync(u => u.Email == email);
             if (existingUser)
@@ -47,33 +70,67 @@ namespace HotelBK.Controllers
                 return View();
             }
 
-            // Tạo tài khoản mới
-            var customerRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Customer");
-            if (customerRole == null)
+            try
             {
-                // Tạo vai trò Customer nếu chưa có
-                customerRole = new Role { RoleName = "Customer" };
-                _context.Roles.Add(customerRole);
+                // Tạo tài khoản mới
+                var customerRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Customer");
+                if (customerRole == null)
+                {
+                    // Tạo vai trò Customer nếu chưa có
+                    customerRole = new Role { RoleName = "Customer" };
+                    _context.Roles.Add(customerRole);
+                    await _context.SaveChangesAsync();
+                }
+
+                var newUser = new User
+                {
+                    FullName = fullName,
+                    Email = email,
+                    Phone = phone,
+                    RoleID = customerRole.RoleID,
+                    CreatedAt = DateTime.Now
+                };
+
+                // Mã hóa mật khẩu
+                newUser.PasswordHash = _passwordHasher.HashPassword(newUser, password);
+
+                _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Đăng ký thành công. Vui lòng đăng nhập.";
+                return RedirectToAction("Index", "Login");
             }
-
-            var newUser = new User
+            catch (Exception ex)
             {
-                FullName = fullName,
-                Email = email,
-                Phone = phone,
-                RoleID = customerRole.RoleID,
-                CreatedAt = DateTime.Now
-            };
+                // Ghi log lỗi
+                System.Diagnostics.Debug.WriteLine($"Lỗi khi đăng ký: {ex.Message}");
+                ModelState.AddModelError("", "Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại sau.");
+                return View();
+            }
+        }
 
-            // Mã hóa mật khẩu
-            newUser.PasswordHash = _passwordHasher.HashPassword(newUser, password);
+        // Phương thức kiểm tra email hợp lệ
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Đăng ký thành công. Vui lòng đăng nhập.";
-            return RedirectToAction("Index", "Login");
+        // Phương thức kiểm tra số điện thoại hợp lệ
+        private bool IsValidPhoneNumber(string phone)
+        {
+            // Cho phép số điện thoại từ 10-15 ký tự và chỉ chứa số
+            return !string.IsNullOrEmpty(phone) &&
+                   phone.Length >= 10 &&
+                   phone.Length <= 15 &&
+                   System.Text.RegularExpressions.Regex.IsMatch(phone, @"^\d+$");
         }
     }
 }

@@ -1,360 +1,325 @@
 ﻿@{
+    ViewData["Title"] = "Dashboard";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-<div>
-    <main id="main" class="main">
 
-        <div class="pagetitle">
-            <h1>Dashboard</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="AdminHome">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Dashboard</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AdminHome">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-        <section class="section dashboard">
-            <div class="row">
+    <section class="section dashboard">
+        <div class="row">
+            <!-- Left side columns -->
+            <div class="col-lg-8">
+                <div class="row">
+                    <!-- Thống kê tổng quan -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Thống kê tổng quan</h5>
 
-                <!-- Left side columns -->
-                <div class="col-lg-8">
-                    <div class="row">
+                                <!-- Line Chart -->
+                                <div id="revenueChart"></div>
 
-                        <!-- Reports -->
-                        <div class="col-12">
-                            <div class="card">
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                    // Dữ liệu doanh thu từ controller
+                                    const revenueData = @Html.Raw(Json.Serialize(ViewBag.MonthlyRevenue));
+                                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
+                                    // Tạo dữ liệu cho biểu đồ
+                                    const chartData = months.map((month, index) => ({
+                                    x: month,
+                                    y: revenueData[index] || 0
+                                    }));
 
-                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
-                                </div>
+                                    // Tạo biểu đồ doanh thu
+                                    new ApexCharts(document.querySelector("#revenueChart"), {
+                                    series: [{
+                                    name: 'Doanh thu',
+                                    data: chartData.map(item => item.y)
+                                    }],
+                                    chart: {
+                                    height: 350,
+                                    type: 'area',
+                                    toolbar: {
+                                    show: false
+                                    },
+                                    },
+                                    markers: {
+                                    size: 4
+                                    },
+                                    colors: ['#4154f1'],
+                                    fill: {
+                                    type: "gradient",
+                                    gradient: {
+                                    shadeIntensity: 1,
+                                    opacityFrom: 0.3,
+                                    opacityTo: 0.4,
+                                    stops: [0, 90, 100]
+                                    }
+                                    },
+                                    dataLabels: {
+                                    enabled: false
+                                    },
+                                    stroke: {
+                                    curve: 'smooth',
+                                    width: 2
+                                    },
+                                    xaxis: {
+                                    categories: months
+                                    },
+                                    tooltip: {
+                                    y: {
+                                    formatter: function (val) {
+                                    return val.toLocaleString('vi-VN') + " VNĐ";
+                                    }
+                                    }
+                                    }
+                                    }).render();
+                                    });
+                                </script>
+                                <!-- End Line Chart -->
+                            </div>
+                        </div>
+                    </div><!-- End Thống kê tổng quan -->
+                    <!-- Đặt phòng gần đây -->
+                    <div class="col-12">
+                        <div class="card recent-sales overflow-auto">
+                            <div class="card-body">
+                                <h5 class="card-title">Đặt phòng gần đây</h5>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Reports <span>/Today</span></h5>
-
-                                    <!-- Line Chart -->
-                                    <div id="reportsChart"></div>
-
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", () => {
-                                          new ApexCharts(document.querySelector("#reportsChart"), {
-                                            series: [{
-                                              name: 'Sales',
-                                              data: [31, 40, 28, 51, 42, 82, 56],
-                                            }, {
-                                              name: 'Revenue',
-                                              data: [11, 32, 45, 32, 34, 52, 41]
-                                            }, {
-                                              name: 'Customers',
-                                              data: [15, 11, 32, 18, 9, 24, 11]
-                                            }],
-                                            chart: {
-                                              height: 350,
-                                              type: 'area',
-                                              toolbar: {
-                                                show: false
-                                              },
-                                            },
-                                            markers: {
-                                              size: 4
-                                            },
-                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                                            fill: {
-                                              type: "gradient",
-                                              gradient: {
-                                                shadeIntensity: 1,
-                                                opacityFrom: 0.3,
-                                                opacityTo: 0.4,
-                                                stops: [0, 90, 100]
-                                              }
-                                            },
-                                            dataLabels: {
-                                              enabled: false
-                                            },
-                                            stroke: {
-                                              curve: 'smooth',
-                                              width: 2
-                                            },
-                                            xaxis: {
-                                              type: 'datetime',
-                                              categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                                            },
-                                            tooltip: {
-                                              x: {
-                                                format: 'dd/MM/yy HH:mm'
-                                              },
+                                <table class="table table-borderless datatable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Mã</th>
+                                            <th scope="col">Khách hàng</th>
+                                            <th scope="col">Phòng</th>
+                                            <th scope="col">Ngày nhận</th>
+                                            <th scope="col">Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.RecentBookings != null)
+                                        {
+                                            @foreach (var booking in ViewBag.RecentBookings)
+                                            {
+                                                <tr>
+                                                    <th scope="row"><a href="@Url.Action("View", "Bookings", new { id = booking.BookingID })">@booking.BookingID</a></th>
+                                                    <td>@booking.FullName</td>
+                                                    <td><a href="@Url.Action("View", "Rooms", new { id = booking.RoomID })" class="text-primary">@booking.Room.RoomName</a></td>
+                                                    <td>@booking.CheckInDate.ToString("dd/MM/yyyy")</td>
+                                                    <td>
+                                                        @switch (booking.Status)
+                                                        {
+                                                            case "Pending":
+                                                                <span class="badge bg-warning">Chờ xác nhận</span>
+                                                                break;
+                                                            case "Confirmed":
+                                                                <span class="badge bg-info">Đã xác nhận</span>
+                                                                break;
+                                                            case "Checked-in":
+                                                                <span class="badge bg-primary">Đã nhận phòng</span>
+                                                                break;
+                                                            case "Checked-out":
+                                                                <span class="badge bg-success">Đã trả phòng</span>
+                                                                break;
+                                                            case "Cancelled":
+                                                                <span class="badge bg-danger">Đã hủy</span>
+                                                                break;
+                                                            default:
+                                                                <span class="badge bg-secondary">@booking.Status</span>
+                                                                break;
+                                                        }
+                                                    </td>
+                                                </tr>
                                             }
-                                          }).render();
-                                        });
-                                    </script>
-                                    <!-- End Line Chart -->
-
-                                </div>
-
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-                        </div><!-- End Reports -->
-                        <!-- Recent Sales -->
-                        <div class="col-12">
-                            <div class="card recent-sales overflow-auto">
-
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-
-                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="card-body">
-                                    <h5 class="card-title">Recent Sales <span>| Today</span></h5>
-
-                                    <table class="table table-borderless datatable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Customer</th>
-                                                <th scope="col">Product</th>
-                                                <th scope="col">Price</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row"><a href="#">#2457</a></th>
-                                                <td>Brandon Jacob</td>
-                                                <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                                                <td>$64</td>
-                                                <td><span class="badge bg-success">Approved</span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#">#2147</a></th>
-                                                <td>Bridie Kessler</td>
-                                                <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                                                <td>$47</td>
-                                                <td><span class="badge bg-warning">Pending</span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#">#2049</a></th>
-                                                <td>Ashleigh Langosh</td>
-                                                <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                                                <td>$147</td>
-                                                <td><span class="badge bg-success">Approved</span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#">#2644</a></th>
-                                                <td>Angus Grady</td>
-                                                <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                                                <td>$67</td>
-                                                <td><span class="badge bg-danger">Rejected</span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#">#2644</a></th>
-                                                <td>Raheem Lehner</td>
-                                                <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                                                <td>$165</td>
-                                                <td><span class="badge bg-success">Approved</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
+                        </div>
+                    </div><!-- End Đặt phòng gần đây -->
+                    <!-- Phòng được đặt nhiều nhất -->
+                    <div class="col-12">
+                        <div class="card top-selling overflow-auto">
+                            <div class="card-body">
+                                <h5 class="card-title">Phòng được đặt nhiều nhất</h5>
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Ảnh</th>
+                                            <th scope="col">Phòng</th>
+                                            <th scope="col">Giá</th>
+                                            <th scope="col">Lượt đặt</th>
+                                            <th scope="col">Loại phòng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.TopRooms != null)
+                                        {
+                                            @foreach (var roomData in ViewBag.TopRooms)
+                                            {
+                                                var room = roomData.Item1;
+                                                var bookingCount = roomData.Item2;
+                                                <tr>
+                                                    <th scope="row">
+                                                        <a href="@Url.Action("View", "Rooms", new { id = room.RoomID })">
+                                                            @if (!string.IsNullOrEmpty(room.Image))
+                                                            {
+                                                                <img src="@room.Image" alt="@room.RoomName" style="width: 50px; height: 50px; object-fit: cover;">
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/admin/assets/img/product-1.jpg" alt="@room.RoomName" style="width: 50px; height: 50px; object-fit: cover;">
+                                                            }
+                                                        </a>
+                                                    </th>
+                                                    <td><a href="@Url.Action("View", "Rooms", new { id = room.RoomID })" class="text-primary fw-bold">@room.RoomName</a></td>
+                                                    <td>@room.Price.ToString("N0") VNĐ</td>
+                                                    <td class="fw-bold">@bookingCount</td>
+                                                    <td>@(room.RoomType?.TypeName ?? "Không xác định")</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-                        </div><!-- End Recent Sales -->
-                        <!-- Top Selling -->
-                        <div class="col-12">
-                            <div class="card top-selling overflow-auto">
-
-                                <div class="filter">
-                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-
-                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="card-body pb-0">
-                                    <h5 class="card-title">Top Selling <span>| Today</span></h5>
-
-                                    <table class="table table-borderless">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Preview</th>
-                                                <th scope="col">Product</th>
-                                                <th scope="col">Price</th>
-                                                <th scope="col">Sold</th>
-                                                <th scope="col">Revenue</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row"><a href="#"><img src="~/admin/assets/img/product-1.jpg" alt=""></a></th>
-                                                <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
-                                                <td>$64</td>
-                                                <td class="fw-bold">124</td>
-                                                <td>$5,828</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#"><img src="~/admin/assets/img/product-2.jpg" alt=""></a></th>
-                                                <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
-                                                <td>$46</td>
-                                                <td class="fw-bold">98</td>
-                                                <td>$4,508</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#"><img src="~/admin/assets/img/product-3.jpg" alt=""></a></th>
-                                                <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
-                                                <td>$59</td>
-                                                <td class="fw-bold">74</td>
-                                                <td>$4,366</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#"><img src="~/admin/assets/img/product-4.jpg" alt=""></a></th>
-                                                <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
-                                                <td>$32</td>
-                                                <td class="fw-bold">63</td>
-                                                <td>$2,016</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#"><img src="~/admin/assets/img/product-5.jpg" alt=""></a></th>
-                                                <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
-                                                <td>$79</td>
-                                                <td class="fw-bold">41</td>
-                                                <td>$3,239</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
+                        </div>
+                    </div><!-- End Phòng được đặt nhiều nhất -->
+                </div>
+            </div><!-- End Left side columns -->
+            <!-- Right side columns -->
+            <div class="col-lg-4">
+                <!-- Thống kê đặt phòng -->
+                <div class="card info-card sales-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Đặt phòng</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-calendar-check"></i>
                             </div>
-                        </div><!-- End Top Selling -->
-
+                            <div class="ps-3">
+                                <h6>@ViewBag.TotalBookings</h6>
+                                <span class="text-success small pt-1 fw-bold">Tổng đặt phòng</span>
+                            </div>
+                        </div>
                     </div>
-                </div><!-- End Left side columns -->
-                <!-- Right side columns -->
-                <!-- sales-card -->
-                <div class="col-lg-4">
+                </div>
 
-                    <div class="card info-card sales-card">
-
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="card-body-custom">
-                            <h5 class="card-title">Sales <span>| Today</span></h5>
-
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-cart"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>145</h6>
-                                    <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                </div>
+                <!-- Thống kê doanh thu -->
+                <div class="card info-card revenue-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Doanh thu</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6>@ViewBag.TotalRevenue.ToString("N0") VNĐ</h6>
+                                <span class="text-success small pt-1 fw-bold">Tổng doanh thu</span>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                    </div><!-- End Sales Card -->
-                    <!-- Revenue Card -->
-                    <div class="card info-card revenue-card">
-
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="card-body">
-                            <h5 class="card-title">Revenue <span>| This Month</span></h5>
-
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-currency-dollar"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>$3,264</h6>
-                                    <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                </div>
+                <!-- Thống kê phòng -->
+                <div class="card info-card customers-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Phòng</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-house-door"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6>@ViewBag.TotalRooms</h6>
+                                <span class="text-success small pt-1 fw-bold">Tổng số phòng</span>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                    </div><!-- End Revenue Card -->
-                    <!-- Customers Card -->
-                    <div class="card info-card customers-card">
-
-                        <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                <li class="dropdown-header text-start">
-                                    <h6>Filter</h6>
-                                </li>
-
-                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="card-body">
-                            <h5 class="card-title">Customers <span>| This Year</span></h5>
-
-                            <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-people"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>1244</h6>
-                                    <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
-
-                                </div>
+                <!-- Thống kê người dùng -->
+                <div class="card info-card customers-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Người dùng</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-people"></i>
                             </div>
-
+                            <div class="ps-3">
+                                <h6>@ViewBag.TotalUsers</h6>
+                                <span class="text-success small pt-1 fw-bold">Tổng người dùng</span>
+                            </div>
                         </div>
-                    </div><!-- End Customers Card -->
+                    </div>
+                </div>
 
-                </div><!-- End Right side columns -->
+                <!-- Thống kê trạng thái -->
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">Trạng thái đặt phòng</h5>
+                        <div id="bookingStatusChart" style="min-height: 400px;"></div>
 
-            </div>
-        </section>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                // Dữ liệu từ controller
+                                const bookingStatusStats = @Html.Raw(Json.Serialize(ViewBag.BookingStatusStats));
 
-    </main><!-- End #main -->
-</div>
+                                // Chuẩn bị dữ liệu cho biểu đồ
+                                const labels = [];
+                                const data = [];
+                                const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
+
+                                if (bookingStatusStats && bookingStatusStats.length > 0) {
+                                    bookingStatusStats.forEach((stat, index) => {
+                                        let label = stat.status;
+                                        switch(stat.status) {
+                                            case 'Pending': label = 'Chờ xác nhận'; break;
+                                            case 'Confirmed': label = 'Đã xác nhận'; break;
+                                            case 'Checked-in': label = 'Đã nhận phòng'; break;
+                                            case 'Checked-out': label = 'Đã trả phòng'; break;
+                                            case 'Cancelled': label = 'Đã hủy'; break;
+                                            case 'Paid': label = 'Đã thanh toán'; break;
+                                        }
+
+                                        labels.push(label);
+                                        data.push(stat.count);
+                                    });
+                                }
+
+                                new ApexCharts(document.querySelector("#bookingStatusChart"), {
+                                    series: data,
+                                    chart: {
+                                        height: 350,
+                                        type: 'donut',
+                                    },
+                                    labels: labels,
+                                    colors: colors,
+                                    responsive: [{
+                                        breakpoint: 480,
+                                        options: {
+                                            chart: {
+                                                width: 200
+                                            },
+                                            legend: {
+                                                position: 'bottom'
+                                            }
+                                        }
+                                    }]
+                                }).render();
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div><!-- End Right side columns -->
+        </div>
+    </section>
+</main><!-- End #main -->
