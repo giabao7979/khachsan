@@ -18,55 +18,11 @@
         </div>
     </div>
     <!-- Page Header End -->
-    <!-- Booking Start -->
-    <div class="container-fluid booking pb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="bg-white shadow" style="padding: 35px;">
-                <div class="row g-2">
-                    <div class="col-md-10">
-                        <div class="row g-2">
-                            <div class="col-md-3">
-                                <label>Ngày bắt đầu</label>
-                                <div class="date" id="date1" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input"
-                                           placeholder="Ngày nhận" data-target="#date1" data-toggle="datetimepicker" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label>Ngày kết thúc</label>
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" placeholder="Ngày trả" data-target="#date2" data-toggle="datetimepicker" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label>Số người</label>
-                                <select class="form-select">
-                                    <option value="1">1 người</option>
-                                    <option value="2">2 người</option>
-                                    <option value="3">3 người</option>
-                                    <option value="4">4 người</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label>Loại phòng</label>
-                                <select class="form-select">
-                                    <option value="">Tất cả</option>
-                                    @foreach (var roomType in Model.Select(r => r.RoomType).Where(rt => rt != null).GroupBy(rt => rt.RoomTypeID).Select(g => g.First()))
-                                    {
-                                        <option value="@roomType.RoomTypeID">@roomType.TypeName</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2" style="margin-top: 32px;">
-                        <button class="btn btn-primary w-100">Tìm kiếm</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Booking End -->
+    <!-- Khu vực tìm kiếm -->
+    @await Html.PartialAsync("_SearchForm")
+
+    <!-- Khu vực kết quả tìm kiếm -->
+    @await Html.PartialAsync("_SearchResult", Model)
     <!-- Room List Start -->
     <div class="container-xxl py-5">
         <div class="container">
@@ -156,3 +112,6 @@
     </div>
     <!-- Newsletter End -->
 </div>
+@section Scripts {
+    <script src="~/js/search-validation.js"></script>
+}

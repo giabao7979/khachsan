@@ -542,6 +542,7 @@ wwwroot\img\testimonial-3.jpg
 wwwroot\img\testimonial-4.jpg
 wwwroot\img\video.jpg
 wwwroot\js\main.js
+wwwroot\js\search-validation.js
 wwwroot\lib\animate\animate.css
 wwwroot\lib\animate\animate.min.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.css

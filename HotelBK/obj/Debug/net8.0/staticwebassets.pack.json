@@ -2181,6 +2181,10 @@
       "PackagePath": "staticwebassets\\js\\main.js"
     },
     {
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\js\\search-validation.js",
+      "PackagePath": "staticwebassets\\js\\search-validation.js"
+    },
+    {
       "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\lib\\animate\\animate.css",
       "PackagePath": "staticwebassets\\lib\\animate\\animate.css"
     },

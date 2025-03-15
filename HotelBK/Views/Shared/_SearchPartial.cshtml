@@ -1,0 +1,60 @@
+﻿@{
+    var checkIn = ViewBag.CheckIn as DateTime? ?? DateTime.Now;
+    var checkOut = ViewBag.CheckOut as DateTime? ?? DateTime.Now.AddDays(1);
+    var roomType = ViewBag.RoomType as int? ?? 0;
+    var priceRange = ViewBag.PriceRange as int? ?? 0;
+}
+
+<!-- Booking Search Form -->
+<div class="container-fluid booking pb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="bg-white shadow" style="padding: 35px;">
+            <form action="/Room/Index" method="get" id="searchForm">
+                <div class="row g-2">
+                    <div class="col-md-10">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <label>Ngày nhận phòng</label>
+                                <div class="date">
+                                    <input type="date" class="form-control" name="checkIn" 
+                                           value="@checkIn.ToString("yyyy-MM-dd")"
+                                           min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Ngày trả phòng</label>
+                                <div class="date">
+                                    <input type="date" class="form-control" name="checkOut" 
+                                           value="@checkOut.ToString("yyyy-MM-dd")" 
+                                           min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Loại phòng</label>
+                                <select class="form-select" name="roomType">
+                                    <option value="0" selected="@(ViewBag.RoomType == 0)">Tất cả</option>
+                                    <option value="1" selected="@(ViewBag.RoomType == 1)">VIP</option>
+                                    <option value="2" selected="@(ViewBag.RoomType == 2)">Standard</option>
+                                    <option value="3" selected="@(ViewBag.RoomType == 3)">Deluxe</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Khoảng giá</label>
+                                <select class="form-select" name="priceRange">
+                                    <option value="0" selected="@(ViewBag.PriceRange == 0)">Tất cả</option>
+                                    <option value="1" selected="@(ViewBag.PriceRange == 1)">Dưới 500.000 VNĐ</option>
+                                    <option value="2" selected="@(ViewBag.PriceRange == 2)">500.000 - 1.000.000 VNĐ</option>
+                                    <option value="3" selected="@(ViewBag.PriceRange == 3)">1.000.000 - 2.000.000 VNĐ</option>
+                                    <option value="4" selected="@(ViewBag.PriceRange == 4)">Trên 2.000.000 VNĐ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="margin-top: 32px;">
+                        <button type="submit" class="btn btn-primary w-100">Tìm phòng</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

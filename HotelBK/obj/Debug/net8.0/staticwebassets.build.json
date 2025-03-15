@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BS+aBx/NKge2ZdLdeM7/1vm4Os6qx+Z31JO9A+XDIfM=",
+  "Hash": "KCaJ0BrtGFOqh5H3HZmpQ56V5k25T1703xNz3y5kmio=",
   "Source": "HotelBK",
   "BasePath": "_content/HotelBK",
   "Mode": "Default",
@@ -11481,6 +11481,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\main.js"
+    },
+    {
+      "Identity": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\js\\search-validation.js",
+      "SourceId": "HotelBK",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\",
+      "BasePath": "_content/HotelBK",
+      "RelativePath": "js/search-validation#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "6wjgbxm9nz",
+      "Integrity": "tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\search-validation.js"
     },
     {
       "Identity": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\lib\\animate\\animate.css",
@@ -56054,7 +56075,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 13 Mar 2025 03:20:53 GMT"
+          "Value": "Sat, 15 Mar 2025 03:26:49 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -56099,7 +56120,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 13 Mar 2025 03:20:53 GMT"
+          "Value": "Sat, 15 Mar 2025 03:26:49 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -56144,7 +56165,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 13 Mar 2025 03:20:53 GMT"
+          "Value": "Sat, 15 Mar 2025 03:26:49 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -56181,7 +56202,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 13 Mar 2025 03:20:53 GMT"
+          "Value": "Sat, 15 Mar 2025 03:26:49 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -59718,6 +59739,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-6K36HO8D6oB8F5crwzQiVAhf21dK+fpTuL1wN7XotE8="
+        }
+      ]
+    },
+    {
+      "Route": "js/search-validation.6wjgbxm9nz.js",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\js\\search-validation.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2132"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 15 Mar 2025 03:27:26 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6wjgbxm9nz"
+        },
+        {
+          "Name": "label",
+          "Value": "js/search-validation.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc="
+        }
+      ]
+    },
+    {
+      "Route": "js/search-validation.js",
+      "AssetFile": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\js\\search-validation.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2132"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 15 Mar 2025 03:27:26 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc="
         }
       ]
     },

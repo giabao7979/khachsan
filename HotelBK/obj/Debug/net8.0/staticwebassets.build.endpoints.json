@@ -29,7 +29,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 13 Mar 2025 03:20:53 GMT"
+          "Value": "Sat, 15 Mar 2025 03:26:49 GMT"
         }
       ],
       "EndpointProperties": [
@@ -74,7 +74,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 13 Mar 2025 03:20:53 GMT"
+          "Value": "Sat, 15 Mar 2025 03:26:49 GMT"
         }
       ],
       "EndpointProperties": [
@@ -44689,6 +44689,88 @@
         {
           "Name": "label",
           "Value": "js/main.js"
+        }
+      ]
+    },
+    {
+      "Route": "js/search-validation.6wjgbxm9nz.js",
+      "AssetFile": "js/search-validation.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2132"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 15 Mar 2025 03:27:26 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6wjgbxm9nz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc="
+        },
+        {
+          "Name": "label",
+          "Value": "js/search-validation.js"
+        }
+      ]
+    },
+    {
+      "Route": "js/search-validation.js",
+      "AssetFile": "js/search-validation.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2132"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 15 Mar 2025 03:27:26 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-tneT9ocHKp8xTTBMX1ciMzoHe9rIl8T3MIfWPj66glc="
         }
       ]
     },

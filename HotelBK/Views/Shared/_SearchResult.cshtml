@@ -1,0 +1,62 @@
+﻿@model IEnumerable<HotelBK.Models.Room>
+@{
+    var checkIn = ViewBag.CheckIn as DateTime? ?? DateTime.Now;
+    var checkOut = ViewBag.CheckOut as DateTime? ?? DateTime.Now.AddDays(1);
+    var roomType = ViewBag.RoomType as int? ?? 0;
+    var priceRange = ViewBag.PriceRange as int? ?? 0;
+    var isSearchResult = ViewBag.IsSearchResult as bool? ?? false;
+}
+
+@if (isSearchResult)
+{
+    <div class="container mt-4">
+        <div class="bg-light p-3 mb-4 rounded">
+            <h5 class="mb-3">Kết quả tìm kiếm</h5>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Ngày nhận phòng:</strong> @checkIn.ToString("dd/MM/yyyy")
+                </div>
+                <div class="col-md-3">
+                    <strong>Ngày trả phòng:</strong> @checkOut.ToString("dd/MM/yyyy")
+                </div>
+                <div class="col-md-3">
+                    <strong>Loại phòng:</strong>
+                    @{
+                        string roomTypeName = "Tất cả";
+                        switch (roomType)
+                        {
+                            case 1: roomTypeName = "VIP"; break;
+                            case 2: roomTypeName = "Standard"; break;
+                            case 3: roomTypeName = "Deluxe"; break;
+                        }
+                    }
+                    @roomTypeName
+                </div>
+                <div class="col-md-3">
+                    <strong>Khoảng giá:</strong>
+                    @{
+                        string priceRangeName = "Tất cả";
+                        switch (priceRange)
+                        {
+                            case 1: priceRangeName = "Dưới 500.000 VNĐ"; break;
+                            case 2: priceRangeName = "500.000 - 1.000.000 VNĐ"; break;
+                            case 3: priceRangeName = "1.000.000 - 2.000.000 VNĐ"; break;
+                            case 4: priceRangeName = "Trên 2.000.000 VNĐ"; break;
+                        }
+                    }
+                    @priceRangeName
+                </div>
+            </div>
+            <div class="mt-2">
+                @if (Model != null && Model.Any())
+                {
+                    <p class="mb-0 text-success">Tìm thấy @Model.Count() phòng phù hợp với yêu cầu của bạn</p>
+                }
+                else
+                {
+                    <p class="mb-0 text-danger">Không tìm thấy phòng nào phù hợp. Vui lòng thử lại với tiêu chí khác.</p>
+                }
+            </div>
+        </div>
+    </div>
+}
