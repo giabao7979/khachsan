@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<HotelBK.Models.Room>
+
 @{
     ViewBag.Title = "Danh sách phòng";
 }
@@ -19,7 +20,7 @@
     </div>
     <!-- Page Header End -->
     <!-- Khu vực tìm kiếm -->
-    @await Html.PartialAsync("_SearchForm")
+    @await Html.PartialAsync("_SearchPartial")
 
     <!-- Khu vực kết quả tìm kiếm -->
     @await Html.PartialAsync("_SearchResult", Model)

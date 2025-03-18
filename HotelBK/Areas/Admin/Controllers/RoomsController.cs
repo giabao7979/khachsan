@@ -181,6 +181,10 @@ namespace HotelBK.Areas.Admin.Controllers
                     // Thêm mới
                     System.Diagnostics.Debug.WriteLine("Đang thêm phòng mới");
                     _context.Rooms.Add(room);
+                    await _context.SaveChangesAsync();
+
+                    // Trả về mã JavaScript để tạo thông báo cho phòng mới
+                    TempData["NewRoomNotification"] = $"{{ \"roomId\": {room.RoomID}, \"roomName\": \"{room.RoomName}\" }}";
                 }
                 else
                 {
@@ -211,6 +215,7 @@ namespace HotelBK.Areas.Admin.Controllers
                     }
 
                     _context.Rooms.Update(existingRoom);
+
                 }
 
                 // Lưu thay đổi
