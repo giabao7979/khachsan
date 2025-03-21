@@ -14,6 +14,9 @@ namespace HotelBK.Data
         public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<ContactMessages> ContactMessages { get; set; }
+        public DbSet<RoomImage> RoomImages { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -47,6 +50,13 @@ namespace HotelBK.Data
             };
 
             modelBuilder.Entity<User>().HasData(adminUser);
+
+            // Cấu hình mối quan hệ giữa Room và RoomImage
+            modelBuilder.Entity<Room>()
+                .HasMany(r => r.RoomImages)
+                .WithOne(ri => ri.Room)
+                .HasForeignKey(ri => ri.RoomID)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

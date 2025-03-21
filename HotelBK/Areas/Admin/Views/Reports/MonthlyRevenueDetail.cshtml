@@ -1,0 +1,416 @@
+﻿@{
+    ViewData["Title"] = $"Báo cáo doanh thu tháng {ViewBag.Month}/{ViewBag.Year}";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Báo cáo doanh thu chi tiết</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AdminHome">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-action="Revenue" asp-controller="Reports">Báo cáo doanh thu</a></li>
+                <li class="breadcrumb-item active">Tháng @ViewBag.Month/@ViewBag.Year</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Doanh thu tháng @ViewBag.MonthName @ViewBag.Year</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <a href="@Url.Action("Revenue", "Reports", new { year = ViewBag.Year })" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> Quay lại
+                                </a>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <div class="btn-group print-buttons" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="printReport()">
+                                        <i class="bi bi-printer"></i> In báo cáo
+                                    </button>
+                                    <a href="@Url.Action("ExportMonthlyRevenueExcel", "Reports", new { year = ViewBag.Year, month = ViewBag.Month })" class="btn btn-success">
+                                        <i class="bi bi-file-earmark-excel"></i> Xuất Excel
+                                    </a>
+                                    <button type="button" class="btn btn-danger" onclick="exportPDF()">
+                                        <i class="bi bi-file-earmark-pdf"></i> Xuất PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tổng quan - Chỉ hiển thị trên màn hình -->
+                        <div class="row d-print-none">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card info-card revenue-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tổng doanh thu</h5>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-currency-dollar"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6>@ViewBag.TotalMonthlyRevenue.ToString("N0") VNĐ</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card info-card customers-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tổng số giao dịch</h5>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-credit-card"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6>@ViewBag.Payments.Count</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card info-card sales-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Số đặt phòng</h5>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-house-door"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                @{
+                                                    var distinctBookings = new HashSet<int>();
+                                                    foreach (var payment in ViewBag.Payments)
+                                                    {
+                                                        distinctBookings.Add(payment.BookingID);
+                                                    }
+                                                }
+                                                <h6>@distinctBookings.Count</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6">
+                                <div class="card info-card customers-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Doanh thu trung bình/ngày</h5>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-calendar-check"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                @{
+                                                    int daysWithRevenue = 0;
+                                                    foreach (var item in ViewBag.DayRevenueData)
+                                                    {
+                                                        if ((decimal)item > 0)
+                                                        {
+                                                            daysWithRevenue++;
+                                                        }
+                                                    }
+                                                    decimal avgDailyRevenue = daysWithRevenue > 0 ? ViewBag.TotalMonthlyRevenue / daysWithRevenue : 0;
+                                                }
+                                                <h6>@avgDailyRevenue.ToString("N0") VNĐ</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4" id="printableArea">
+                            <!-- Phần này sẽ được in -->
+                            <div class="text-center mb-4 d-none d-print-block">
+                                <h2>BÁO CÁO DOANH THU THÁNG @ViewBag.Month/@ViewBag.Year</h2>
+                                <p>Ngày xuất báo cáo: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</p>
+                            </div>
+                            
+                            <!-- Doanh thu theo ngày trong tháng -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Doanh thu theo ngày trong tháng</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr class="table-primary">
+                                                    <th>Ngày</th>
+                                                    <th>Doanh thu (VNĐ)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (int i = 0; i < ViewBag.DayLabels.Length; i++)
+                                                {
+                                                    <tr>
+                                                        <td>@ViewBag.DayLabels[i]/@ViewBag.Month/@ViewBag.Year</td>
+                                                        <td class="text-end">@ViewBag.DayRevenueData[i].ToString("N0")</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="table-secondary fw-bold">
+                                                    <td>Tổng cộng</td>
+                                                    <td class="text-end">@ViewBag.TotalMonthlyRevenue.ToString("N0")</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Doanh thu theo loại phòng và phương thức thanh toán -->
+                            <div class="row">
+                                <!-- Doanh thu theo loại phòng -->
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Doanh thu theo loại phòng</h5>                                            
+                                            <div class="table-responsive mt-3">
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr class="table-primary">
+                                                            <th>Loại phòng</th>
+                                                            <th>Doanh thu</th>
+                                                            <th>Số đặt phòng</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in ViewBag.RevenueByRoomType)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.RoomType</td>
+                                                                <td class="text-end">@item.Revenue.ToString("N0") VNĐ</td>
+                                                                <td class="text-center">@item.BookingsCount</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr class="table-secondary fw-bold">
+                                                            <td>Tổng cộng</td>
+                                                            <td class="text-end">@ViewBag.TotalMonthlyRevenue.ToString("N0") VNĐ</td>
+                                                            <td class="text-center">
+                                                                @{
+                                                                    var uniqueBookings = new HashSet<int>();
+                                                                    foreach (var payment in ViewBag.Payments)
+                                                                    {
+                                                                        uniqueBookings.Add(payment.BookingID);
+                                                                    }
+                                                                }
+                                                                @uniqueBookings.Count
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Doanh thu theo phương thức thanh toán -->
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Doanh thu theo phương thức thanh toán</h5>
+                                            <div class="table-responsive mt-3">
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr class="table-primary">
+                                                            <th>Phương thức</th>
+                                                            <th>Doanh thu</th>
+                                                            <th>Số giao dịch</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in ViewBag.RevenueByPaymentMethod)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.Method</td>
+                                                                <td class="text-end">@item.Revenue.ToString("N0") VNĐ</td>
+                                                                <td class="text-center">@item.Count</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr class="table-secondary fw-bold">
+                                                            <td>Tổng cộng</td>
+                                                            <td class="text-end">@ViewBag.TotalMonthlyRevenue.ToString("N0") VNĐ</td>
+                                                            <td class="text-center">@ViewBag.Payments.Count</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chi tiết giao dịch -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Chi tiết giao dịch</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr class="table-primary">
+                                                    <th>Mã GD</th>
+                                                    <th>Khách hàng</th>
+                                                    <th>Phòng</th>
+                                                    <th>Số tiền</th>
+                                                    <th>Phương thức</th>
+                                                    <th>Ngày thanh toán</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var payment in ViewBag.Payments)
+                                                {
+                                                    <tr>
+                                                        <td>@payment.PaymentID</td>
+                                                        <td>@payment.Booking.FullName</td>
+                                                        <td>@payment.Booking.Room.RoomName</td>
+                                                        <td class="text-end">@payment.Amount.ToString("N0") VNĐ</td>
+                                                        <td>@payment.PaymentMethod</td>
+                                                        <td>@payment.PaymentDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="table-secondary fw-bold">
+                                                    <td colspan="3">Tổng cộng</td>
+                                                    <td class="text-end">@ViewBag.TotalMonthlyRevenue.ToString("N0") VNĐ</td>
+                                                    <td colspan="2"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Hàm in báo cáo
+        function printReport() {
+            window.print();
+        }
+
+        // Hàm xuất PDF
+        function exportPDF() {
+            const element = document.getElementById('printableArea');
+            const options = {
+                scale: 1,
+                useCORS: true,
+                logging: false
+            };
+
+            html2canvas(element, options).then(function(canvas) {
+                const imgData = canvas.toDataURL('image/jpeg', 0.8);
+                const { jsPDF } = window.jspdf;
+                
+                // Tạo trang A4 nằm ngang
+                const pdf = new jsPDF('l', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                // Tính tỷ lệ để fit nội dung vào PDF
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+                const ratio = canvasWidth / pdfWidth;
+                const totalPages = Math.ceil(canvasHeight / ratio / pdfHeight);
+                
+                // Chia canvas thành nhiều phần để fit vào từng trang PDF
+                for (let i = 0; i < totalPages; i++) {
+                    if (i > 0) {
+                        pdf.addPage();
+                    }
+                    
+                    const srcY = i * pdfHeight * ratio;
+                    const srcHeight = Math.min(pdfHeight * ratio, canvasHeight - srcY);
+                    const destHeight = (srcHeight / ratio);
+                    
+                    pdf.addImage(
+                        imgData, 'JPEG', 
+                        0, 0, 
+                        pdfWidth, destHeight, 
+                        null, 'FAST', 
+                        0, i * pdfHeight,
+                        canvasWidth, srcHeight
+                    );
+                }
+                
+                // Lưu file PDF
+                var month = @ViewBag.Month;
+                var year = @ViewBag.Year;
+                pdf.save("Bao_cao_doanh_thu_thang_" + month + "_" + year + ".pdf");
+            });
+        }
+    </script>
+
+    <style media="print">
+        /* Ẩn các phần không cần thiết khi in */
+        .btn-group, .input-group, .breadcrumb, .pagetitle, .d-print-none, .print-buttons {
+            display: none !important;
+        }
+        
+        /* Ẩn header và sidebar */
+        #header, .header, #sidebar, .sidebar {
+            display: none !important;
+        }
+        
+        /* Ẩn thanh công cụ và thanh tìm kiếm */
+        .navbar, .nav, .search-bar, .nav-link, .nav-item, .nav-profile {
+            display: none !important;
+        }
+        
+        /* Ẩn nút và menu */
+        button, .btn, .dropdown-menu, .dropdown-item, .toggle-sidebar-btn {
+            display: none !important;
+        }
+        
+        /* Ẩn thanh breadcrumb và title */
+        .breadcrumb, .pagetitle, .page-title {
+            display: none !important;
+        }
+        
+        /* Loại bỏ shadow và border */
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Reset margin và padding */
+        body {
+            padding: 0 !important;
+            margin: 0 !important;
+            background-color: white !important;
+        }
+        
+        /* Hiển thị title ẩn khi in */
+        .d-none.d-print-block {
+            display: block !important;
+        }
+        
+        
+        /* Điều chỉnh margin của main */
+        #main, .main {
+            margin-left: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
+}

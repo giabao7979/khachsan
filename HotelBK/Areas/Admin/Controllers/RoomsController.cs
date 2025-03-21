@@ -14,12 +14,14 @@ namespace HotelBK.Areas.Admin.Controllers
     {
         private readonly HotelContext _context;
         private readonly IRoomService _roomService;
+        private readonly IRoomImageService _roomImageService;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public RoomsController(HotelContext context, IRoomService roomService, IWebHostEnvironment hostEnvironment)
+        public RoomsController(HotelContext context, IRoomService roomService, IRoomImageService roomImageService, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _roomService = roomService;
+            _roomImageService = roomImageService;
             _hostEnvironment = hostEnvironment;
         }
 
@@ -50,6 +52,7 @@ namespace HotelBK.Areas.Admin.Controllers
         {
             var room = await _context.Rooms
                 .Include(r => r.RoomType)
+                .Include(r => r.RoomImages)
                 .FirstOrDefaultAsync(r => r.RoomID == id);
 
             if (room == null)
@@ -64,6 +67,7 @@ namespace HotelBK.Areas.Admin.Controllers
         {
             var room = await _context.Rooms
                 .Include(r => r.RoomType)
+                .Include(r => r.RoomImages)
                 .FirstOrDefaultAsync(r => r.RoomID == id);
 
             if (room == null)
@@ -85,7 +89,7 @@ namespace HotelBK.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrUpdate(Room room, IFormFile imageFile)
+        public async Task<IActionResult> CreateOrUpdate(Room room, IFormFile imageFile, List<IFormFile> additionalImages)
         {
             try
             {
@@ -95,6 +99,7 @@ namespace HotelBK.Areas.Admin.Controllers
                 System.Diagnostics.Debug.WriteLine($"Room Name: {room.RoomName}");
                 System.Diagnostics.Debug.WriteLine($"Room Type ID: {room.RoomTypeID}");
                 System.Diagnostics.Debug.WriteLine($"Image file: {(imageFile != null ? imageFile.FileName : "null")}");
+                System.Diagnostics.Debug.WriteLine($"Additional images count: {(additionalImages != null ? additionalImages.Count : 0)}");
 
                 string[] validStatuses = { "Đang ở", "Bảo trì", "Còn trống" };
 
@@ -222,6 +227,70 @@ namespace HotelBK.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 System.Diagnostics.Debug.WriteLine("Lưu thành công");
 
+                // Nếu có ảnh chính mới, thêm vào RoomImages
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    // Hủy tất cả ảnh chính hiện tại
+                    var currentMainImages = await _context.RoomImages
+                        .Where(ri => ri.RoomID == room.RoomID && ri.IsMainImage)
+                        .ToListAsync();
+
+                    foreach (var mainImage in currentMainImages)
+                    {
+                        mainImage.IsMainImage = false;
+                    }
+
+                    // Thêm ảnh chính mới
+                    var newMainImage = new RoomImage
+                    {
+                        RoomID = room.RoomID,
+                        ImagePath = room.Image,
+                        IsMainImage = true,
+                        DisplayOrder = 0
+                    };
+
+                    _context.RoomImages.Add(newMainImage);
+                    await _context.SaveChangesAsync();
+                }
+                // Xử lý các ảnh bổ sung
+                if (additionalImages != null && additionalImages.Count > 0)
+                {
+                    foreach (var additionalImage in additionalImages)
+                    {
+                        if (additionalImage.Length > 0)
+                        {
+                            // Tạo tên file duy nhất cho mỗi ảnh
+                            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(additionalImage.FileName);
+
+                            // Sử dụng thư mục tương tự với ảnh chính
+                            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images", "rooms");
+
+                            // Lưu file
+                            string filePath = Path.Combine(uploadsFolder, fileName);
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await additionalImage.CopyToAsync(stream);
+                            }
+
+                            // Tạo bản ghi RoomImage mới
+                            var roomImage = new RoomImage
+                            {
+                                RoomID = room.RoomID,
+                                ImagePath = "/images/rooms/" + fileName,
+                                IsMainImage = false,
+                                DisplayOrder = await _context.RoomImages
+                                    .Where(ri => ri.RoomID == room.RoomID)
+                                    .CountAsync() // Đặt thứ tự hiển thị bằng số lượng ảnh hiện có
+                            };
+
+                            // Thêm vào database
+                            _context.RoomImages.Add(roomImage);
+                        }
+                    }
+
+                    // Lưu các ảnh bổ sung
+                    await _context.SaveChangesAsync();
+                }
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
                     // AJAX request
@@ -284,5 +353,115 @@ namespace HotelBK.Areas.Admin.Controllers
                 return Json(new List<RoomType>());
             }
         }
+        #region Room Images Management
+
+        // Hiển thị trang quản lý ảnh của phòng
+        public async Task<IActionResult> ManageImages(int id)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.RoomImages)
+                .FirstOrDefaultAsync(r => r.RoomID == id);
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            return View(room);
+        }
+
+        // Thêm ảnh mới cho phòng
+        [HttpPost]
+        public async Task<IActionResult> AddImage(int roomId, IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                return BadRequest("Vui lòng chọn một tệp ảnh");
+            }
+
+            var roomImage = new RoomImage
+            {
+                RoomID = roomId
+            };
+
+            var result = await _roomImageService.AddRoomImage(roomImage, imageFile);
+
+            if (result != null)
+            {
+                return Ok(new { success = true, image = result });
+            }
+            else
+            {
+                return BadRequest("Không thể thêm ảnh. Vui lòng thử lại");
+            }
+        }
+
+        // Xóa một ảnh
+        [HttpPost]
+        public async Task<IActionResult> DeleteImage(int id)
+        {
+            try
+            {
+                // Log để debug
+                System.Diagnostics.Debug.WriteLine($"Đang xóa ảnh với ID: {id}");
+
+                // Lấy thông tin ảnh
+                var roomImage = await _context.RoomImages.FindAsync(id);
+                if (roomImage == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Không tìm thấy ảnh với ID: {id}");
+                    return Json(new { success = false, message = "Không tìm thấy ảnh" });
+                }
+
+                // Lưu thông tin để log
+                int roomId = roomImage.RoomID;
+                string imagePath = roomImage.ImagePath;
+                System.Diagnostics.Debug.WriteLine($"Tìm thấy ảnh: ID={id}, RoomID={roomId}, Path={imagePath}");
+
+                // Xóa file vật lý nếu tồn tại
+                if (!string.IsNullOrEmpty(imagePath))
+                {
+                    string webRootPath = _hostEnvironment.WebRootPath;
+                    string filePath = Path.Combine(webRootPath, imagePath.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                        System.Diagnostics.Debug.WriteLine($"Đã xóa file: {filePath}");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Không tìm thấy file: {filePath}");
+                    }
+                }
+
+                // Xóa bản ghi trong database
+                _context.RoomImages.Remove(roomImage);
+                await _context.SaveChangesAsync();
+                System.Diagnostics.Debug.WriteLine($"Đã xóa bản ghi RoomImage với ID: {id}");
+
+                return Json(new { success = true, message = "Đã xóa ảnh thành công" });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi khi xóa ảnh: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // Cập nhật thứ tự hiển thị của ảnh
+        [HttpPost]
+        public async Task<IActionResult> UpdateImageOrder(int id, int newOrder)
+        {
+            var success = await _roomImageService.UpdateDisplayOrder(id, newOrder);
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return Ok(new { success = true });
+        }
+
+        #endregion
     }
 }

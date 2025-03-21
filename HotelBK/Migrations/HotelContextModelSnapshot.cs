@@ -48,6 +48,9 @@ namespace HotelBK.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -74,6 +77,44 @@ namespace HotelBK.Migrations
                     b.ToTable("Bookings");
                 });
 
+            modelBuilder.Entity("HotelBK.Models.ContactMessages", b =>
+                {
+                    b.Property<int>("ContactID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("ContactID");
+
+                    b.ToTable("ContactMessages");
+                });
+
             modelBuilder.Entity("HotelBK.Models.Payment", b =>
                 {
                     b.Property<int>("PaymentID")
@@ -89,7 +130,6 @@ namespace HotelBK.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -111,6 +151,48 @@ namespace HotelBK.Migrations
                     b.HasIndex("BookingID");
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("HotelBK.Models.Review", b =>
+                {
+                    b.Property<int>("ReviewID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReviewID"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RoomID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReviewID");
+
+                    b.HasIndex("RoomID");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("HotelBK.Models.Role", b =>
@@ -193,6 +275,35 @@ namespace HotelBK.Migrations
                     b.HasIndex("RoomTypeID");
 
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("HotelBK.Models.RoomImage", b =>
+                {
+                    b.Property<int>("ImageID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageID"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsMainImage")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RoomID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImageID");
+
+                    b.HasIndex("RoomID");
+
+                    b.ToTable("RoomImages");
                 });
 
             modelBuilder.Entity("HotelBK.Models.RoomType", b =>
@@ -278,10 +389,10 @@ namespace HotelBK.Migrations
                         new
                         {
                             UserID = 1,
-                            CreatedAt = new DateTime(2025, 3, 13, 9, 29, 57, 145, DateTimeKind.Local).AddTicks(76),
+                            CreatedAt = new DateTime(2025, 3, 20, 11, 48, 33, 929, DateTimeKind.Local).AddTicks(3172),
                             Email = "admin@example.com",
                             FullName = "Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEObt96aWNoPpDdjVPJiCVCj1D5VN8YGUt74hKLqo9AoujtXGTzyfZuaEo43IJYMqQA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOYM1AE013MhyNDSBIQaHYEv2wlaXbmfNzw1NXjvHcvnIUVKcaiMl2uCIF09FtCRBQ==",
                             Phone = "0123456789",
                             RoleID = 1
                         });
@@ -309,6 +420,17 @@ namespace HotelBK.Migrations
                     b.Navigation("Booking");
                 });
 
+            modelBuilder.Entity("HotelBK.Models.Review", b =>
+                {
+                    b.HasOne("HotelBK.Models.Room", "Room")
+                        .WithMany("Reviews")
+                        .HasForeignKey("RoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+                });
+
             modelBuilder.Entity("HotelBK.Models.Room", b =>
                 {
                     b.HasOne("HotelBK.Models.RoomType", "RoomType")
@@ -316,6 +438,17 @@ namespace HotelBK.Migrations
                         .HasForeignKey("RoomTypeID");
 
                     b.Navigation("RoomType");
+                });
+
+            modelBuilder.Entity("HotelBK.Models.RoomImage", b =>
+                {
+                    b.HasOne("HotelBK.Models.Room", "Room")
+                        .WithMany("RoomImages")
+                        .HasForeignKey("RoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("HotelBK.Models.User", b =>
@@ -327,6 +460,13 @@ namespace HotelBK.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("HotelBK.Models.Room", b =>
+                {
+                    b.Navigation("Reviews");
+
+                    b.Navigation("RoomImages");
                 });
 
             modelBuilder.Entity("HotelBK.Models.RoomType", b =>

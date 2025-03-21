@@ -1,0 +1,89 @@
+﻿@model IEnumerable<HotelBK.Models.Review>
+@{
+    ViewData["Title"] = "Quản lý đánh giá";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div>
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Quản lý đánh giá</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AdminHome">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Quản lý đánh giá</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="top-row d-flex justify-content-between my-3">
+                                <div class="search-container">
+                                    <label for="searchInput">Tìm kiếm:</label>
+                                    <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm">
+                                </div>
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên người đánh giá</th>
+                                        <th>Email</th>
+                                        <th>Phòng</th>
+                                        <th>Nội dung</th>
+                                        <th>Ngày đánh giá</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reviewTableBody">
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="reviewRow_@item.ReviewID">
+                                            <td>@item.ReviewID</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Email</td>
+                                            <td>@(item.Room?.RoomName ?? "Không xác định")</td>
+                                            <td>@(item.Comment.Length > 50 ? item.Comment.Substring(0, 50) + "..." : item.Comment)</td>
+                                            <td>@item.ReviewDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>
+                                                <button class="btn btn-danger deleteReview" data-id="@item.ReviewID">Xóa</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Script -->
+<script>
+    $(document).ready(function () {
+        // Xử lý xóa đánh giá
+        $(".deleteReview").click(function () {
+            var id = $(this).data("id");
+            if (confirm("Bạn có chắc muốn xóa đánh giá này?")) {
+                $.post("/Admin/Reviews/Delete/" + id, function () {
+                    $("#reviewRow_" + id).remove();
+                });
+            }
+        });
+
+        // Tìm kiếm
+        $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#reviewTableBody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

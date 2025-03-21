@@ -1,0 +1,95 @@
+﻿@model IEnumerable<HotelBK.Models.ContactMessages>
+@{
+    ViewData["Title"] = "Quản lý tin nhắn liên hệ";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Quản lý tin nhắn liên hệ</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Admin/AdminHome">Dashboard</a></li>
+                <li class="breadcrumb-item active">Tin nhắn liên hệ</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Danh sách tin nhắn liên hệ</h5>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Người gửi</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Chủ đề</th>
+                                    <th scope="col">Ngày gửi</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="@(!item.IsRead ? "fw-bold" : "")">
+                                        <th scope="row">@item.ContactID</th>
+                                        <td>@item.Name</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.Subject</td>
+                                        <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>
+                                            @if (item.IsRead)
+                                            {
+                                                <span class="badge bg-success">Đã đọc</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">Chưa đọc</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="/Admin/ContactMessages/View/@item.ContactID" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+
+                                            @if (item.IsRead)
+                                            {
+                                                <form method="post" action="/Admin/ContactMessages/MarkAsUnread/@item.ContactID" style="display: inline;">
+                                                    <button type="submit" class="btn btn-sm btn-warning">
+                                                        <i class="bi bi-envelope"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form method="post" action="/Admin/ContactMessages/MarkAsRead/@item.ContactID" style="display: inline;">
+                                                    <button type="submit" class="btn btn-sm btn-info">
+                                                        <i class="bi bi-envelope-open"></i>
+                                                    </button>
+                                                </form>
+                                            }
+
+                                            <form method="post" action="/Admin/ContactMessages/Delete/@item.ContactID"
+                                                  style="display: inline;"
+                                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa tin nhắn này?');">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

@@ -27,6 +27,9 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 // Thêm các dịch vụ nghiệp vụ
 builder.Services.AddScoped<IBookingService, BookingServices>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomImageService, RoomImageService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+
 
 // Thêm dịch vụ MVC
 builder.Services.AddControllersWithViews();

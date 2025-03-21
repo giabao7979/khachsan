@@ -163,10 +163,24 @@
                     <i class="ri-paypal-fill"></i><span>Thanh toán</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/Admin/Reports/Revenue">
+                    <i class="ri-bar-chart-box-line"></i><span>Báo cáo doanh thu</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="/Admin/Roles">
                     <i class="ri-contacts-line"></i><span>Phân quyền</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/Admin/ContactMessages">
+                    <i class="ri-mail-line"></i><span>Tin nhắn liên hệ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/Admin/Reviews">
+                    <i class="ri-chat-quote-line"></i><span>Bình luận</span>
                 </a>
             </li>
             <li class="nav-heading">Trở lại</li>
@@ -206,6 +220,8 @@
 
     <!-- Template Main JS File -->
     <script defer src="~/admin/assets/js/main.js"></script>
+    <!-- Script xử lý thông báo -->
+    <script src="~/admin/assets/js/notifications.js"></script>
 
 
     @await RenderSectionAsync("Scripts", required: false)

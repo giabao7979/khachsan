@@ -40,6 +40,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQm9va2luZ3NcX1ZpZXcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/ContactMessages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ29udGFjdE1lc3NhZ2VzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/ContactMessages/View.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ29udGFjdE1lc3NhZ2VzXFZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/Payments/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUGF5bWVudHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -54,6 +62,22 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/Payments/_View.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUGF5bWVudHNcX1ZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/Reports/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVwb3J0c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/Reports/MonthlyRevenueDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVwb3J0c1xNb250aGx5UmV2ZW51ZURldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/Reports/Revenue.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmVwb3J0c1xSZXZlbnVlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/Reviews/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcUmV2aWV3c1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Areas/Admin/Views/Roles/Index.cshtml]
@@ -158,10 +182,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Views/RoomDetail/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9vbURldGFpbFxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Views/Room/Detail.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9vbVxEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Đồ Án Quản lý khách sạn/HotelBK/HotelBK/Views/Room/Index.cshtml]

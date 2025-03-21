@@ -1,0 +1,96 @@
+﻿@model HotelBK.Models.ContactMessages
+@{
+    ViewData["Title"] = "Chi tiết tin nhắn";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Chi tiết tin nhắn liên hệ</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Admin/AdminHome">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/Admin/ContactMessages">Tin nhắn liên hệ</a></li>
+                <li class="breadcrumb-item active">Chi tiết</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <div class="tab-content pt-2">
+                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                <h5 class="card-title">Chi tiết tin nhắn</h5>
+
+                                <div class="row border-bottom mb-3 pb-2">
+                                    <div class="col-lg-3 col-md-4 label">Người gửi</div>
+                                    <div class="col-lg-9 col-md-8">@Model.Name</div>
+                                </div>
+
+                                <div class="row border-bottom mb-3 pb-2">
+                                    <div class="col-lg-3 col-md-4 label">Email</div>
+                                    <div class="col-lg-9 col-md-8">@Model.Email</div>
+                                </div>
+
+                                <div class="row border-bottom mb-3 pb-2">
+                                    <div class="col-lg-3 col-md-4 label">Chủ đề</div>
+                                    <div class="col-lg-9 col-md-8">@Model.Subject</div>
+                                </div>
+
+                                <div class="row border-bottom mb-3 pb-2">
+                                    <div class="col-lg-3 col-md-4 label">Ngày gửi</div>
+                                    <div class="col-lg-9 col-md-8">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                                </div>
+
+                                <div class="row border-bottom mb-3 pb-2">
+                                    <div class="col-lg-3 col-md-4 label">Nội dung</div>
+                                    <div class="col-lg-9 col-md-8 message-content" style="white-space: pre-wrap;">@Model.Message</div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-lg-3 col-md-4 label">Trạng thái</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        @if (Model.IsRead)
+                                        {
+                                            <span class="badge bg-success">Đã đọc</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">Chưa đọc</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <a href="/Admin/ContactMessages" class="btn btn-primary">Quay lại danh sách</a>
+
+                                    @if (Model.IsRead)
+                                    {
+                                        <form method="post" action="/Admin/ContactMessages/MarkAsUnread/@Model.ContactID" style="display: inline;">
+                                            <button type="submit" class="btn btn-warning">Đánh dấu chưa đọc</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" action="/Admin/ContactMessages/MarkAsRead/@Model.ContactID" style="display: inline;">
+                                            <button type="submit" class="btn btn-info">Đánh dấu đã đọc</button>
+                                        </form>
+                                    }
+
+                                    <form method="post" action="/Admin/ContactMessages/Delete/@Model.ContactID"
+                                          style="display: inline;"
+                                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa tin nhắn này?');">
+                                        <button type="submit" class="btn btn-danger">Xóa tin nhắn</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

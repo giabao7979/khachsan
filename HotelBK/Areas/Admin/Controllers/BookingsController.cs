@@ -62,6 +62,12 @@ namespace HotelBK.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            //// Cập nhật trạng thái đã đọc
+            if (!booking.IsRead)
+            {
+                booking.IsRead = true;
+                await _context.SaveChangesAsync();
+            }
 
             // Tính tổng số tiền
             var totalDays = (booking.CheckOutDate - booking.CheckInDate).Days;
@@ -136,8 +142,11 @@ namespace HotelBK.Areas.Admin.Controllers
                     }
                 }
 
+                //// Nếu là booking mới
                 if (booking.BookingID == 0)
                 {
+                    booking.CreatedAt = DateTime.Now;
+                    booking.IsRead = false; // Đánh dấu là chưa đọc để hiển thị thông báo
                     _context.Bookings.Add(booking);
                 }
                 else

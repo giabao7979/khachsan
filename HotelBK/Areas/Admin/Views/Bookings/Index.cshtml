@@ -82,18 +82,6 @@
                                                 <button class="btn btn-info btn-sm viewBooking" data-id="@item.BookingID">Chi tiết</button>
                                                 <button class="btn btn-warning btn-sm text-white editBooking mt-1" data-id="@item.BookingID">Sửa</button>
                                                 <button class="btn btn-danger btn-sm deleteBooking mt-1" data-id="@item.BookingID">Xóa</button>
-                                                <div class="dropdown mt-1">
-                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="statusDropdown_@item.BookingID" data-bs-toggle="dropdown">
-                                                        Đổi trạng thái
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Pending">Chờ xác nhận</a></li>
-                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Confirmed">Đã xác nhận</a></li>
-                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Checked-in">Đã nhận phòng</a></li>
-                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Checked-out">Đã trả phòng</a></li>
-                                                        <li><a class="dropdown-item change-status" href="#" data-id="@item.BookingID" data-status="Cancelled">Đã hủy</a></li>
-                                                    </ul>
-                                                </div>
                                             </td>
                                         </tr>
                                     }

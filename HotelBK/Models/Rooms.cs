@@ -32,11 +32,15 @@ namespace HotelBK.Models
         [RegularExpression(@"^(Đang ở|Bảo trì|Còn trống)$")]
         public string Status { get; set; } = "Còn trống";
 
-        public string? Image { get; set; }
+        public string? Image { get; set; } // Giữ lại để tương thích với code cũ
 
         public int? RoomTypeID { get; set; }
 
         [ForeignKey("RoomTypeID")]
         public RoomType? RoomType { get; set; }
+
+        // Navigation property tới các ảnh của phòng
+        public virtual ICollection<RoomImage> RoomImages { get; set; } = new List<RoomImage>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

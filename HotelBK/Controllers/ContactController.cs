@@ -17,11 +17,11 @@ namespace HotelBK.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(new ContactMessages());
         }
 
         [HttpPost]
-        public async Task<IActionResult> SubmitContact(ContactMessage model)
+        public async Task<IActionResult> SubmitContact(ContactMessages model)
         {
             if (!ModelState.IsValid)
             {
@@ -35,9 +35,6 @@ namespace HotelBK.Controllers
             // Lưu tin nhắn liên hệ vào database
             _context.ContactMessages.Add(model);
             await _context.SaveChangesAsync();
-
-            // Lưu thông tin để tạo thông báo (sẽ xử lý ở trang Admin)
-            TempData["NewContactNotification"] = true;
 
             TempData["SuccessMessage"] = "Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ lại trong thời gian sớm nhất!";
             return RedirectToAction("Index");

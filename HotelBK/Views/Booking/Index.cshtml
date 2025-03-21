@@ -22,7 +22,156 @@
     </div>
     <!-- Page Header End -->
 </div>
+<!-- Booking Form Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
 
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-info text-white py-3">
+                        <h4 class="mb-0">Thông tin phòng</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        @if (ViewBag.Room != null)
+                        {
+                            <div class="d-flex mb-3">
+                                <h3 class="mb-0">@ViewBag.Room.RoomName</h3>
+                                <div class="ps-3 d-flex align-items-center">
+                                    @for (int i = 0; i < (room.StarRating ?? 0); i++)
+                                    {
+                                        <small class="fa fa-star text-primary"></small>
+                                    }
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(room.Image))
+                            {
+                                <img class="img-fluid rounded mb-3" src="@room.Image" alt="@room.RoomName">
+                            }
+                            else
+                            {
+                                <img class="img-fluid rounded mb-3" src="/img/room-1.jpg" alt="@room.RoomName">
+                            }
+
+                            <div class="d-flex flex-wrap mb-3">
+                                <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                    <i class="fa fa-bed text-primary me-2"></i>@room.Beds Giường
+                                </span>
+                                <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                    <i class="fa fa-bath text-primary me-2"></i>@room.Bathrooms Phòng tắm
+                                </span>
+                                <span class="bg-light rounded py-2 px-3 me-2 mb-2">
+                                    <i class="fa fa-wifi text-primary me-2"></i>Wifi
+                                </span>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5>Chi tiết đặt phòng:</h5>
+                                    <div class="row">
+                                        <div class="col-7">Giá phòng:</div>
+                                        <div class="col-5 text-end" id="roomPrice">@room.Price.ToString("N0") VNĐ/đêm</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-7">Số đêm:</div>
+                                        <div class="col-5 text-end" id="nightCount">@ViewBag.TotalNights</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-7">Số phòng:</div>
+                                        <div class="col-5 text-end" id="roomCountDisplay">@Model.RoomCount</div>
+                                    </div>
+                                    <hr>
+                                    <div class="row fw-bold">
+                                        <div class="col-7">Tổng tiền:</div>
+                                        <div class="col-5 text-end text-primary fs-5" id="totalPrice">@ViewBag.TotalPrice.ToString("N0") VNĐ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                Không tìm thấy thông tin phòng. Vui lòng quay lại trang phòng và thử lại.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h4 class="mb-0">Thông tin đặt phòng</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="bookingForm" action="/Booking/BookRoom" method="post">
+                            <input type="hidden" name="RoomID" value="@Model.RoomID" />
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="FullName">Họ tên</label>
+                                        <input type="text" class="form-control" id="FullName" name="FullName" value="@Model.FullName" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="Phone">Số điện thoại</label>
+                                        <input type="tel" class="form-control" id="Phone" name="Phone" value="@Model.Phone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group mb-3">
+                                    <label for="Email">Email</label>
+                                    <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="CheckInDate">Ngày nhận phòng</label>
+                                        <input type="date" class="form-control" id="CheckInDate" name="CheckInDate"
+                                               value="@Model.CheckInDate.ToString("yyyy-MM-dd")"
+                                               min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="CheckOutDate">Ngày trả phòng</label>
+                                        <input type="date" class="form-control" id="CheckOutDate" name="CheckOutDate"
+                                               value="@Model.CheckOutDate.ToString("yyyy-MM-dd")"
+                                               min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="RoomCount">Số người</label>
+                                <input type="number" class="form-control" id="RoomCount" name="RoomCount"
+                                       value="@Model.RoomCount" min="1" max="5" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="SpecialRequest">Yêu cầu đặc biệt (nếu có)</label>
+                                <textarea class="form-control" id="SpecialRequest" name="SpecialRequest" rows="3">@Model.SpecialRequest</textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary py-3 w-100">Xác nhận đặt phòng</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Booking Form End -->
 @section Scripts {
     <script>
         $(document).ready(function () {

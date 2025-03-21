@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\controllers\\contactcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\controllers\\contactcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\areas\\admin\\views\\reports\\revenue.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\areas\\admin\\views\\reports\\revenue.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\data\\hotelcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\data\\hotelcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\areas\\admin\\views\\reports\\monthlyrevenuedetail.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\areas\\admin\\views\\reports\\monthlyrevenuedetail.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\areas\\admin\\controllers\\roomscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\areas\\admin\\controllers\\roomscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\areas\\admin\\controllers\\reportscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\areas\\admin\\controllers\\reportscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\wwwroot\\admin\\js\\notifications.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\wwwroot\\admin\\js\\notifications.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\areas\\admin\\views\\reports\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\areas\\admin\\views\\reports\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\areas\\admin\\views\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\areas\\admin\\views\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|d:\\\u0111\u1ED3 \u00E1n qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\hotelbk\\hotelbk\\hotelbk.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A4EBAE72-8201-441D-AF74-5E9A08B23CDC}|HotelBK\\HotelBK.csproj|solutionrelative:hotelbk\\hotelbk.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,68 +30,71 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "notifications.js",
-              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\wwwroot\\admin\\js\\notifications.js",
-              "RelativeDocumentMoniker": "HotelBK\\wwwroot\\admin\\js\\notifications.js",
-              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\wwwroot\\admin\\js\\notifications.js",
-              "RelativeToolTip": "HotelBK\\wwwroot\\admin\\js\\notifications.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-18T08:03:48.455Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "_LayoutAdmin.cshtml",
-              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Shared\\_LayoutAdmin.cshtml",
-              "RelativeDocumentMoniker": "HotelBK\\Areas\\Admin\\Views\\Shared\\_LayoutAdmin.cshtml",
-              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Shared\\_LayoutAdmin.cshtml",
-              "RelativeToolTip": "HotelBK\\Areas\\Admin\\Views\\Shared\\_LayoutAdmin.cshtml",
-              "ViewState": "AgIAACMAAAAAAAAAAAAkwDMAAABNAAAAAAAAAA==",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Reports\\Index.cshtml",
+              "RelativeDocumentMoniker": "HotelBK\\Areas\\Admin\\Views\\Reports\\Index.cshtml",
+              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Reports\\Index.cshtml",
+              "RelativeToolTip": "HotelBK\\Areas\\Admin\\Views\\Reports\\Index.cshtml",
+              "ViewState": "AgIAAEQBAAAAAAAAAAAhwEkBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-18T08:02:00.678Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "RoomsController.cs",
-              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Controllers\\RoomsController.cs",
-              "RelativeDocumentMoniker": "HotelBK\\Areas\\Admin\\Controllers\\RoomsController.cs",
-              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Controllers\\RoomsController.cs",
-              "RelativeToolTip": "HotelBK\\Areas\\Admin\\Controllers\\RoomsController.cs",
-              "ViewState": "AgIAAOoAAAAAAAAAAAAmwPgAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T08:01:33.433Z"
+              "WhenOpened": "2025-03-21T03:55:33.402Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ContactController.cs",
-              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Controllers\\ContactController.cs",
-              "RelativeDocumentMoniker": "HotelBK\\Controllers\\ContactController.cs",
-              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Controllers\\ContactController.cs",
-              "RelativeToolTip": "HotelBK\\Controllers\\ContactController.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAowBsAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T08:01:02.016Z",
+              "Title": "Revenue.cshtml",
+              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Reports\\Revenue.cshtml",
+              "RelativeDocumentMoniker": "HotelBK\\Areas\\Admin\\Views\\Reports\\Revenue.cshtml",
+              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Reports\\Revenue.cshtml",
+              "RelativeToolTip": "HotelBK\\Areas\\Admin\\Views\\Reports\\Revenue.cshtml",
+              "ViewState": "AgIAAAcBAAAAAAAAAAAAABcBAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-21T03:27:18.521Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "HotelContext.cs",
-              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Data\\HotelContext.cs",
-              "RelativeDocumentMoniker": "HotelBK\\Data\\HotelContext.cs",
-              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Data\\HotelContext.cs",
-              "RelativeToolTip": "HotelBK\\Data\\HotelContext.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAA5wA8AAAA0AAAAAAAAAA==",
+              "Title": "MonthlyRevenueDetail.cshtml",
+              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Reports\\MonthlyRevenueDetail.cshtml",
+              "RelativeDocumentMoniker": "HotelBK\\Areas\\Admin\\Views\\Reports\\MonthlyRevenueDetail.cshtml",
+              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Views\\Reports\\MonthlyRevenueDetail.cshtml",
+              "RelativeToolTip": "HotelBK\\Areas\\Admin\\Views\\Reports\\MonthlyRevenueDetail.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHgBAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-21T03:27:14.272Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HotelBK",
+              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\HotelBK.csproj",
+              "RelativeDocumentMoniker": "HotelBK\\HotelBK.csproj",
+              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\HotelBK.csproj",
+              "RelativeToolTip": "HotelBK\\HotelBK.csproj",
+              "ViewState": "AgIAAAUAAAAAAAAAAAArwBQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-21T03:26:25.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ReportsController.cs",
+              "DocumentMoniker": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Controllers\\ReportsController.cs",
+              "RelativeDocumentMoniker": "HotelBK\\Areas\\Admin\\Controllers\\ReportsController.cs",
+              "ToolTip": "D:\\\u0110\u1ED3 \u00C1n Qu\u1EA3n l\u00FD kh\u00E1ch s\u1EA1n\\HotelBK\\HotelBK\\Areas\\Admin\\Controllers\\ReportsController.cs",
+              "RelativeToolTip": "HotelBK\\Areas\\Admin\\Controllers\\ReportsController.cs",
+              "ViewState": "AgIAAO8AAAAAAAAAAAAQwM4AAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-15T03:57:19.86Z",
+              "WhenOpened": "2025-03-21T03:25:41.829Z",
               "EditorCaption": ""
             }
           ]

@@ -148,3 +148,11 @@ D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\HotelBK.ge
 D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\ref\HotelBK.dll
 D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\scopedcss\Areas\Admin\Views\Shared\_LayoutAdmin.cshtml.rz.scp.css
 D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\obj\Debug\net8.0\HotelBK.sourcelink.json
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\ClosedXML.dll
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\ClosedXML.Parser.dll
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\ExcelNumberFormat.dll
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\RBush.dll
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\SixLabors.Fonts.dll
+D:\Đồ Án Quản lý khách sạn\HotelBK\HotelBK\bin\Debug\net8.0\System.IO.Packaging.dll

@@ -42,5 +42,6 @@ namespace HotelBK.Models
         [MaxLength(500)]
         [Display(Name = "Yêu cầu đặc biệt")]
         public string? SpecialRequest { get; set; } = string.Empty;
+        public bool IsRead { get; set; } = false;
     }
 }
