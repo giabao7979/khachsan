@@ -30,6 +30,41 @@
                                 <button class="btn btn-primary" id="openAddRoom">Thêm phòng</button>
                             </div>
 
+                            <!-- Thêm phần sắp xếp -->
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="me-2">Sắp xếp theo:</span>
+                                <div class="btn-group">
+                                    <a href="@Url.Action("Index", new { sortOrder = ViewBag.ViewCountSortParam })"
+                                       class="btn @(ViewBag.CurrentSort == "view_count_desc" ? "btn-primary" : "btn-outline-primary")">
+                                        <i class="bi bi-eye me-1"></i>Lượt xem
+                                    </a>
+                                    <a href="@Url.Action("Index", new { sortOrder = ViewBag.NameSortParam })"
+                                       class="btn @(ViewBag.CurrentSort == "name" || ViewBag.CurrentSort == "name_desc" ? "btn-primary" : "btn-outline-primary")">
+                                        <i class="bi bi-sort-alpha-down me-1"></i>Tên
+                                        @if (ViewBag.CurrentSort == "name")
+                                        {
+                                            <i class="bi bi-arrow-up"></i>
+                                        }
+                                        else if (ViewBag.CurrentSort == "name_desc")
+                                        {
+                                            <i class="bi bi-arrow-down"></i>
+                                        }
+                                    </a>
+                                    <a href="@Url.Action("Index", new { sortOrder = ViewBag.PriceSortParam })"
+                                       class="btn @(ViewBag.CurrentSort == "price" || ViewBag.CurrentSort == "price_desc" ? "btn-primary" : "btn-outline-primary")">
+                                        <i class="bi bi-currency-dollar me-1"></i>Giá
+                                        @if (ViewBag.CurrentSort == "price")
+                                        {
+                                            <i class="bi bi-arrow-up"></i>
+                                        }
+                                        else if (ViewBag.CurrentSort == "price_desc")
+                                        {
+                                            <i class="bi bi-arrow-down"></i>
+                                        }
+                                    </a>
+                                </div>
+                            </div>
+
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -40,6 +75,7 @@
                                         <th>Phòng Tắm</th>
                                         <th>Trạng thái</th>
                                         <th>Loại Phòng</th>
+                                        <th>Lượt xem</th>
                                         <th>Ảnh</th>
                                         <th>Thao tác</th>
                                     </tr>
@@ -63,6 +99,13 @@
                                                 {
                                                     <span>Không xác định</span>
                                                 }
+                                            </td>
+                                            <td>
+                                                @item.ViewCount
+                                                <button class="btn btn-sm btn-outline-secondary ms-1 reset-view-count"
+                                                        data-id="@item.RoomID" title="Đặt về 0">
+                                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                                </button>
                                             </td>
                                             <td>
                                                 @if (!string.IsNullOrEmpty(item.Image))
@@ -144,6 +187,27 @@
             if (confirm("Bạn có chắc muốn xóa phòng này?")) {
                 $.post("/Admin/Rooms/Delete/" + id, function () {
                     $("#roomRow_" + id).remove();
+                });
+            }
+        });
+
+        // Reset lượt xem về 0
+        $(".reset-view-count").click(function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            var row = $(this).closest("tr");
+
+            if (confirm("Bạn có chắc muốn đặt lại lượt xem về 0?")) {
+                $.post("/Admin/Rooms/ResetViewCount/" + id, function (response) {
+                    if (response.success) {
+                        // Cập nhật giá trị lượt xem trong giao diện
+                        row.find("td:nth-child(8)").html('0 <button class="btn btn-sm btn-outline-secondary ms-1 reset-view-count" data-id="' + id + '" title="Đặt về 0"><i class="bi bi-arrow-counterclockwise"></i></button>');
+                        alert("Đã đặt lại lượt xem thành công!");
+                    } else {
+                        alert("Lỗi: " + response.message);
+                    }
+                }).fail(function (xhr) {
+                    alert("Đã xảy ra lỗi khi reset lượt xem: " + xhr.responseText);
                 });
             }
         });

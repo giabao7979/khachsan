@@ -21,8 +21,13 @@ namespace HotelBK.Controllers
         }
 
         // GET: /Room
-        public async Task<IActionResult> Index(DateTime? checkIn, DateTime? checkOut, int? roomType, int? priceRange)
+        public async Task<IActionResult> Index(DateTime? checkIn, DateTime? checkOut, int? roomType, int? priceRange, string sortOrder = "")
         {
+            // Thêm parameter sortOrder để hỗ trợ sắp xếp
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ViewCountSortParam = string.IsNullOrEmpty(sortOrder) ? "view_count_desc" : "";
+            ViewBag.PriceSortParam = sortOrder == "price_asc" ? "price_desc" : "price_asc";
+
             // Kiểm tra xem có phải là request tìm kiếm không
             bool isSearchRequest = checkIn.HasValue || checkOut.HasValue || roomType.HasValue || priceRange.HasValue;
             ViewBag.IsSearchResult = isSearchRequest;
@@ -86,6 +91,24 @@ namespace HotelBK.Controllers
                     .ToListAsync();
 
                 query = query.Where(r => !bookedRoomIds.Contains(r.RoomID));
+            }
+
+            // Áp dụng sắp xếp
+            switch (sortOrder)
+            {
+                case "view_count_desc":
+                    query = query.OrderByDescending(r => r.ViewCount);
+                    break;
+                case "price_asc":
+                    query = query.OrderBy(r => r.Price);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(r => r.Price);
+                    break;
+                default:
+                    // Mặc định sắp xếp theo ID
+                    query = query.OrderBy(r => r.RoomID);
+                    break;
             }
 
             var rooms = await query.ToListAsync();
@@ -177,9 +200,13 @@ namespace HotelBK.Controllers
         // Tìm kiếm nâng cao với nhiều tiêu chí hơn
         [HttpGet]
         public async Task<IActionResult> AdvancedSearch(DateTime? checkIn, DateTime? checkOut, int? roomType,
-                                                     int? priceRange, int? beds, int? bathrooms, bool? withWifi)
+                                                     int? priceRange, int? beds, int? bathrooms, bool? withWifi, string sortOrder = "")
         {
             // Cập nhật ViewBag cho tất cả tham số
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ViewCountSortParam = string.IsNullOrEmpty(sortOrder) ? "view_count_desc" : "";
+            ViewBag.PriceSortParam = sortOrder == "price_asc" ? "price_desc" : "price_asc";
+
             ViewBag.CheckIn = checkIn ?? DateTime.Now;
             ViewBag.CheckOut = checkOut ?? DateTime.Now.AddDays(1);
             ViewBag.RoomType = roomType ?? 0;
@@ -192,7 +219,31 @@ namespace HotelBK.Controllers
             var query = _context.Rooms.Include(r => r.RoomType).AsQueryable();
 
             // Áp dụng các tiêu chí tìm kiếm tương tự như trong Index
-            // ... (code tương tự như trong Index)
+            // Lọc theo loại phòng nếu được chọn
+            if (roomType.HasValue && roomType.Value > 0)
+            {
+                query = query.Where(r => r.RoomTypeID == roomType.Value);
+            }
+
+            // Lọc theo khoảng giá nếu được chọn
+            if (priceRange.HasValue && priceRange.Value > 0)
+            {
+                switch (priceRange.Value)
+                {
+                    case 1: // Dưới 500.000 VNĐ
+                        query = query.Where(r => r.Price < 500000);
+                        break;
+                    case 2: // 500.000 - 1.000.000 VNĐ
+                        query = query.Where(r => r.Price >= 500000 && r.Price <= 1000000);
+                        break;
+                    case 3: // 1.000.000 - 2.000.000 VNĐ
+                        query = query.Where(r => r.Price > 1000000 && r.Price <= 2000000);
+                        break;
+                    case 4: // Trên 2.000.000 VNĐ
+                        query = query.Where(r => r.Price > 2000000);
+                        break;
+                }
+            }
 
             // Thêm các tiêu chí nâng cao
             if (beds.HasValue && beds.Value > 0)
@@ -210,6 +261,24 @@ namespace HotelBK.Controllers
             if (withWifi.HasValue && withWifi.Value)
             {
                 query = query.Where(r => r.Description.Contains("Wifi") || r.Description.Contains("WiFi"));
+            }
+
+            // Áp dụng sắp xếp
+            switch (sortOrder)
+            {
+                case "view_count_desc":
+                    query = query.OrderByDescending(r => r.ViewCount);
+                    break;
+                case "price_asc":
+                    query = query.OrderBy(r => r.Price);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(r => r.Price);
+                    break;
+                default:
+                    // Mặc định sắp xếp theo ID
+                    query = query.OrderBy(r => r.RoomID);
+                    break;
             }
 
             var rooms = await query.ToListAsync();

@@ -11,7 +11,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center text-uppercase">
                         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-                        <li class="breadcrumb-item"><a href="/Room">Danh sách phòng</a></li>
+                        <li class="breadcrumb-item"><a href="/Room">Phòng</a></li>
                         <li class="breadcrumb-item text-white active" aria-current="page">@Model?.RoomName</li>
                     </ol>
                 </nav>
@@ -90,6 +90,14 @@
                             {
                                 <small class="fa fa-star text-primary"></small>
                             }
+                        </div>
+                    </div>
+
+                    <!-- Hiển thị số lượt xem -->
+                    <div class="bg-light rounded p-2 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-eye text-primary me-2 fs-4"></i>
+                            <span>@Model.ViewCount lượt xem</span>
                         </div>
                     </div>
 

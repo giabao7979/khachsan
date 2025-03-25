@@ -50,6 +50,14 @@
     </div>
 
     <div class="form-group mb-3">
+        <label>Lượt xem</label>
+        <div class="input-group">
+            <input type="number" name="ViewCount" class="form-control" min="0" value="@Model.ViewCount" />
+            <button type="button" class="btn btn-outline-secondary" id="resetViewCount">Đặt về 0</button>
+        </div>
+    </div>
+
+    <div class="form-group mb-3">
         <label>Mô tả</label>
         <textarea name="Description" class="form-control" rows="3">@Model.Description</textarea>
     </div>
@@ -116,6 +124,11 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Reset lượt xem
+        document.getElementById('resetViewCount').addEventListener('click', function() {
+            document.querySelector('input[name="ViewCount"]').value = "0";
+        });
+
         // Log tất cả các phần tử có data-id để debug
         console.log("Đang kiểm tra các phần tử có data-id:");
         document.querySelectorAll('[data-id]').forEach(el => {

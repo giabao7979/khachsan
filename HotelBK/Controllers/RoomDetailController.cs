@@ -5,7 +5,7 @@ using HotelBK.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using HotelBK.Services; // Thêm namespace này
+using HotelBK.Services; 
 
 namespace HotelBK.Controllers
 {
@@ -36,6 +36,10 @@ namespace HotelBK.Controllers
             {
                 return NotFound();
             }
+            // Tăng số lượt xem phòng
+            room.ViewCount++;
+            _context.Update(room);
+            await _context.SaveChangesAsync();
 
             var reviews = await _context.Reviews
                 .Where(r => r.RoomID == id)

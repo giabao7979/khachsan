@@ -25,9 +25,41 @@ namespace HotelBK.Areas.Admin.Controllers
             _hostEnvironment = hostEnvironment;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder = "")
         {
-            var rooms = await _roomService.GetAllRooms();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ViewCountSortParam = string.IsNullOrEmpty(sortOrder) ? "view_count_desc" : "";
+            ViewBag.NameSortParam = sortOrder == "name" ? "name_desc" : "name";
+            ViewBag.PriceSortParam = sortOrder == "price" ? "price_desc" : "price";
+
+            var roomsQuery = _context.Rooms
+                .Include(r => r.RoomType)
+                .AsQueryable();
+
+            // Áp dụng sắp xếp
+            switch (sortOrder)
+            {
+                case "view_count_desc":
+                    roomsQuery = roomsQuery.OrderByDescending(r => r.ViewCount);
+                    break;
+                case "name":
+                    roomsQuery = roomsQuery.OrderBy(r => r.RoomName);
+                    break;
+                case "name_desc":
+                    roomsQuery = roomsQuery.OrderByDescending(r => r.RoomName);
+                    break;
+                case "price":
+                    roomsQuery = roomsQuery.OrderBy(r => r.Price);
+                    break;
+                case "price_desc":
+                    roomsQuery = roomsQuery.OrderByDescending(r => r.Price);
+                    break;
+                default:
+                    roomsQuery = roomsQuery.OrderBy(r => r.RoomID);
+                    break;
+            }
+
+            var rooms = await roomsQuery.ToListAsync();
             return View(rooms);
         }
 
@@ -100,6 +132,7 @@ namespace HotelBK.Areas.Admin.Controllers
                 System.Diagnostics.Debug.WriteLine($"Room Type ID: {room.RoomTypeID}");
                 System.Diagnostics.Debug.WriteLine($"Image file: {(imageFile != null ? imageFile.FileName : "null")}");
                 System.Diagnostics.Debug.WriteLine($"Additional images count: {(additionalImages != null ? additionalImages.Count : 0)}");
+                System.Diagnostics.Debug.WriteLine($"View Count: {room.ViewCount}");
 
                 string[] validStatuses = { "Đang ở", "Bảo trì", "Còn trống" };
 
@@ -128,6 +161,12 @@ namespace HotelBK.Areas.Admin.Controllers
                 if (room.Bathrooms <= 0)
                 {
                     return BadRequest("Số phòng tắm phải lớn hơn 0");
+                }
+
+                // Đảm bảo ViewCount không âm
+                if (room.ViewCount < 0)
+                {
+                    room.ViewCount = 0;
                 }
 
                 // Đặt giá trị mặc định cho các trường có thể NULL
@@ -179,6 +218,7 @@ namespace HotelBK.Areas.Admin.Controllers
                 System.Diagnostics.Debug.WriteLine($"Số giường: {room.Beds}");
                 System.Diagnostics.Debug.WriteLine($"Số phòng tắm: {room.Bathrooms}");
                 System.Diagnostics.Debug.WriteLine($"Trạng thái: {room.Status}");
+                System.Diagnostics.Debug.WriteLine($"Lượt xem: {room.ViewCount}");
 
                 // Lưu vào database
                 if (room.RoomID == 0)
@@ -212,6 +252,7 @@ namespace HotelBK.Areas.Admin.Controllers
                     existingRoom.Description = room.Description;
                     existingRoom.Status = room.Status;
                     existingRoom.RoomTypeID = room.RoomTypeID;
+                    existingRoom.ViewCount = room.ViewCount;
 
                     // Chỉ cập nhật Image nếu có upload file mới
                     if (!string.IsNullOrEmpty(room.Image))
@@ -220,7 +261,6 @@ namespace HotelBK.Areas.Admin.Controllers
                     }
 
                     _context.Rooms.Update(existingRoom);
-
                 }
 
                 // Lưu thay đổi
@@ -252,6 +292,7 @@ namespace HotelBK.Areas.Admin.Controllers
                     _context.RoomImages.Add(newMainImage);
                     await _context.SaveChangesAsync();
                 }
+
                 // Xử lý các ảnh bổ sung
                 if (additionalImages != null && additionalImages.Count > 0)
                 {
@@ -291,6 +332,7 @@ namespace HotelBK.Areas.Admin.Controllers
                     // Lưu các ảnh bổ sung
                     await _context.SaveChangesAsync();
                 }
+
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
                     // AJAX request
@@ -353,6 +395,29 @@ namespace HotelBK.Areas.Admin.Controllers
                 return Json(new List<RoomType>());
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetViewCount(int id)
+        {
+            try
+            {
+                var room = await _context.Rooms.FindAsync(id);
+                if (room == null)
+                {
+                    return NotFound();
+                }
+
+                room.ViewCount = 0;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { success = true, message = "Đã đặt lại lượt xem về 0" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Lỗi: {ex.Message}");
+            }
+        }
+
         #region Room Images Management
 
         // Hiển thị trang quản lý ảnh của phòng
