@@ -5,6 +5,7 @@ using HotelBK.Services;
 using HotelBK.Areas.Admin.Filters;
 using HotelBK.Data;
 using HotelBK.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBK.Areas.Admin.Controllers
 {

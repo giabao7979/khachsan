@@ -9,92 +9,12 @@
       "PackagePath": "staticwebassets\\admin\\assets\\css\\style.css"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\apple-touch-icon.png",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\apple-touch-icon.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\card.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\card.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\favicon.png",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\favicon.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\logo.png",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\logo.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\messages-1.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\messages-1.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\messages-2.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\messages-2.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\messages-3.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\messages-3.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\news-1.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\news-1.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\news-2.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\news-2.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\news-3.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\news-3.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\news-4.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\news-4.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\news-5.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\news-5.jpg"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\icon.png",
+      "PackagePath": "staticwebassets\\admin\\assets\\img\\icon.png"
     },
     {
       "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\not-found.svg",
       "PackagePath": "staticwebassets\\admin\\assets\\img\\not-found.svg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\product-1.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\product-1.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\product-2.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\product-2.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\product-3.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\product-3.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\product-4.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\product-4.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\product-5.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\product-5.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\profile-img.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\profile-img.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\slides-1.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\slides-1.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\slides-2.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\slides-2.jpg"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\img\\slides-3.jpg",
-      "PackagePath": "staticwebassets\\admin\\assets\\img\\slides-3.jpg"
     },
     {
       "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\admin\\assets\\js\\main.js",
@@ -2009,196 +1929,168 @@
       "PackagePath": "staticwebassets\\css\\style.css"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\favicon.ico",
-      "PackagePath": "staticwebassets\\favicon.ico"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\00b1de58-b048-4b52-aad9-dfa8ad31f039.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\00b1de58-b048-4b52-aad9-dfa8ad31f039.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\07508d2e-5c46-4e25-93f7-c5e444324e28.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\07508d2e-5c46-4e25-93f7-c5e444324e28.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\06bd57e6-d946-4c26-afd2-61b2f04577dc.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\06bd57e6-d946-4c26-afd2-61b2f04577dc.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\079e999d-51e0-4304-aba7-53f648645dda.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\079e999d-51e0-4304-aba7-53f648645dda.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\0c4cf089-e4a9-4fb6-9ad5-005c1a27dd39.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\0c4cf089-e4a9-4fb6-9ad5-005c1a27dd39.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\09d4a4a2-ae4f-4a94-9b8d-a1cf7a77f269.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\09d4a4a2-ae4f-4a94-9b8d-a1cf7a77f269.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\0f2e84d0-fe5e-4143-9a54-510458c0ed5b.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\0f2e84d0-fe5e-4143-9a54-510458c0ed5b.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\13c18a40-98d3-4c8e-b53b-8056d6a24d32.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\13c18a40-98d3-4c8e-b53b-8056d6a24d32.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\232c1151-4c50-4c82-9498-ee5bde79cbe2.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\232c1151-4c50-4c82-9498-ee5bde79cbe2.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\15e8001b-4fca-4e9a-b99a-192297ea58fc.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\15e8001b-4fca-4e9a-b99a-192297ea58fc.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\23abb5d2-e465-4ca3-87a7-1d87e9e189c0.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\23abb5d2-e465-4ca3-87a7-1d87e9e189c0.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\2e46806f-d5af-4068-b1ed-bbcfcc61a7a8.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\2e46806f-d5af-4068-b1ed-bbcfcc61a7a8.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\28af5c17-94f1-4c18-b486-78f619124c5f.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\28af5c17-94f1-4c18-b486-78f619124c5f.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\2f3863f3-1d77-444b-aaa3-04694219efa1.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\2f3863f3-1d77-444b-aaa3-04694219efa1.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\2c72f57a-c2fd-46ab-a412-c5f1aeda636e.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\2c72f57a-c2fd-46ab-a412-c5f1aeda636e.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\325a47f5-49e7-4053-a9f6-b4c404beed81.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\325a47f5-49e7-4053-a9f6-b4c404beed81.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\38808032-508b-41e7-a92c-39c8b14bc6b7.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\38808032-508b-41e7-a92c-39c8b14bc6b7.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\3a2069a2-63b5-461f-b95d-c9c3e84ce81c.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\3a2069a2-63b5-461f-b95d-c9c3e84ce81c.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\3df61083-59b0-4701-bd68-473a1b1ea684.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\3df61083-59b0-4701-bd68-473a1b1ea684.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\477c370f-59c3-4a2a-acf4-6f8415603a43.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\477c370f-59c3-4a2a-acf4-6f8415603a43.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\53b618f6-2e47-43ba-92f6-6cc4c35ff64f.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\53b618f6-2e47-43ba-92f6-6cc4c35ff64f.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\49133ac0-9679-4185-9bc6-a27ad4763694.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\49133ac0-9679-4185-9bc6-a27ad4763694.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\55cd9aa1-cad3-40c0-87f8-fe24afa69a61.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\55cd9aa1-cad3-40c0-87f8-fe24afa69a61.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\4aa74757-5ca1-4125-9188-61dfdccea077.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\4aa74757-5ca1-4125-9188-61dfdccea077.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\63961580-ff32-4ecb-913a-16d74970c7a9.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\63961580-ff32-4ecb-913a-16d74970c7a9.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\4b3696b1-1ac1-4630-80db-5f887e8abc2c.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\4b3696b1-1ac1-4630-80db-5f887e8abc2c.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\65874269-a7aa-4a78-839a-eb69ee8a5e46.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\65874269-a7aa-4a78-839a-eb69ee8a5e46.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\4d55636c-3bf7-4b5f-8924-dd2e9916da17.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\4d55636c-3bf7-4b5f-8924-dd2e9916da17.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6a3911af-7509-498c-af10-1d8567b861a4.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\6a3911af-7509-498c-af10-1d8567b861a4.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\4fdd93fd-fd82-4ebb-884f-d6b8086e3f91.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\4fdd93fd-fd82-4ebb-884f-d6b8086e3f91.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6b68f43c-01c1-4263-bcb3-8af394d14e25.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\6b68f43c-01c1-4263-bcb3-8af394d14e25.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\4ff5190a-eee7-4f7d-99e4-e6ef607455c9.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\4ff5190a-eee7-4f7d-99e4-e6ef607455c9.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6f198cff-e3d3-49b5-8bcf-6409d9bab485.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\6f198cff-e3d3-49b5-8bcf-6409d9bab485.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\5d17f6ea-03a5-47a1-89a0-7b0e5a71d1c8.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\5d17f6ea-03a5-47a1-89a0-7b0e5a71d1c8.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\7a474081-6b46-4e88-97ff-a5377ac441ca.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\7a474081-6b46-4e88-97ff-a5377ac441ca.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\5f94f3ae-5e7f-4775-aa15-cec1201f735b.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\5f94f3ae-5e7f-4775-aa15-cec1201f735b.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\7cdc83ef-059e-45b3-b2b5-7fb9ad723aab.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\7cdc83ef-059e-45b3-b2b5-7fb9ad723aab.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6263a74f-69aa-4dda-833c-3c72aca71de1.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\6263a74f-69aa-4dda-833c-3c72aca71de1.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\7f0da973-39a0-49dc-a5c3-84bf6af4396f.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\7f0da973-39a0-49dc-a5c3-84bf6af4396f.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\65b3881f-897f-4cfa-8b44-bb39f4ad72b0.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\65b3881f-897f-4cfa-8b44-bb39f4ad72b0.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\8149c939-036a-475e-aeaa-0fb8e65b2935.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\8149c939-036a-475e-aeaa-0fb8e65b2935.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\67138839-a451-45db-a642-5e4b0ba57f20.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\67138839-a451-45db-a642-5e4b0ba57f20.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\815e51f0-bc5d-4690-8d2c-afe81249669e.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\815e51f0-bc5d-4690-8d2c-afe81249669e.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6c52c177-b9c5-4208-a8a8-6c8355ba17df.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\6c52c177-b9c5-4208-a8a8-6c8355ba17df.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\81ae3567-ccc6-40c4-a29b-770fd3d525ba.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\81ae3567-ccc6-40c4-a29b-770fd3d525ba.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6d807e0b-ec2c-437b-b41a-713ab85e04d7.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\6d807e0b-ec2c-437b-b41a-713ab85e04d7.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\8409c9eb-5e6e-47b3-a80e-b6954fc429c0.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\8409c9eb-5e6e-47b3-a80e-b6954fc429c0.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\6eb8d7ca-c2b7-41aa-a0e2-1429c7e36340.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\6eb8d7ca-c2b7-41aa-a0e2-1429c7e36340.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\85131281-94f0-4d4a-b2e3-c2da091030fc.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\85131281-94f0-4d4a-b2e3-c2da091030fc.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\728b41c1-1077-448b-925e-fa4b4ab8767a.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\728b41c1-1077-448b-925e-fa4b4ab8767a.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\8e30d2c9-5bcc-4103-8ce8-869ad6be9f25.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\8e30d2c9-5bcc-4103-8ce8-869ad6be9f25.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\7381f624-bbf5-4c1e-97ff-8b3152365cd0.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\7381f624-bbf5-4c1e-97ff-8b3152365cd0.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\9b798933-57ee-4c0f-b578-b9bf0293cd16.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\9b798933-57ee-4c0f-b578-b9bf0293cd16.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\76912fa5-ca49-45e6-9c6a-d725f5c61897.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\76912fa5-ca49-45e6-9c6a-d725f5c61897.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\9f07288a-a941-4ee5-8828-8154d6115dfe.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\9f07288a-a941-4ee5-8828-8154d6115dfe.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\8790fca1-92b7-4806-a7cb-8bee7939b25b.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\8790fca1-92b7-4806-a7cb-8bee7939b25b.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\9ff4f4e2-6eb3-451a-a32e-f404dafc0638.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\9ff4f4e2-6eb3-451a-a32e-f404dafc0638.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\8ce860da-951b-4e8b-bf89-1e2e10af4b3e.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\8ce860da-951b-4e8b-bf89-1e2e10af4b3e.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\a0ead046-ee13-48da-bdc1-b42876bc22ad.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\a0ead046-ee13-48da-bdc1-b42876bc22ad.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\8e1142ef-7e52-4018-b5f4-50f802567008.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\8e1142ef-7e52-4018-b5f4-50f802567008.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\a4d087d3-edd5-4b71-a303-ced829268701.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\a4d087d3-edd5-4b71-a303-ced829268701.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\8ff126da-297d-46a5-ba4f-a139e97f883c.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\8ff126da-297d-46a5-ba4f-a139e97f883c.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\b0841f9c-37fa-43f4-b475-2fdbb71a7e1b.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\b0841f9c-37fa-43f4-b475-2fdbb71a7e1b.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\95221a19-6cad-46c9-8308-48cd1545245c.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\95221a19-6cad-46c9-8308-48cd1545245c.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\c14dc91a-fc67-4a07-97b0-2223e217de6f.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\c14dc91a-fc67-4a07-97b0-2223e217de6f.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\c5ea316d-a3f7-4b69-8f4e-a3fa4e38a0a0.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\c5ea316d-a3f7-4b69-8f4e-a3fa4e38a0a0.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\c4584940-cc00-424d-b469-4d1902c6b39d.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\c4584940-cc00-424d-b469-4d1902c6b39d.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\cc505f64-1b07-4d63-90a9-e934c33a5055.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\cc505f64-1b07-4d63-90a9-e934c33a5055.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\c5d2b97e-112c-4f84-8de9-f5062fd899f1.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\c5d2b97e-112c-4f84-8de9-f5062fd899f1.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\d70893aa-ae01-4ec6-8bf5-6063626b3fb6.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\d70893aa-ae01-4ec6-8bf5-6063626b3fb6.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\c6d83526-98f5-4755-9ab8-556445a20d6a.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\c6d83526-98f5-4755-9ab8-556445a20d6a.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\d7886bd5-e236-4e55-b7e0-c7778b81e461.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\d7886bd5-e236-4e55-b7e0-c7778b81e461.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\ca60eb3f-36d3-4cca-8123-44617b0d8610.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\ca60eb3f-36d3-4cca-8123-44617b0d8610.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\da711e95-660a-4cae-bffd-4691bb9289eb.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\da711e95-660a-4cae-bffd-4691bb9289eb.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\daa954cc-6264-4d48-86b5-436e6a0e4cdf.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\daa954cc-6264-4d48-86b5-436e6a0e4cdf.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\de5011e9-c7d7-4c1a-834f-2f8335963690.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\de5011e9-c7d7-4c1a-834f-2f8335963690.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\db93d6fb-5241-40ff-a1c3-3f939c1e5dba.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\db93d6fb-5241-40ff-a1c3-3f939c1e5dba.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\e98c77b0-393d-431f-88ac-33ab61ff0bbc.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\e98c77b0-393d-431f-88ac-33ab61ff0bbc.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\edf19386-0677-4d0b-8e8b-ef3d32c7fda3.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\edf19386-0677-4d0b-8e8b-ef3d32c7fda3.jpg"
     },
     {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\ecc23dd7-148e-406b-99d6-08f11684c2c7.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\ecc23dd7-148e-406b-99d6-08f11684c2c7.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f128bc32-5a51-43fd-bfb7-589b287738f7.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\f128bc32-5a51-43fd-bfb7-589b287738f7.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f13f4bdf-e3c7-481c-9911-3e698ad03d7b.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\f13f4bdf-e3c7-481c-9911-3e698ad03d7b.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f357d6cb-2779-4307-bdfb-3e5fb9b1a253.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\f357d6cb-2779-4307-bdfb-3e5fb9b1a253.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f3a09650-1cd6-4f4b-b1bf-64156f8f3738.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\f3a09650-1cd6-4f4b-b1bf-64156f8f3738.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f95fc800-eb38-4232-8a79-ae424b1fe2c0.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\f95fc800-eb38-4232-8a79-ae424b1fe2c0.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f9b5223b-b3ac-4e1c-b656-9167728b902f.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\f9b5223b-b3ac-4e1c-b656-9167728b902f.png"
-    },
-    {
-      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\fd060d63-a2d7-43cc-8560-f55d62c90e6d.png",
-      "PackagePath": "staticwebassets\\images\\rooms\\fd060d63-a2d7-43cc-8560-f55d62c90e6d.png"
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\images\\rooms\\f387dc64-ae30-4c7a-9f39-fa31edd0838f.jpg",
+      "PackagePath": "staticwebassets\\images\\rooms\\f387dc64-ae30-4c7a-9f39-fa31edd0838f.jpg"
     },
     {
       "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\img\\about-1.jpg",
@@ -2223,6 +2115,10 @@
     {
       "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\img\\carousel-2.jpg",
       "PackagePath": "staticwebassets\\img\\carousel-2.jpg"
+    },
+    {
+      "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\img\\icon.png",
+      "PackagePath": "staticwebassets\\img\\icon.png"
     },
     {
       "Id": "D:\\Đồ Án Quản lý khách sạn\\HotelBK\\HotelBK\\wwwroot\\img\\room-1.jpg",

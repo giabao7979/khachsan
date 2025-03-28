@@ -1,1 +1,293 @@
-﻿
+﻿@model HotelBK.Models.Payment
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Chi tiết thanh toán #@Model.PaymentID</h5>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-5 fw-bold">Mã thanh toán:</div>
+            <div class="col-md-7">@Model.PaymentID</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-5 fw-bold">Trạng thái:</div>
+            <div class="col-md-7">
+                @switch (Model.Status)
+                {
+                    case "Completed":
+                        <span class="badge bg-success">Hoàn thành</span>
+                        break;
+                    case "Pending":
+                        <span class="badge bg-warning">Đang xử lý</span>
+                        break;
+                    case "Cancelled":
+                        <span class="badge bg-danger">Đã hủy</span>
+                        break;
+                    default:
+                        <span class="badge bg-secondary">@Model.Status</span>
+                        break;
+                }
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">Thông tin đặt phòng</h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Mã đặt phòng:</div>
+                    <div class="col-md-7">@Model.BookingID</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Khách hàng:</div>
+                    <div class="col-md-7">@Model.Booking.FullName</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Phòng:</div>
+                    <div class="col-md-7">@Model.Booking.Room.RoomName</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Check-in:</div>
+                    <div class="col-md-7">@Model.Booking.CheckInDate.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Check-out:</div>
+                    <div class="col-md-7">@Model.Booking.CheckOutDate.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+                <!-- Bỏ hiển thị tổng tiền đặt phòng vì không chắc chắn về tên thuộc tính -->
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0">Thông tin thanh toán</h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Số tiền thanh toán:</div>
+                    <div class="col-md-7">@Model.Amount.ToString("N0") VNĐ</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Phương thức thanh toán:</div>
+                    <div class="col-md-7">
+                        @switch (Model.PaymentMethod)
+                        {
+                            case "Cash":
+                                <span>Tiền mặt</span>
+                                break;
+                            case "BankTransfer":
+                                <span>Chuyển khoản</span>
+                                break;
+                            case "CreditCard":
+                                <span>Thẻ tín dụng</span>
+                                break;
+                            case "Momo":
+                                <span>Ví MoMo</span>
+                                break;
+                            case "ZaloPay":
+                                <span>ZaloPay</span>
+                                break;
+                            default:
+                                <span>@Model.PaymentMethod</span>
+                                break;
+                        }
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Ngày thanh toán:</div>
+                    <div class="col-md-7">@Model.PaymentDate.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-5 fw-bold">Ghi chú:</div>
+                    <div class="col-md-7">@(string.IsNullOrEmpty(Model.Notes) ? "Không có" : Model.Notes)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            @if (DateTime.Now.Subtract(Model.PaymentDate).TotalDays <= 1)
+            {
+                <button type="button" class="btn btn-danger deletePayment" data-id="@Model.PaymentID" data-bs-dismiss="modal">
+                    <i class="bi bi-trash"></i> Xóa thanh toán
+                </button>
+            }
+            <button type="button" class="btn btn-primary" onclick="printPaymentDetail()">
+                <i class="bi bi-printer"></i> In hóa đơn
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <i class="bi bi-x-circle"></i> Đóng
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function printPaymentDetail() {
+        // Tạo một cửa sổ in mới
+        var printWindow = window.open('', '_blank');
+
+        // Nội dung HTML cho trang in
+        var printContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Hóa đơn thanh toán #@Model.PaymentID</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                        margin: 0;
+                        padding: 20px;
+                    }
+                    .header {
+                        text-align: center;
+                        margin-bottom: 20px;
+                        border-bottom: 1px solid #ddd;
+                        padding-bottom: 10px;
+                    }
+                    .hotel-name {
+                        font-size: 24px;
+                        font-weight: bold;
+                    }
+                    .receipt-title {
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin: 10px 0;
+                    }
+                    .info-section {
+                        margin-bottom: 20px;
+                    }
+                    .info-row {
+                        display: flex;
+                        margin-bottom: 5px;
+                    }
+                    .info-label {
+                        width: 200px;
+                        font-weight: bold;
+                    }
+                    .info-value {
+                        flex: 1;
+                    }
+                    .total {
+                        font-weight: bold;
+                        margin-top: 10px;
+                        border-top: 1px solid #ddd;
+                        padding-top: 10px;
+                    }
+                    .footer {
+                        margin-top: 30px;
+                        text-align: center;
+                        font-style: italic;
+                    }
+                    .signature {
+                        margin-top: 50px;
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .signature-box {
+                        text-align: center;
+                        width: 45%;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <div class="hotel-name">KHÁCH SẠN LOTUS</div>
+                    <div>Địa chỉ: 32 Đỗ Đức Dục, Mễ Trì, Nam Từ Liêm, Hà Nội/div>
+                    <div>Điện thoại: 033354437 - Email: lotushotel@gmail.com</div>
+                    <div class="receipt-title">HÓA ĐƠN THANH TOÁN</div>
+                    <div>Mã hóa đơn: #@Model.PaymentID</div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-row">
+                        <div class="info-label">Khách hàng:</div>
+                        <div class="info-value">@Model.Booking.FullName</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Phòng:</div>
+                        <div class="info-value">@Model.Booking.Room.RoomName</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Thời gian check-in:</div>
+                        <div class="info-value">@Model.Booking.CheckInDate.ToString("dd/MM/yyyy HH:mm")</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Thời gian check-out:</div>
+                        <div class="info-value">@Model.Booking.CheckOutDate.ToString("dd/MM/yyyy HH:mm")</div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-row">
+                        <div class="info-label">Phương thức thanh toán:</div>
+                        <div class="info-value">
+    @switch (Model.PaymentMethod)
+    {
+        case "Cash":
+            <text>Tiền mặt</text>
+            break;
+        case "BankTransfer":
+            <text>Chuyển khoản</text>
+            break;
+        case "CreditCard":
+            <text>Thẻ tín dụng</text>
+            break;
+        case "Momo":
+            <text>Ví MoMo</text>
+            break;
+        case "ZaloPay":
+            <text>ZaloPay</text>
+            break;
+        default:
+            <text>@Model.PaymentMethod</text>
+            break;
+    }
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Ngày thanh toán:</div>
+                        <div class="info-value">@Model.PaymentDate.ToString("dd/MM/yyyy HH:mm")</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Ghi chú:</div>
+                        <div class="info-value">@(string.IsNullOrEmpty(Model.Notes) ? "Không có" : Model.Notes)</div>
+                    </div>
+
+                    <div class="info-row total">
+                        <div class="info-label">Tổng tiền thanh toán:</div>
+                        <div class="info-value">@Model.Amount.ToString("N0") VNĐ</div>
+                    </div>
+                </div>
+
+                <div class="signature">
+                    <div class="signature-box">
+                        <div>Người thanh toán</div>
+                        <div>(Ký và ghi rõ họ tên)</div>
+                    </div>
+                    <div class="signature-box">
+                        <div>Người thu tiền</div>
+                        <div>(Ký và ghi rõ họ tên)</div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <p>Cảm ơn Quý khách đã sử dụng dịch vụ của Khách sạn HotelBK!</p>
+                    <p>Hotline: 1800 1234 - Website: www.hotelbk.com</p>
+                </div>
+            </body>
+            </html>
+        `;
+
+        // Ghi nội dung vào cửa sổ in
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+
+        // Chờ tải xong rồi mới in
+        printWindow.onload = function() {
+            printWindow.print();
+        };
+    }
+</script>

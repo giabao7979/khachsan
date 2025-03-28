@@ -29,37 +29,12 @@
                                            value="@checkOut.ToString("yyyy-MM-dd")" />
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3">                            
                                 <select class="form-select" name="roomType">
-                                    @if (roomTypeId == 0)
-                                    {
-                                        <option value="0" selected>Loại phòng</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="0">Loại phòng</option>
-                                    }
-                                    @{
-                                        try
-                                        {
-                                            var roomTypes = await new HotelBK.Data.HotelContext(new Microsoft.EntityFrameworkCore.DbContextOptions<HotelBK.Data.HotelContext>()).RoomTypes.ToListAsync();
-                                            foreach (var roomType in roomTypes)
-                                            {
-                                                if (roomTypeId == roomType.RoomTypeID)
-                                                {
-                                                    <option value="@roomType.RoomTypeID" selected>@roomType.TypeName</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@roomType.RoomTypeID">@roomType.TypeName</option>
-                                                }
-                                            }
-                                        }
-                                        catch
-                                        {
-                                            // Xử lý lỗi nếu có
-                                        }
-                                    }
+                                    <option value="0" selected="@(ViewBag.RoomType == 0)">Loại phòng</option>
+                                    <option value="1" selected="@(ViewBag.RoomType == 1)">Phòng VIP</option>
+                                    <option value="2" selected="@(ViewBag.RoomType == 2)">Phòng Tiêu Chuẩn</option>
+                                    <option value="3" selected="@(ViewBag.RoomType == 3)">Phòng Sang Trọng</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -197,36 +172,11 @@
                         </div>
                         <div class="col-md-6">
                             <label for="roomType" class="form-label">Loại phòng</label>
-                            <select class="form-select" id="roomType" name="roomType">
-                                @if (roomTypeId == 0)
-                                {
-                                    <option value="0" selected>Tất cả</option>
-                                }
-                                else
-                                {
-                                    <option value="0">Tất cả</option>
-                                }
-                                @{
-                                    try
-                                    {
-                                        var roomTypes = await new HotelBK.Data.HotelContext(new Microsoft.EntityFrameworkCore.DbContextOptions<HotelBK.Data.HotelContext>()).RoomTypes.ToListAsync();
-                                        foreach (var roomType in roomTypes)
-                                        {
-                                            if (roomTypeId == roomType.RoomTypeID)
-                                            {
-                                                <option value="@roomType.RoomTypeID" selected>@roomType.TypeName</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@roomType.RoomTypeID">@roomType.TypeName</option>
-                                            }
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        // Xử lý lỗi nếu có
-                                    }
-                                }
+                            <select class="form-select" name="roomType">
+                                <option value="0" selected="@(ViewBag.RoomType == 0)">Loại phòng</option>
+                                <option value="1" selected="@(ViewBag.RoomType == 1)">Phòng VIP</option>
+                                <option value="2" selected="@(ViewBag.RoomType == 2)">Phòng Tiêu Chuẩn</option>
+                                <option value="3" selected="@(ViewBag.RoomType == 3)">Phòng Sang Trọng</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -335,14 +285,6 @@
                                     <option value="price_desc">Giá (Cao đến thấp)</option>
                                 }
                             </select>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="withWifi" name="withWifi">
-                                <label class="form-check-label" for="withWifi">
-                                    Phòng có Wifi
-                                </label>
-                            </div>
                         </div>
                     </div>
                 </form>

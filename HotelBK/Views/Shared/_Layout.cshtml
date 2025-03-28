@@ -9,7 +9,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="img/icon.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -95,14 +95,12 @@
                                         Xin chào, @User.Identity.Name
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                        @if (User.IsInRole("Admin"))
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Reception"))
                                         {
-                                            <li><a class="dropdown-item" href="/Admin/AdminHome">Quản trị</a></li>
+                                            <a href="/Admin/AdminHome" class="nav-item nav-link">Quản trị</a>
                                         }
-                                        <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
-                                        <li><a class="dropdown-item" href="/Booking/MyBookings">Lịch sử đặt phòng</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="/Login/Logout">Đăng xuất</a></li>
+                                        <a href="/Booking/MyBookings" class="nav-item nav-link">Lịch sử đặt phòng</a>
+                                        <a href="/Login/Logout" class="nav-item nav-link">Đăng xuất</a>
                                     </ul>
                                 </div>
 
@@ -112,11 +110,10 @@
                                         <div class="nav-item text-light mb-2">
                                             Xin chào, @User.Identity.Name
                                         </div>
-                                        @if (User.IsInRole("Admin"))
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Reception"))
                                         {
                                             <a href="/Admin/AdminHome" class="nav-item nav-link">Quản trị</a>
                                         }
-                                        <a href="#" class="nav-item nav-link">Thông tin cá nhân</a>
                                         <a href="#" class="nav-item nav-link">Lịch sử đặt phòng</a>
                                         <a href="/Login/Logout" class="nav-item nav-link">Đăng xuất</a>
                                     </div>
@@ -179,7 +176,6 @@
                                 <div class="col-md-6">
                                     <h6 class="section-title text-start text-primary text-uppercase mb-4">Công ty</h6>
                                     <a class="btn btn-link" href="">Trang chủ</a>
-                                    <a class="btn btn-link" href="">Thông tin</a>
                                     <a class="btn btn-link" href="">Dịch vụ</a>
                                     <a class="btn btn-link" href="">Phòng</a>
                                     <a class="btn btn-link" href="">Support</a>

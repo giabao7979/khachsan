@@ -1,8 +1,5 @@
 ﻿@model HotelBK.Models.Room
-@{
-    var imageCount = Model.RoomImages?.Count() ?? 0;
-    <div>Số lượng ảnh: @imageCount</div>
-}
+
 <form action="/Admin/Rooms/CreateOrUpdate" method="post" enctype="multipart/form-data">
     <input type="hidden" name="RoomID" value="@Model.RoomID" />
 

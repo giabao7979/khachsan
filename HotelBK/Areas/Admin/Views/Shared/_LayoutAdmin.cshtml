@@ -6,7 +6,7 @@
     <title>Admin Hotel</title>
 
     <!-- Favicons -->
-    <link href="~/admin/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="~/img/icon.png" rel="icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -53,136 +53,92 @@
                         <i class="bi bi-search"></i>
                     </a>
                 </li><!-- End Search Icon-->
-                <!-- Phần code thông báo cho biểu tượng chuông -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-bell"></i>
-                        <span class="badge bg-primary badge-number notification-count-room">0</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                        <li class="dropdown-header">
-                            Thông báo phòng mới
-                            <a href="#" id="markAllRoomRead"><span class="badge rounded-pill bg-primary p-2 ms-2">Đánh dấu đã đọc</span></a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <div id="roomNotificationItems">
-                            <!-- Các thông báo về phòng sẽ được thêm vào đây bằng JavaScript -->
-                        </div>
-                        <li class="dropdown-footer">
-                            <a href="#" id="viewAllRoomNotifications">Xem tất cả thông báo</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Phần code thông báo cho biểu tượng tin nhắn -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-chat-left-text"></i>
-                        <span class="badge bg-success badge-number notification-count-message">0</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-                        <li class="dropdown-header">
-                            Tin nhắn liên hệ mới
-                            <a href="#" id="markAllMessageRead"><span class="badge rounded-pill bg-primary p-2 ms-2">Đánh dấu đã đọc</span></a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <div id="messageNotificationItems">
-                            <!-- Các thông báo về tin nhắn liên hệ sẽ được thêm vào đây bằng JavaScript -->
-                        </div>
-                        <li class="dropdown-footer">
-                            <a href="#" id="viewAllMessageNotifications">Xem tất cả tin nhắn</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown pe-3">
-
-                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="~/admin/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
-                    </a><!-- End Profile Iamge Icon -->
-
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                        <li class="dropdown-header">
-                            <h6>Admin</h6>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </li>
-
-                    </ul><!-- End Profile Dropdown Items -->
-                </li><!-- End Profile Nav -->
 
             </ul>
         </nav><!-- End Icons Navigation -->
 
     </header><!-- End Header -->
     <!-- ======= Sidebar ======= -->
+    @using Microsoft.AspNetCore.Identity
+    @using System.Security.Claims
+
+    @{
+        bool isAdmin = User.IsInRole("Admin");
+        bool isStaff = User.IsInRole("Staff");
+        bool isReception = User.IsInRole("Reception");
+    }
+
     <aside id="sidebar" class="sidebar">
-
         <ul class="sidebar-nav" id="sidebar-nav">
-
             <li class="nav-item">
-                <a class="nav-link " href="/Admin/AdminHome">
+                <a class="nav-link" href="/Admin/AdminHome">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
-            </li><!-- End Dashboard Nav -->
+            </li>
 
             <li class="nav-heading">Quản lý</li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/User">
-                    <i class="ri-user-3-fill"></i><span>Người dùng</span>
-                </a>
-            </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/Rooms">
-                    <i class="ri-store-2-fill"></i><span>Phòng</span>
-                </a>
-            </li>
+            @if (isAdmin)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/User">
+                        <i class="ri-user-3-fill"></i><span>Người dùng</span>
+                    </a>
+                </li>
+            }
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/Bookings">
-                    <i class="ri-calendar-check-line"></i><span>Đặt phòng</span>
-                </a>
-            </li>
+            @if (isAdmin || isStaff || isReception)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/Rooms">
+                        <i class="ri-store-2-fill"></i><span>Phòng</span>
+                    </a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/Payments">
-                    <i class="ri-paypal-fill"></i><span>Thanh toán</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/Reports/Revenue">
-                    <i class="ri-bar-chart-box-line"></i><span>Báo cáo doanh thu</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/Roles">
-                    <i class="ri-contacts-line"></i><span>Phân quyền</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/ContactMessages">
-                    <i class="ri-mail-line"></i><span>Tin nhắn liên hệ</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="/Admin/Reviews">
-                    <i class="ri-chat-quote-line"></i><span>Bình luận</span>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/Bookings">
+                        <i class="ri-calendar-check-line"></i><span>Đặt phòng</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/Payments">
+                        <i class="ri-paypal-fill"></i><span>Thanh toán</span>
+                    </a>
+                </li>
+            }
+
+            @if (isAdmin || isStaff)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/Reports/Revenue">
+                        <i class="ri-bar-chart-box-line"></i><span>Báo cáo doanh thu</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/ContactMessages">
+                        <i class="ri-mail-line"></i><span>Tin nhắn liên hệ</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/Reviews">
+                        <i class="ri-chat-quote-line"></i><span>Bình luận</span>
+                    </a>
+                </li>
+            }
+
+            @if (isAdmin)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/Admin/Roles">
+                        <i class="ri-contacts-line"></i><span>Phân quyền</span>
+                    </a>
+                </li>
+            }
+
             <li class="nav-heading">Trở lại</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="https://localhost:7126">
@@ -190,10 +146,7 @@
                     <span>Trở về trang chủ</span>
                 </a>
             </li>
-
-
         </ul>
-
     </aside>
     <!-- End Sidebar-->
 

@@ -23,8 +23,7 @@ namespace HotelBK.Models
 
         [Required]
         public int Bathrooms { get; set; }
-
-        [StringLength(255)]
+    
         public string? Description { get; set; }
 
         [Required]

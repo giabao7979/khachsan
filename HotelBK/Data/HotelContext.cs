@@ -29,14 +29,15 @@ namespace HotelBK.Data
             modelBuilder.Entity<Role>().HasData(
                 new Role { RoleID = 1, RoleName = "Admin" },
                 new Role { RoleID = 2, RoleName = "Customer" },
-                new Role { RoleID = 3, RoleName = "Staff" }
+                new Role { RoleID = 3, RoleName = "Staff" },
+                new Role { RoleID = 5, RoleName = "Reception" }
             );
 
             // Seed RoomTypes
             modelBuilder.Entity<RoomType>().HasData(
-                new RoomType { RoomTypeID = 1, TypeName = "VIP", Description = "Phòng VIP cao cấp" },
-                new RoomType { RoomTypeID = 2, TypeName = "Standard", Description = "Phòng tiêu chuẩn" },
-                new RoomType { RoomTypeID = 3, TypeName = "Deluxe", Description = "Phòng sang trọng" }
+                new RoomType { RoomTypeID = 1, TypeName = "Phòng VIP", Description = "Phòng VIP cao cấp" },
+                new RoomType { RoomTypeID = 2, TypeName = "Phòng Tiêu Chuẩn", Description = "Phòng tiêu chuẩn" },
+                new RoomType { RoomTypeID = 3, TypeName = "Phòng Sang Trọng", Description = "Phòng sang trọng" }
             );
             var passwordHasher = new PasswordHasher<User>();
             var adminUser = new User

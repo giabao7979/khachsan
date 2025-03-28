@@ -59,7 +59,7 @@
                             <div class="border rounded p-1">
                                 <div class="border rounded text-center p-4">
                                     <i class="fa fa-hotel fa-2x text-primary mb-2"></i>
-                                    <h2 class="mb-1" data-toggle="counter-up">50</h2>
+                                    <h2 class="mb-1" data-toggle="counter-up">@ViewBag.RoomsCount</h2>
                                     <p class="mb-0">Phòng</p>
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                             <div class="border rounded p-1">
                                 <div class="border rounded text-center p-4">
                                     <i class="fa fa-users-cog fa-2x text-primary mb-2"></i>
-                                    <h2 class="mb-1" data-toggle="counter-up">40</h2>
+                                    <h2 class="mb-1" data-toggle="counter-up">@ViewBag.StaffCount</h2>
                                     <p class="mb-0">Nhân viên</p>
                                 </div>
                             </div>
@@ -77,13 +77,13 @@
                             <div class="border rounded p-1">
                                 <div class="border rounded text-center p-4">
                                     <i class="fa fa-users fa-2x text-primary mb-2"></i>
-                                    <h2 class="mb-1" data-toggle="counter-up">500</h2>
+                                    <h2 class="mb-1" data-toggle="counter-up">@ViewBag.CustomersCount</h2>
                                     <p class="mb-0">Khách hàng</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <a class="btn btn-primary py-3 px-5 mt-2" href="about.html">Khám phá thêm</a>
+                    <a class="btn btn-primary py-3 px-5 mt-2" href="/about">Khám phá thêm</a>
                 </div>
                 <div class="col-lg-6">
                     <div class="row g-3">
@@ -113,96 +113,60 @@
                 <h1 class="mb-5">Khám phá <span class="text-primary text-uppercase">Phòng</span></h1>
             </div>
             <div class="row g-4">
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="room-item shadow rounded overflow-hidden">
-                        <div class="position-relative">
-                            <img class="img-fluid" src="img/room-1.jpg" alt="">
-                            <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">$100/Night</small>
-                        </div>
-                        <div class="p-4 mt-2">
-                            <div class="d-flex justify-content-between mb-3">
-                                <h5 class="mb-0">Junior Suite</h5>
-                                <div class="ps-2">
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
+                @if (ViewBag.FeaturedRooms != null && ViewBag.FeaturedRooms.Count > 0)
+                {
+                    foreach (var room in ViewBag.FeaturedRooms)
+                    {
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="room-item shadow rounded overflow-hidden">
+                                <div class="position-relative">
+                                    @if (!string.IsNullOrEmpty(room.Image))
+                                    {
+                                        <img class="img-fluid" src="@room.Image" alt="@room.RoomName" style="width: 100%; height: 250px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <img class="img-fluid" src="img/room-1.jpg" alt="@room.RoomName" style="width: 100%; height: 250px; object-fit: cover;">
+                                    }
+                                    <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">@room.Price.ToString("N0") VNĐ/Night</small>
+                                </div>
+                                <div class="p-4 mt-2">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h5 class="mb-0">@room.RoomName</h5>
+                                        <div class="ps-2">
+                                            @for (int i = 0; i < (room.StarRating ?? 0); i++)
+                                            {
+                                                <small class="fa fa-star text-primary"></small>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>@room.Beds Giường</small>
+                                        <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>@room.Bathrooms Phòng tắm</small>
+                                        <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
+                                    </div>
+                                    <p class="text-body mb-3">
+                                        @(string.IsNullOrEmpty(room.Description)
+                                            ? "Phòng tiêu chuẩn với đầy đủ tiện nghi."
+                                            : (room.Description.Length > 100
+                                            ? room.Description.Substring(0, 97) + "..."
+                                            : room.Description))
+                                    </p>
+                                    <div class="d-flex justify-content-between">
+                                        <a class="btn btn-sm btn-primary rounded py-2 px-4" href="/RoomDetail/Index/@room.RoomID">Xem thêm</a>
+                                        <a class="btn btn-sm btn-dark rounded py-2 px-4" href="/Booking/Index?roomId=@room.RoomID">Đặt ngay</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="d-flex mb-3">
-                                <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                                <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                            </div>
-                            <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p>
-                            <div class="d-flex justify-content-between">
-                                <a class="btn btn-sm btn-primary rounded py-2 px-4" href="">Xem thêm</a>
-                                <a class="btn btn-sm btn-dark rounded py-2 px-4" href="">Đặt ngay</a>
-                            </div>
                         </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-center">
+                        <p>Không có phòng nào được tìm thấy hoặc đang tải dữ liệu.</p>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="room-item shadow rounded overflow-hidden">
-                        <div class="position-relative">
-                            <img class="img-fluid" src="img/room-2.jpg" alt="">
-                            <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">$100/Night</small>
-                        </div>
-                        <div class="p-4 mt-2">
-                            <div class="d-flex justify-content-between mb-3">
-                                <h5 class="mb-0">Executive Suite</h5>
-                                <div class="ps-2">
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                </div>
-                            </div>
-                            <div class="d-flex mb-3">
-                                <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                                <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                            </div>
-                            <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p>
-                            <div class="d-flex justify-content-between">
-                                <a class="btn btn-sm btn-primary rounded py-2 px-4" href="">View Detail</a>
-                                <a class="btn btn-sm btn-dark rounded py-2 px-4" href="">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
-                    <div class="room-item shadow rounded overflow-hidden">
-                        <div class="position-relative">
-                            <img class="img-fluid" src="img/room-3.jpg" alt="">
-                            <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">$100/Night</small>
-                        </div>
-                        <div class="p-4 mt-2">
-                            <div class="d-flex justify-content-between mb-3">
-                                <h5 class="mb-0">Super Deluxe</h5>
-                                <div class="ps-2">
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                </div>
-                            </div>
-                            <div class="d-flex mb-3">
-                                <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3 Bed</small>
-                                <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
-                            </div>
-                            <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p>
-                            <div class="d-flex justify-content-between">
-                                <a class="btn btn-sm btn-primary rounded py-2 px-4" href="">View Detail</a>
-                                <a class="btn btn-sm btn-dark rounded py-2 px-4" href="">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
@@ -285,59 +249,57 @@
         </div>
     </div>
     <!-- Service End -->
-    <!-- Testimonial Start -->
-    <div class="container-xxl testimonial my-5 py-5 bg-dark wow zoomIn" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="owl-carousel testimonial-carousel py-5">
+<!-- Testimonial Start -->
+<div class="container-xxl testimonial my-5 py-5 bg-dark wow zoomIn" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="owl-carousel testimonial-carousel py-5">
+            @if (ViewBag.RecentReviews != null && ViewBag.RecentReviews.Count > 0)
+            {
+                foreach (var review in ViewBag.RecentReviews)
+                {
+                    <div class="testimonial-item position-relative bg-white rounded overflow-hidden">
+                        <p>@review.Comment</p>
+                        <div class="d-flex align-items-center">
+                            <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-1.jpg" style="width: 45px; height: 45px;">
+                            <div class="ps-3">
+                                <h6 class="fw-bold mb-1">@review.Name</h6>
+                                <small>@review.ReviewDate.ToString("dd/MM/yyyy")</small>
+                            </div>
+                        </div>
+                        <i class="fa fa-quote-right fa-3x text-primary position-absolute end-0 bottom-0 me-4 mb-n1"></i>
+                    </div>
+                }
+            }
+            else
+            {
                 <div class="testimonial-item position-relative bg-white rounded overflow-hidden">
-                    <p>Phục cụ chu đáo, phòng và dịch vụ vô cùng tốt.</p>
+                    <p>Chưa có đánh giá nào. Hãy trở thành người đầu tiên đánh giá dịch vụ của chúng tôi!</p>
                     <div class="d-flex align-items-center">
                         <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-1.jpg" style="width: 45px; height: 45px;">
                         <div class="ps-3">
-                            <h6 class="fw-bold mb-1">Gia Bảo</h6>
-                            <small>Khách hàng</small>
+                            <h6 class="fw-bold mb-1">Khách hàng</h6>
+                            <small>Đánh giá</small>
                         </div>
                     </div>
                     <i class="fa fa-quote-right fa-3x text-primary position-absolute end-0 bottom-0 me-4 mb-n1"></i>
                 </div>
-                <div class="testimonial-item position-relative bg-white rounded overflow-hidden">
-                    <p>Phục cụ chu đáo, phòng và dịch vụ vô cùng tốt.</p>
-                    <div class="d-flex align-items-center">
-                        <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-1.jpg" style="width: 45px; height: 45px;">
-                        <div class="ps-3">
-                            <h6 class="fw-bold mb-1">Gia Bảo</h6>
-                            <small>Khách hàng</small>
-                        </div>
-                    </div>
-                    <i class="fa fa-quote-right fa-3x text-primary position-absolute end-0 bottom-0 me-4 mb-n1"></i>
-                </div>
-                <div class="testimonial-item position-relative bg-white rounded overflow-hidden">
-                    <p>Phục cụ chu đáo, phòng và dịch vụ vô cùng tốt.</p>
-                    <div class="d-flex align-items-center">
-                        <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-1.jpg" style="width: 45px; height: 45px;">
-                        <div class="ps-3">
-                            <h6 class="fw-bold mb-1">Gia Bảo</h6>
-                            <small>Khách hàng</small>
-                        </div>
-                    </div>
-                    <i class="fa fa-quote-right fa-3x text-primary position-absolute end-0 bottom-0 me-4 mb-n1"></i>
-                </div>
-            </div>
+            }
         </div>
     </div>
-    <!-- Testimonial End -->
+</div>
+<!-- Testimonial End -->
     <!-- Team Start -->
     <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title text-center text-primary text-uppercase">Đội ngũ</h6>
-                <h1 class="mb-5">Khám phá<span class="text-primary text-uppercase">nhân viên</span></h1>
+                <h1 class="mb-5">Khám phá <span class="text-primary text-uppercase">Đội ngũ</span> của chúng tôi</h1>
             </div>
             <div class="row g-4">
                 <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="rounded shadow overflow-hidden">
                         <div class="position-relative">
-                            <img class="img-fluid" src="img/team-1.jpg" alt="">
+                            <img class="img-fluid" src="/img/team-1.jpg" alt="">
                             <div class="position-absolute start-50 top-100 translate-middle d-flex align-items-center">
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
@@ -345,15 +307,15 @@
                             </div>
                         </div>
                         <div class="text-center p-4 mt-3">
-                            <h5 class="fw-bold mb-0">Đỗ Anh Tuấn</h5>
-                            <small>Giám đốc</small>
+                            <h5 class="fw-bold mb-0">Nguyễn Văn A</h5>
+                            <small>Tổng Giám đốc</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                     <div class="rounded shadow overflow-hidden">
                         <div class="position-relative">
-                            <img class="img-fluid" src="img/team-2.jpg" alt="">
+                            <img class="img-fluid" src="/img/team-2.jpg" alt="">
                             <div class="position-absolute start-50 top-100 translate-middle d-flex align-items-center">
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
@@ -361,15 +323,15 @@
                             </div>
                         </div>
                         <div class="text-center p-4 mt-3">
-                            <h5 class="fw-bold mb-0">Đỗ Gia Huy</h5>
-                            <small>Phó giám đốc</small>
+                            <h5 class="fw-bold mb-0">Trần Thị B</h5>
+                            <small>Quản lý khách sạn</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                     <div class="rounded shadow overflow-hidden">
                         <div class="position-relative">
-                            <img class="img-fluid" src="img/team-3.jpg" alt="">
+                            <img class="img-fluid" src="/img/team-3.jpg" alt="">
                             <div class="position-absolute start-50 top-100 translate-middle d-flex align-items-center">
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
@@ -377,15 +339,15 @@
                             </div>
                         </div>
                         <div class="text-center p-4 mt-3">
-                            <h5 class="fw-bold mb-0">Đỗ Gia Bảo</h5>
-                            <small>Dev</small>
+                            <h5 class="fw-bold mb-0">Lê Văn C</h5>
+                            <small>Đầu bếp trưởng</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
                     <div class="rounded shadow overflow-hidden">
                         <div class="position-relative">
-                            <img class="img-fluid" src="img/team-4.jpg" alt="">
+                            <img class="img-fluid" src="/img/team-4.jpg" alt="">
                             <div class="position-absolute start-50 top-100 translate-middle d-flex align-items-center">
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
                                 <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
@@ -393,8 +355,8 @@
                             </div>
                         </div>
                         <div class="text-center p-4 mt-3">
-                            <h5 class="fw-bold mb-0">Hoàng Diệu Linh</h5>
-                            <small>Quản lý</small>
+                            <h5 class="fw-bold mb-0">Phạm Thị D</h5>
+                            <small>Trưởng bộ phận lễ tân</small>
                         </div>
                     </div>
                 </div>
